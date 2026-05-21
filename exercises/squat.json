@@ -1,0 +1,7 @@
+{
+    "name": "squat",
+    "joints": [23, 25, 27],
+    "stand_angle": 165,
+    "bend_angle": 95,
+    "max_reps": 20
+}
