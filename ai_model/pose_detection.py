@@ -13,16 +13,14 @@ from ai_model.posture_logic import get_state
 
 from utils.timer import start_timer, time_remaining
 from utils.safety_manager import is_safe_to_continue
+from utils.voice_coach import speak
+from database.workout_history import save_workout_session
 
 
-# -------------------------
-# MUSIC CONTROLLER
-# -------------------------
 music_started = False
 
 
 def play_music(exercise):
-
     global music_started
 
     if music_started:
@@ -36,21 +34,14 @@ def play_music(exercise):
     file = music_map.get(exercise)
 
     if file:
-
         pygame.mixer.init()
-
         pygame.mixer.music.load(file)
-
         pygame.mixer.music.play(-1)
 
     music_started = True
 
 
-# -------------------------
-# SMART CARD SYSTEM
-# -------------------------
 smart_cards = [
-
     "Consistency builds strength.",
     "Controlled movement improves form.",
     "Every rep counts.",
@@ -59,46 +50,236 @@ smart_cards = [
     "Hydration improves endurance.",
     "Quality reps matter more than speed.",
     "Recovery is part of growth."
-
 ]
 
 card_cycle = itertools.cycle(smart_cards)
-
 current_card = next(card_cycle)
-
 last_card_switch = time.time()
 
 
-# -------------------------
-# MAIN WORKOUT ENGINE
-# -------------------------
-def run_workout(exercise):
+def show_finish_screen(frame, counter, safe_max_reps):
 
-    global current_card
-    global last_card_switch
+    calories = round(counter.count * 0.35, 2)
 
-    config = load_exercise(exercise)
+    while True:
 
-    if not config:
+        finish_frame = frame.copy()
+        overlay = finish_frame.copy()
 
-        print("Invalid exercise")
+        cv2.rectangle(
+            overlay,
+            (0, 0),
+            (1366, 768),
+            (10, 18, 10),
+            -1
+        )
 
-        return
+        cv2.addWeighted(
+            overlay,
+            0.72,
+            finish_frame,
+            0.28,
+            0,
+            finish_frame
+        )
 
-    # -------------------------
-    # INIT SYSTEMS
-    # -------------------------
-    counter = RepCounter(
-        max_reps=config["max_reps"]
-    )
+        cv2.putText(
+            finish_frame,
+            "SESSION COMPLETE",
+            (560, 150),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.75,
+            (185, 215, 185),
+            1
+        )
 
-    start_timer(
-        config.get("duration", 60)
-    )
+        cv2.putText(
+            finish_frame,
+            "WORKOUT",
+            (525, 265),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            2.1,
+            (245, 255, 245),
+            3
+        )
 
-    # -------------------------
-    # LOAD MODEL
-    # -------------------------
+        cv2.putText(
+            finish_frame,
+            "COMPLETE",
+            (510, 350),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            2.1,
+            (245, 255, 245),
+            3
+        )
+
+        cv2.line(
+            finish_frame,
+            (450, 395),
+            (915, 395),
+            (120, 170, 90),
+            3
+        )
+
+        # SESSION SUMMARY CARDS - SAME SIZE
+        cv2.rectangle(
+            finish_frame,
+            (405, 435),
+            (690, 535),
+            (35, 50, 35),
+            -1
+        )
+
+        cv2.rectangle(
+            finish_frame,
+            (730, 435),
+            (970, 535),
+            (35, 50, 35),
+            -1
+        )
+
+        cv2.putText(
+            finish_frame,
+            "TOTAL REPS",
+            (500, 472),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.55,
+            (180, 210, 180),
+            1
+        )
+
+        cv2.putText(
+            finish_frame,
+            str(counter.count),
+            (515, 522),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1.3,
+            (245, 255, 245),
+            2
+        )
+
+        cv2.putText(
+            finish_frame,
+            "CALORIES",
+            (795, 472),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.55,
+            (180, 210, 180),
+            1
+        )
+
+        cv2.putText(
+            finish_frame,
+            str(calories),
+            (800, 522),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1.3,
+            (245, 255, 245),
+            2
+        )
+
+        if counter.max_reps < safe_max_reps:
+
+            cv2.rectangle(
+                finish_frame,
+                (455, 585),
+                (690, 650),
+                (55, 80, 55),
+                -1
+            )
+
+            cv2.line(
+                finish_frame,
+                (455, 585),
+                (690, 585),
+                (120, 170, 90),
+                2
+            )
+
+            cv2.putText(
+                finish_frame,
+                "PRESS Y",
+                (520, 627),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.95,
+                (245, 255, 245),
+                2
+            )
+
+            cv2.rectangle(
+                finish_frame,
+                (735, 585),
+                (920, 650),
+                (35, 45, 35),
+                -1
+            )
+
+            cv2.putText(
+                finish_frame,
+                "PRESS Q",
+                (775, 627),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.9,
+                (210, 220, 210),
+                2
+            )
+
+            cv2.putText(
+                finish_frame,
+                "EXTRA REPS",
+                (500, 680),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.6,
+                (180, 205, 180),
+                1
+            )
+
+            cv2.putText(
+                finish_frame,
+                "FINISH",
+                (790, 680),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.6,
+                (180, 205, 180),
+                1
+            )
+
+        else:
+
+            cv2.putText(
+                finish_frame,
+                "SAFE LIMIT REACHED",
+                (540, 610),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                1,
+                (220, 255, 220),
+                2
+            )
+
+            cv2.putText(
+                finish_frame,
+                "PRESS Q TO EXIT",
+                (585, 675),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.8,
+                (190, 210, 190),
+                1
+            )
+
+        cv2.imshow(
+            "AI Fitness Trainer",
+            finish_frame
+        )
+
+        key = cv2.waitKey(1) & 0xFF
+
+        if key == ord('y') and counter.max_reps < safe_max_reps:
+            return "extra"
+
+        if key == ord('q'):
+            return "finish"
+def create_pose_landmarker():
+
     base_options = python.BaseOptions(
         model_asset_path="models/pose_landmarker_lite.task"
     )
@@ -108,47 +289,55 @@ def run_workout(exercise):
         running_mode=vision.RunningMode.VIDEO
     )
 
-    landmarker = vision.PoseLandmarker.create_from_options(
-        options
-    )
+    return vision.PoseLandmarker.create_from_options(options)
 
-    # -------------------------
-    # CAMERA
-    # -------------------------
-    cap = cv2.VideoCapture(0)
+def run_workout(exercise, cap=None, landmarker=None):
+    global current_card
+    global last_card_switch
+
+    config = load_exercise(exercise)
+
+    if not config:
+        print("Invalid exercise")
+        return
+
+    prescribed_reps = config["max_reps"]
+    safe_max_reps = config.get("safe_max_reps", prescribed_reps + 5)
+
+    counter = RepCounter(max_reps=prescribed_reps)
+
+    start_timer(config.get("duration", 60))
+
+    if landmarker is None:
+     landmarker = create_pose_landmarker()
+    if cap is None:
+     cap = cv2.VideoCapture(0)
+
+    visible_feedback = ""
+    last_feedback_time = 0
+    feedback_duration = 2.5
+    feedback_cooldown = 4
+    bending_frames = 0
 
     print(f"\n🏋️ Starting {exercise} workout...")
+    speak("Workout started", force=True)
 
     while cap.isOpened():
 
-        # -------------------------
-        # TIMER CHECK
-        # -------------------------
         remaining = time_remaining()
 
         if remaining <= 0:
-
             print("⏱️ Workout time finished!")
-
             break
 
         ret, frame = cap.read()
 
         if not ret:
-
             break
 
-        # -------------------------
-        # FULLSCREEN RESIZE
-        # -------------------------
-        frame = cv2.resize(
-            frame,
-            (1366, 768)
-        )
+        frame = cv2.resize(frame, (1366, 768))
+        clean_finish_frame = frame.copy()
 
-        # -------------------------
-        # MEDIAPIPE IMAGE
-        # -------------------------
         mp_image = mp.Image(
             image_format=mp.ImageFormat.SRGB,
             data=frame
@@ -162,43 +351,79 @@ def run_workout(exercise):
         )
 
         state = "NO POSE"
-
         angle = 0
+        feedback = ""
 
-        # -------------------------
-        # POSE PROCESSING
-        # -------------------------
         if result.pose_landmarks:
 
             for pose in result.pose_landmarks:
 
-                # GET POSTURE STATE
-                state, angle = get_state(
+                state, angle, feedback = get_state(
                     pose,
                     config
                 )
 
-                # SAFETY CHECK
                 if not is_safe_to_continue(
                     counter.count,
-                    config["max_reps"]
+                    safe_max_reps
                 ):
-
                     print("🛑 Safety limit reached!")
-
                     cap.release()
-
                     cv2.destroyAllWindows()
-
                     return
 
-                # UPDATE REPS
                 counter.update(state)
 
-                # WORKOUT COMPLETE
-                if counter.is_complete():
+                if state == "BENDING":
+                    bending_frames += 1
+                else:
+                    bending_frames = 0
 
-                    print("🎉 Workout Complete!")
+                if (
+                    bending_frames > 18
+                    and time.time() - last_feedback_time > feedback_cooldown
+                ):
+                    visible_feedback = "Go lower"
+                    speak("Go lower")
+                    last_feedback_time = time.time()
+
+                if (
+                    counter.did_count_rep()
+                    and time.time() - last_feedback_time > 1
+                ):
+                    visible_feedback = "Excellent form"
+                    speak("Excellent form")
+                    last_feedback_time = time.time()
+
+                if counter.is_complete():
+                    action = show_finish_screen(
+                     clean_finish_frame,
+                     counter,
+                     safe_max_reps
+)
+                    
+
+                    if action == "extra":
+                        extra_reps = 5
+                        counter.max_reps = min(
+                            counter.max_reps + extra_reps,
+                            safe_max_reps
+                        )
+
+                        start_timer(30)
+
+                        visible_feedback = "Extra set started"
+                        speak("Extra set started", force=True)
+                        last_feedback_time = time.time()
+
+                    else:
+
+                           save_workout_session(
+                            exercise=exercise,
+                            reps_completed=counter.count,
+                            target_reps=counter.max_reps,
+                            status="completed"
+    )
 
                     cap.release()
 
@@ -206,28 +431,15 @@ def run_workout(exercise):
 
                     return
 
-        # -------------------------
-        # PLAY MUSIC
-        # -------------------------
         try:
-
             play_music(exercise)
-
         except:
             pass
 
-        # -------------------------
-        # CHANGE SMART CARD
-        # -------------------------
         if time.time() - last_card_switch > 7:
-
             current_card = next(card_cycle)
-
             last_card_switch = time.time()
 
-        # -------------------------
-        # GLASS OVERLAY
-        # -------------------------
         overlay = frame.copy()
 
         cv2.rectangle(
@@ -249,9 +461,6 @@ def run_workout(exercise):
             frame
         )
 
-        # -------------------------
-        # HEADER
-        # -------------------------
         cv2.putText(
             frame,
             "AI FITNESS TRAINER",
@@ -270,9 +479,6 @@ def run_workout(exercise):
             2
         )
 
-        # -------------------------
-        # EXERCISE
-        # -------------------------
         cv2.putText(
             frame,
             "EXERCISE",
@@ -293,9 +499,6 @@ def run_workout(exercise):
             2
         )
 
-        # -------------------------
-        # REPS
-        # -------------------------
         cv2.putText(
             frame,
             "REPETITIONS",
@@ -308,7 +511,7 @@ def run_workout(exercise):
 
         cv2.putText(
             frame,
-            f"{counter.count} / {config['max_reps']}",
+            f"{counter.count} / {counter.max_reps}",
             (60, 375),
             cv2.FONT_HERSHEY_SIMPLEX,
             1.4,
@@ -316,9 +519,6 @@ def run_workout(exercise):
             2
         )
 
-        # -------------------------
-        # TIMER
-        # -------------------------
         cv2.putText(
             frame,
             "TIME REMAINING",
@@ -339,18 +539,13 @@ def run_workout(exercise):
             2
         )
 
-        # -------------------------
-        # PROGRESS BAR
-        # -------------------------
-        progress = counter.count / config["max_reps"]
+        progress = min(counter.count / counter.max_reps, 1)
 
         bar_x = 60
         bar_y = 610
-
         bar_width = 300
         bar_height = 12
 
-        # BAR BACKGROUND
         cv2.rectangle(
             frame,
             (bar_x, bar_y),
@@ -362,7 +557,6 @@ def run_workout(exercise):
             -1
         )
 
-        # BAR FILL
         cv2.rectangle(
             frame,
             (bar_x, bar_y),
@@ -374,16 +568,11 @@ def run_workout(exercise):
             -1
         )
 
-        # -------------------------
-        # AI INSIGHT CARD
-        # -------------------------
         card_x1 = 50
         card_y1 = 650
-
         card_x2 = 395
         card_y2 = 755
 
-        # CARD
         cv2.rectangle(
             frame,
             (card_x1, card_y1),
@@ -392,7 +581,6 @@ def run_workout(exercise):
             -1
         )
 
-        # TOP ACCENT
         cv2.line(
             frame,
             (card_x1, card_y1),
@@ -401,62 +589,111 @@ def run_workout(exercise):
             2
         )
 
-        # TITLE
         cv2.putText(
             frame,
             "AI INSIGHT",
-            (75, 690),
+            (75, 688),
             cv2.FONT_HERSHEY_SIMPLEX,
-            0.58,
+            0.55,
             (205, 225, 205),
             1
         )
 
-        # -------------------------
-        # TEXT WRAP
-        # -------------------------
         words = current_card.split()
-
-        line1 = ""
-        line2 = ""
+        lines = []
+        current_line = ""
 
         for word in words:
 
-            test = line1 + word + " "
+            test_line = current_line + word + " "
 
-            if len(test) < 24:
-
-                line1 = test
-
+            if len(test_line) <= 21:
+                current_line = test_line
             else:
+                lines.append(current_line.strip())
+                current_line = word + " "
 
-                line2 += word + " "
+        if current_line:
+            lines.append(current_line.strip())
 
-        # LINE 1
-        cv2.putText(
-            frame,
-            line1.strip(),
-            (75, 720),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.62,
-            (245, 245, 245),
-            1
-        )
+        lines = lines[:3]
 
-        # LINE 2
-        cv2.putText(
-            frame,
-            line2.strip(),
-            (75, 748),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.62,
-            (245, 245, 245),
-            1
-        )
+        y = 718
 
-        # -------------------------
-        # WINDOW
-        # -------------------------
+        for line in lines:
+
+            cv2.putText(
+                frame,
+                line,
+                (75, y),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.72,
+                (245, 245, 245),
+                1
+            )
+
+            y += 28
+
+        if (
+            visible_feedback != ""
+            and time.time() - last_feedback_time < feedback_duration
+        ):
+
+            popup_overlay = frame.copy()
+
+            text_size, _ = cv2.getTextSize(
+                visible_feedback,
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.75,
+                1
+            )
+
+            text_width = text_size[0]
+
+            box_width = text_width + 50
+            box_height = 42
+
+            box_x1 = 760
+            box_y1 = 640
+
+            box_x2 = box_x1 + box_width
+            box_y2 = box_y1 + box_height
+
+            cv2.rectangle(
+                popup_overlay,
+                (box_x1, box_y1),
+                (box_x2, box_y2),
+                (35, 50, 35),
+                -1
+            )
+
+            cv2.addWeighted(
+                popup_overlay,
+                0.65,
+                frame,
+                0.35,
+                0,
+                frame
+            )
+
+            cv2.line(
+                frame,
+                (box_x1, box_y1),
+                (box_x2, box_y1),
+                (120, 170, 90),
+                2
+            )
+
+            cv2.putText(
+                frame,
+                visible_feedback,
+                (box_x1 + 25, box_y1 + 29),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.75,
+                (245, 255, 245),
+                1
+            )
+
         cv2.namedWindow(
             "AI Fitness Trainer",
             cv2.WINDOW_NORMAL
@@ -473,23 +710,52 @@ def run_workout(exercise):
             frame
         )
 
-        # -------------------------
-        # QUIT
-        # -------------------------
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        key = cv2.waitKey(1) & 0xFF
 
+        # QUIT
+        if key == ord('q'):
             break
 
-    # -------------------------
-    # CLEANUP
-    # -------------------------
-    cap.release()
+        # TEST REP INCREASE
+        if key == ord('t'):
 
-    cv2.destroyAllWindows()
+            if counter.count < counter.max_reps:
+                counter.count += 1
 
-    try:
+            if counter.count >= counter.max_reps:
 
-        pygame.mixer.music.stop()
+                action = show_finish_screen(
+                    clean_finish_frame,
+                    counter,
+                    safe_max_reps
+                )
 
-    except:
-        pass
+                if action == "extra":
+
+                    counter.max_reps = min(
+                        counter.max_reps + 5,
+                        safe_max_reps
+                    )
+
+                    start_timer(30)
+
+                elif action == "finish":
+
+                    save_workout_session(
+                        exercise=exercise,
+                        reps_completed=counter.count,
+                        target_reps=counter.max_reps,
+                        status="completed"
+                    )
+
+                    cap.release()
+
+                    cv2.destroyAllWindows()
+
+                    try:
+                        pygame.mixer.music.stop()
+
+                    except:
+                        pass
+
+                    break

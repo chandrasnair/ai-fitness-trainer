@@ -1,0 +1,97 @@
+[
+    {
+        "exercise": "squat",
+        "reps_completed": 25,
+        "target_reps": 25,
+        "status": "completed",
+        "date_time": "2026-05-22 20:32:56"
+    },
+    {
+        "exercise": "squat",
+        "reps_completed": 25,
+        "target_reps": 25,
+        "status": "completed",
+        "date_time": "2026-05-22 21:17:13"
+    },
+    {
+        "exercise": "squat",
+        "reps_completed": 25,
+        "target_reps": 25,
+        "status": "completed",
+        "date_time": "2026-05-22 21:30:06"
+    },
+    {
+        "exercise": "squat",
+        "reps_completed": 25,
+        "target_reps": 25,
+        "status": "completed",
+        "date_time": "2026-05-22 21:48:16"
+    },
+    {
+        "exercise": "squat",
+        "reps_completed": 20,
+        "target_reps": 20,
+        "status": "completed",
+        "date_time": "2026-05-22 21:51:04"
+    },
+    {
+        "exercise": "squat",
+        "reps_completed": 25,
+        "target_reps": 25,
+        "status": "completed",
+        "date_time": "2026-05-22 21:53:53"
+    },
+    {
+        "exercise": "pushup",
+        "reps_completed": 15,
+        "target_reps": 15,
+        "status": "completed",
+        "date_time": "2026-05-22 21:54:38"
+    },
+    {
+        "exercise": "squat",
+        "reps_completed": 25,
+        "target_reps": 25,
+        "status": "completed",
+        "date_time": "2026-05-22 22:02:51"
+    },
+    {
+        "exercise": "squat",
+        "reps_completed": 20,
+        "target_reps": 20,
+        "status": "completed",
+        "date_time": "2026-05-22 22:06:15"
+    },
+    {
+        "exercise": "squat",
+        "reps_completed": 20,
+        "target_reps": 20,
+        "status": "completed",
+        "date_time": "2026-05-22 22:07:35"
+    },
+    {
+        "exercise": "squat",
+        "reps_completed": 20,
+        "target_reps": 20,
+        "status": "completed",
+        "date_time": "2026-05-22 22:08:36"
+    },
+    {
+        "exercise": "squat",
+        "reps_completed": 20,
+        "target_reps": 20,
+        "extra_reps_done": false,
+        "calories_burned": 7.0,
+        "status": "completed",
+        "date_time": "2026-05-22 22:17:48"
+    },
+    {
+        "exercise": "squat",
+        "reps_completed": 25,
+        "target_reps": 25,
+        "extra_reps_done": false,
+        "calories_burned": 8.75,
+        "status": "completed",
+        "date_time": "2026-05-22 22:21:31"
+    }
+]

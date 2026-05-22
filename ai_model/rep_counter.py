@@ -5,36 +5,55 @@ class RepCounter:
 
         self.state_history = []
         self.cooldown = 0
+        self.last_rep_counted = False
 
-        self.last_valid_state = "STANDING"
+        self.went_down = False
+        self.reached_bottom = False
+        self.squat_frames = 0
 
     def update(self, state):
+        self.last_rep_counted = False
 
-        # reduce cooldown every frame
         if self.cooldown > 0:
             self.cooldown -= 1
 
-        # store last few states (stability check)
         self.state_history.append(state)
-        if len(self.state_history) > 5:
+
+        if len(self.state_history) > 8:
             self.state_history.pop(0)
 
-        # majority voting (prevents flicker)
-        stable_state = max(set(self.state_history),
-                           key=self.state_history.count)
+        stable_state = max(
+            set(self.state_history),
+            key=self.state_history.count
+        )
 
-        # REP RULE:
-        # SQUAT -> STANDING = 1 rep
-        if (self.last_valid_state == "SQUAT"
-                and stable_state == "STANDING"
-                and self.cooldown == 0):
+        if stable_state == "BENDING":
+            self.went_down = True
 
-            self.count += 1
-            self.cooldown = 15   # prevents double counting
+        elif stable_state == "SQUAT":
+            self.squat_frames += 1
 
-        self.last_valid_state = stable_state
+            if self.squat_frames >= 8:
+                self.reached_bottom = True
+
+        elif stable_state == "STANDING":
+            if (
+                self.went_down
+                and self.reached_bottom
+                and self.cooldown == 0
+            ):
+                self.count += 1
+                self.cooldown = 25
+                self.last_rep_counted = True
+
+            self.went_down = False
+            self.reached_bottom = False
+            self.squat_frames = 0
 
         return self.count
+
+    def did_count_rep(self):
+        return self.last_rep_counted
 
     def is_complete(self):
         return self.count >= self.max_reps
