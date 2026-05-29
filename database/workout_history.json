@@ -93,5 +93,14 @@
         "calories_burned": 8.75,
         "status": "completed",
         "date_time": "2026-05-22 22:21:31"
+    },
+    {
+        "exercise": "squat",
+        "reps_completed": 20,
+        "target_reps": 20,
+        "extra_reps_done": false,
+        "calories_burned": 7.0,
+        "status": "completed",
+        "date_time": "2026-05-24 00:36:05"
     }
 ]
