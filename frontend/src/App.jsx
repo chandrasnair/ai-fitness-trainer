@@ -14,6 +14,7 @@ import WrittenRecipes from './pages/WrittenRecipes'
 import RecipeVideos from './pages/RecipeVideos'
 
 
+
 function App() {
 
   return (
@@ -59,6 +60,10 @@ function App() {
        <Route
   path="/recipe-videos"
   element={<RecipeVideos />}
+/>
+<Route
+  path="/aicoach"
+  element={<AICoach />}
 />
 
 
