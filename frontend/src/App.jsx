@@ -14,6 +14,7 @@ import WrittenRecipes from './pages/WrittenRecipes'
 import RecipeVideos from './pages/RecipeVideos'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
+import AdminDashboard from './pages/AdminDashboard'
 
 
 function App() {
@@ -74,6 +75,10 @@ function App() {
 <Route
   path="/signup"
   element={<Signup />}
+/>
+<Route
+  path="/admin"
+  element={<AdminDashboard />}
 />
 
 

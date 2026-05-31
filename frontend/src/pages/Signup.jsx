@@ -27,6 +27,58 @@ function Signup() {
   ]
 
   const [activeSlide, setActiveSlide] = useState(0)
+  const [formData, setFormData] = useState({
+  name: '',
+  email: '',
+  password: '',
+  gender: '',
+  age: '',
+  height: '',
+  weight: '',
+  fitnessGoal: 'Strength & Fat Loss',
+  level: 'Beginner'
+})
+
+
+const handleChange = (e) => {
+  setFormData({
+    ...formData,
+    [e.target.name]: e.target.value
+  })
+}
+
+const handleSubmit = async (e) => {
+  e.preventDefault()
+
+  try {
+    const response = await fetch(
+      'http://localhost:5000/api/auth/signup',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      }
+    )
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      alert(data.message)
+      return
+    }
+
+    alert('Account created successfully')
+    console.log(data)
+
+  } catch (error) {
+    alert('Something went wrong')
+    console.log(error)
+  }
+}
+
+
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -46,90 +98,175 @@ function Signup() {
           <h1>Create account</h1>
           <p>Set up your profile to begin personalized AI fitness tracking.</p>
         </div>
+<form
+  className="signup-form"
+  onSubmit={handleSubmit}
+>
 
-        <form className="signup-form">
+  <div className="profile-upload-circle">
+    <Camera size={22} />
+    <p>Upload Photo</p>
+  </div>
 
-          <div className="profile-upload-circle">
-            <Camera size={22} />
-            <p>Upload Photo</p>
-          </div>
+  <div className="signup-two-col">
 
-          <div className="signup-two-col">
+    <div>
+      <label>Full Name</label>
+      <div className="signup-input">
+        <User size={18} />
+        <input
+          type="text"
+          name="name"
+          placeholder="Enter name"
+          value={formData.name}
+          onChange={handleChange}
+        />
+      </div>
+    </div>
 
-            <div>
-              <label>Full Name</label>
-              <div className="signup-input">
-                <User size={18} />
-                <input type="text" placeholder="Enter name" />
-              </div>
-            </div>
+    <div>
+      <label>Email</label>
+      <div className="signup-input">
+        <Mail size={18} />
+        <input
+          type="email"
+          name="email"
+          placeholder="Enter email"
+          value={formData.email}
+          onChange={handleChange}
+        />
+      </div>
+    </div>
 
-            <div>
-              <label>Email</label>
-              <div className="signup-input">
-                <Mail size={18} />
-                <input type="email" placeholder="Enter email" />
-              </div>
-            </div>
+  </div>
 
-          </div>
+  <div className="signup-two-col">
 
-          <div className="signup-two-col">
+    <div>
+      <label>Password</label>
+      <div className="signup-input">
+        <Lock size={18} />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+        />
+      </div>
+    </div>
 
-            <div>
-              <label>Password</label>
-              <div className="signup-input">
-                <Lock size={18} />
-                <input type="password" placeholder="Password" />
-              </div>
-            </div>
+    <div>
+      <label>Confirm</label>
+      <div className="signup-input">
+        <Lock size={18} />
+        <input
+          type="password"
+          placeholder="Confirm"
+        />
+      </div>
+    </div>
 
-            <div>
-              <label>Confirm</label>
-              <div className="signup-input">
-                <Lock size={18} />
-                <input type="password" placeholder="Confirm" />
-              </div>
-            </div>
+  </div>
 
-          </div>
+  <div className="signup-two-col">
 
-          <div className="signup-two-col">
+    <div>
+      <label>Height</label>
+      <div className="signup-input">
+        <input
+          type="number"
+          name="height"
+          placeholder="172 cm"
+          value={formData.height}
+          onChange={handleChange}
+        />
+      </div>
+    </div>
 
-            <div>
-              <label>Height</label>
-              <div className="signup-input">
-                <input type="text" placeholder="172 cm" />
-              </div>
-            </div>
+    <div>
+      <label>Weight</label>
+      <div className="signup-input">
+        <input
+          type="number"
+          name="weight"
+          placeholder="68 kg"
+          value={formData.weight}
+          onChange={handleChange}
+        />
+      </div>
+    </div>
 
-            <div>
-              <label>Weight</label>
-              <div className="signup-input">
-                <input type="text" placeholder="68 kg" />
-              </div>
-            </div>
+  </div>
 
-          </div>
+  <div className="signup-two-col">
 
-          <label>Fitness Goal</label>
-          <select className="signup-select">
-            <option>Strength & Fat Loss</option>
-            <option>Weight Loss</option>
-            <option>Muscle Gain</option>
-            <option>General Fitness</option>
-          </select>
+    <div>
+      <label>Age</label>
+      <div className="signup-input">
+        <input
+          type="number"
+          name="age"
+          placeholder="21"
+          value={formData.age}
+          onChange={handleChange}
+        />
+      </div>
+    </div>
 
-          <button className="signup-main-btn">
-            Create Account
-            <ArrowRight size={18} />
-          </button>
+    <div>
+      <label>Gender</label>
+      <select
+        className="signup-select"
+        name="gender"
+        value={formData.gender}
+        onChange={handleChange}
+      >
+        <option value="">Select Gender</option>
+        <option>Female</option>
+        <option>Male</option>
+        <option>Other</option>
+      </select>
+    </div>
 
-          <p className="login-text">
-            Already have an account? <a>Login</a>
-          </p>
+  </div>
 
-        </form>
+  <label>Fitness Goal</label>
+  <select
+    className="signup-select"
+    name="fitnessGoal"
+    value={formData.fitnessGoal}
+    onChange={handleChange}
+  >
+    <option>Strength & Fat Loss</option>
+    <option>Weight Loss</option>
+    <option>Muscle Gain</option>
+    <option>General Fitness</option>
+  </select>
+
+  <label>Level</label>
+  <select
+    className="signup-select"
+    name="level"
+    value={formData.level}
+    onChange={handleChange}
+  >
+    
+    <option>Beginner</option>
+    <option>Intermediate</option>
+    <option>Advanced</option>
+  </select>
+
+  <button className="signup-main-btn">
+    Create Account
+    <ArrowRight size={18} />
+  </button>
+
+  <p className="login-text">
+    Already have an account? <a>Login</a>
+  </p>
+
+</form>
 
       </div>
 
