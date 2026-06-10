@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import NotificationBell from '../components/NotificationBell'
 
 import {
   Home as HomeIcon,
@@ -43,9 +44,110 @@ const heroSlides = [
 function Home() {
   const [slideIndex, setSlideIndex] = useState(0)
   const [gender, setGender] = useState('male')
+useEffect(() => {
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
+  if (userInfo?.gender) {
+    setGender(userInfo.gender.toLowerCase())
+  }
+}, [])
+
   const [showAllWorkouts, setShowAllWorkouts] = useState(false)
-  const [theme, setTheme] = useState('light')
+  
+  const [theme, setTheme] = useState(
+  localStorage.getItem('themeMode') || 'light'
+)
+useEffect(() => {
+  localStorage.setItem('themeMode', theme)
+
+  if (theme === 'dark') {
+    document.body.classList.add('dark-theme')
+  } else {
+    document.body.classList.remove('dark-theme')
+  }
+}, [theme])
   const [showIntro, setShowIntro] = useState(true)
+  const userInfo = JSON.parse(
+  localStorage.getItem('userInfo')
+)
+
+const [showNotifications, setShowNotifications] = useState(false)
+
+const genderValue = userInfo?.gender?.toLowerCase()
+
+const profileImage = userInfo?.profileImage
+  ? `http://localhost:5000${userInfo.profileImage}`
+  : genderValue === 'female'
+    ? '/images/default-female.jpg'
+    : genderValue === 'male'
+      ? '/images/default-male.jpg'
+      : '/images/default-female.jpg'
+
+const [recentActivity, setRecentActivity] = useState([])
+useEffect(() => {
+  const fetchRecentActivity = async () => {
+    try {
+     const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
+const response = await fetch(
+  'http://localhost:5000/api/history/recent',
+  {
+    headers: {
+      Authorization: `Bearer ${userInfo?.token}`
+    }
+  }
+)
+      const data = await response.json()
+      setRecentActivity(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  fetchRecentActivity()
+}, [])
+
+const [stats, setStats] = useState({
+  dayStreak: 0,
+  totalWorkouts: 0,
+  totalReps: 0,
+  totalCalories: 0,
+})
+
+const [statsLoading, setStatsLoading] = useState(true)
+
+useEffect(() => {
+  const fetchStats = async () => {
+    try {
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
+const response = await fetch(
+  'http://localhost:5000/api/history/stats',
+  {
+    headers: {
+      Authorization: `Bearer ${userInfo?.token}`
+    }
+  }
+)
+      const data = await response.json()
+
+      setStats({
+        dayStreak: data.dayStreak || 0,
+        totalWorkouts: data.totalWorkouts || 0,
+        totalReps: data.totalReps || 0,
+        totalCalories: data.totalCalories || 0,
+      })
+    } catch (error) {
+      console.error('Error fetching stats:', error)
+    } finally {
+      setStatsLoading(false)
+    }
+  }
+
+  fetchStats()
+}, [])
+
+
 
 useEffect(() => {
   const introTimer = setTimeout(() => {
@@ -75,6 +177,56 @@ useEffect(() => {
   const visibleWorkouts = showAllWorkouts
   ? workouts
   : workouts.slice(0, 4)
+
+  const dailyPlans = [
+  {
+    title: 'Recovery & Stretch',
+    description: 'Light stretching and breathing-focused mobility',
+    meta: '20 min · Beginner',
+    image: `/images/stretch-${gender}.jpg`
+  },
+  {
+    title: 'Lower Body Strength',
+    description: 'Squats, lunges, and controlled leg movement',
+    meta: '30 min · Intermediate',
+    image: `/images/lowerbody-${gender}.jpg`
+  },
+  {
+    title: 'Upper Body Power',
+    description: 'Push-ups, shoulder control, and arm strength',
+    meta: '30 min · Intermediate',
+    image: `/images/upperbody-${gender}.jpg`
+  },
+  {
+    title: 'Core Stability',
+    description: 'Abs, plank control, and posture balance',
+    meta: '25 min · Beginner',
+    image: `/images/core-${gender}.jpg`
+  },
+  {
+    title: 'Mobility Training',
+    description: 'Improve flexibility, balance, and joint movement',
+    meta: '25 min · Beginner',
+    image: `/images/mobility-${gender}.jpg`
+  },
+  {
+    title: 'Cardio Burn',
+    description: 'Fast movement, stamina training, and calorie burn',
+    meta: '35 min · Intermediate',
+    image: `/images/cardio-${gender}.jpg`
+  },
+  {
+    title: 'Full Body Training',
+    description: 'Balanced strength workout for the full body',
+    meta: '40 min · Intermediate',
+    image: `/images/hero2.jpg`
+  }
+]
+
+const todayIndex = new Date().getDay()
+const todayPlan = dailyPlans[todayIndex]
+
+
 if (showIntro) {
 
   return (
@@ -169,7 +321,7 @@ if (showIntro) {
 </nav>
 
         <div className="profile-box">
-          <img src="/images/profile.jpg" alt="Profile" />
+  <img src={profileImage} alt="Profile" />
           <div>
             <h4>Welcome Back</h4>
             <p>Level: Beginner</p>
@@ -181,40 +333,23 @@ if (showIntro) {
         <header className="topbar">
           <input placeholder="Search workouts, recipes, progress..." />
 
-          <div className="gender-toggle">
-            <button
-              className={gender === 'male' ? 'selected' : ''}
-              onClick={() => setGender('male')}
-            >
-              Male
-            </button>
-
-            <button
-              className={gender === 'female' ? 'selected' : ''}
-              onClick={() => setGender('female')}
-            >
-              Female
-            </button>
-          </div>
+          
 
 <div className="top-actions">
 
-  <button className="icon-btn">
-    <Bell size={19} />
-  </button>
+  <NotificationBell />
 
-  <button className="icon-btn">
-    <Settings size={19} />
-  </button>
+  <Link to="/profile">
+    <button className="icon-btn">
+      <Settings size={19} />
+    </button>
+  </Link>
 
 </div>
 
         <button
   className="theme-toggle"
-  onClick={() => {
-    console.log('theme clicked', theme)
-    setTheme(theme === 'light' ? 'dark' : 'light')
-  }}
+  onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
 >
   {theme === 'light' ? 'Dark' : 'Light'}
 </button>
@@ -262,9 +397,12 @@ if (showIntro) {
         guidance built into one ecosystem.
       </p>
 
-      <button className="hero-btn">
-        START TRAINING
-      </button>
+      <Link
+  to="/workouts"
+  className="hero-btn"
+>
+  START TRAINING
+</Link>
 
       <div className="dots editorial-dots">
 
@@ -292,55 +430,47 @@ if (showIntro) {
        <section className="floating-stats">
 
   <div className="float-stat fire">
-
     <div className="stat-icon">
       <Flame size={20} />
     </div>
 
     <div>
-      <h3>7</h3>
+      <h3>{statsLoading ? '--' : stats.dayStreak}</h3>
       <p>Day Streak</p>
     </div>
-
   </div>
 
   <div className="float-stat lift">
-
     <div className="stat-icon">
       <Dumbbell size={20} />
     </div>
 
     <div>
-      <h3>24</h3>
+      <h3>{statsLoading ? '--' : stats.totalWorkouts}</h3>
       <p>Workouts</p>
     </div>
-
   </div>
 
   <div className="float-stat reps">
-
     <div className="stat-icon">
       <Repeat size={20} />
     </div>
 
     <div>
-      <h3>860</h3>
+      <h3>{statsLoading ? '--' : stats.totalReps}</h3>
       <p>Total Reps</p>
     </div>
-
   </div>
 
   <div className="float-stat burn">
-
     <div className="stat-icon">
       <Zap size={20} />
     </div>
 
     <div>
-      <h3>320</h3>
+      <h3>{statsLoading ? '--' : stats.totalCalories}</h3>
       <p>Calories</p>
     </div>
-
   </div>
 
 </section>
@@ -364,26 +494,29 @@ if (showIntro) {
       Based on recent sessions, focus on controlled movement and deeper squat range today.
     </p>
 
-    <button>
-      View AI Report
-    </button>
+    <Link
+  to="/ai-coach"
+  className="ai-report-btn"
+>
+  View AI Report
+</Link>
   </div>
 
   <div className="middle-cards">
 
     <div className="side-plan-card image-plan-card">
-      <span>TODAY'S PLAN</span>
+  <span>TODAY'S PLAN</span>
 
-      <div className="plan-content">
-        <div>
-          <h3>Lower Body Strength</h3>
-          <p>Squats and controlled reps</p>
-          <small>30 min · Intermediate</small>
-        </div>
-
-        <img src="/images/today-plan.jpg" alt="" />
-      </div>
+  <div className="plan-content">
+    <div>
+      <h3>{todayPlan.title}</h3>
+      <p>{todayPlan.description}</p>
+      <small>{todayPlan.meta}</small>
     </div>
+
+    <img src={todayPlan.image} alt={todayPlan.title} />
+  </div>
+</div>
 
     <div className="side-plan-card image-plan-card nutrition-preview">
       <span>NUTRITION</span>
@@ -400,26 +533,49 @@ if (showIntro) {
 
   </div>
 
-  <div className="recent-card">
-    <span>RECENT ACTIVITY</span>
+  <div className="recent-activity-card">
 
+  <div className="recent-header">
     <div>
-      <h4>Upper Body</h4>
-      <p>May 24, 2026 · 320 Cal</p>
+      <span>WORKOUT TRACKER</span>
+      <h3>Recent Activity</h3>
     </div>
 
-    <div>
-      <h4>HIIT Cardio</h4>
-      <p>May 23, 2026 · 280 Cal</p>
-    </div>
-
-    <div>
-      <h4>Lower Body</h4>
-      <p>May 22, 2026 · 350 Cal</p>
-    </div>
-
-    <b>View all activity →</b>
+    <Link
+      to="/workout-history"
+      className="view-all-btn"
+    >
+      View All
+    </Link>
   </div>
+
+  <div className="recent-list">
+    {recentActivity.map((item, index) => (
+      <div
+        className="recent-item"
+        key={index}
+      >
+        <div className="recent-item-left">
+          <h4>
+            {item.exercise === 'squat'
+              ? ' Squat Workout'
+              : ' Push-up Workout'}
+          </h4>
+
+          <p>
+            {item.reps_completed} reps •{' '}
+            {item.calories_burned || 0} calories
+          </p>
+        </div>
+
+        <span className="recent-date">
+          {item.date_time?.split(' ')[0]}
+        </span>
+      </div>
+    ))}
+  </div>
+
+</div>
 
 </section>
 
@@ -432,22 +588,24 @@ if (showIntro) {
           </div>
 
           <div className="workout-layout">
-
-  <div
-    className="workout-large"
-    style={{
-      backgroundImage:
-        `linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/lowerbody-${gender}.jpg')`
-    }}
-  >
+<Link
+  to="/workouts/category/strength"
+  className="workout-large"
+  style={{
+    backgroundImage:
+      `linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/lowerbody-${gender}.jpg')`
+  }}
+>
     <div>
       <h3>Strength Training</h3>
       <span>AI Guided</span>
     </div>
-  </div>
+   </Link>
 
-  <div
-    className="workout-large"
+  <Link
+  to="/workouts/category/mobility"
+  className="workout-small"
+
     style={{
       backgroundImage:
         `linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/mobility-${gender}.jpg')`
@@ -457,12 +615,14 @@ if (showIntro) {
       <h3>Yoga & Mobility</h3>
       <span>AI Guided</span>
     </div>
-  </div>
+  </Link>
 
   <div className="workout-stack">
 
-    <div
-      className="workout-small"
+    <Link
+  to="/workouts/category/cardio"
+  className="workout-small"
+
       style={{
         backgroundImage:
           `linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/cardio-${gender}.jpg')`
@@ -472,10 +632,12 @@ if (showIntro) {
         <h3>HIIT Cardio</h3>
         <span>AI Guided</span>
       </div>
-    </div>
+    </Link>
 
-    <div
-      className="workout-small"
+    <Link
+  to="/workouts/category/core"
+  className="workout-tall"
+
       style={{
         backgroundImage:
           `linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/core-${gender}.jpg')`
@@ -485,12 +647,14 @@ if (showIntro) {
         <h3>Core Workouts</h3>
         <span>AI Guided</span>
       </div>
-    </div>
+    </Link>
 
   </div>
 
-  <div
-    className="workout-tall"
+  <Link
+  to="/workouts/category/power"
+  className="workout-small"
+
     style={{
       backgroundImage:
         `linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/upperbody-${gender}.jpg')`
@@ -500,7 +664,7 @@ if (showIntro) {
       <h3>Power Lifting</h3>
       <span>AI Guided</span>
     </div>
-  </div>
+  </Link>
 
 </div>
         </section>
@@ -513,13 +677,21 @@ if (showIntro) {
                 Discover healthy recipes, protein meals, smoothies, and balanced
                 food habits for your fitness goals.
               </p>
-              <button>Explore Diet</button>
+              <Link
+  to="/diet"
+  className="explore-diet-btn"
+>
+  Explore Diet
+</Link>
             </div>
 
             <img src="/images/healthy-food.jpg" alt="Healthy food" />
           </div>
 
-          <div className="analytics-card">
+          <Link
+  to="/progress"
+  className="analytics-card"
+>
             <h2>Progress Analytics</h2>
             <p>Weekly improvement preview</p>
 
@@ -531,37 +703,47 @@ if (showIntro) {
               <span style={{ height: '55%' }}></span>
               <span style={{ height: '88%' }}></span>
             </div>
-          </div>
+          </Link>
         </section>
         <section className="recipe-row">
-          <div>
-            <img src="/images/protein-meal.jpg" alt="Protein meal" />
-            <h3>Protein Meals</h3>
-          </div>
+          <Link to="/diet" className="recipe-card">
+  <img src="/images/protein-meal.jpg" alt="Protein meal" />
+  <h3>Protein Meals</h3>
+</Link>
 
-          <div>
-            <img src="/images/smoothie.jpg" alt="Smoothie" />
-            <h3>Smoothies</h3>
-          </div>
+<Link to="/diet" className="recipe-card">
+  <img src="/images/smoothie.jpg" alt="Smoothie" />
+  <h3>Smoothies</h3>
+</Link>
 
-          <div>
-            <img src="/images/salad.jpg" alt="Salad" />
-            <h3>Clean Eating</h3>
-          </div>
+<Link to="/diet" className="recipe-card">
+  <img src="/images/salad.jpg" alt="Salad" />
+  <h3>Clean Eating</h3>
+</Link>
         </section>
 
       </main>
 
       <nav className="bottom-nav">
-  <span className="nav-active"><HomeIcon size={18} /> Home</span>
-  <span><Dumbbell size={18} /> Workouts</span>
+  <Link to="/" className="nav-active">
+    <HomeIcon size={18} /> Home
+  </Link>
+
+  <Link to="/workouts">
+    <Dumbbell size={18} /> Workouts
+  </Link>
 
   <button className="nav-action">
     <Plus size={30} />
   </button>
 
-  <span><Apple size={18} /> Diet</span>
-  <span><BarChart3 size={18} /> Progress</span>
+  <Link to="/diet">
+    <Apple size={18} /> Diet
+  </Link>
+
+  <Link to="/progress">
+    <BarChart3 size={18} /> Progress
+  </Link>
 </nav>
     </div>
   )

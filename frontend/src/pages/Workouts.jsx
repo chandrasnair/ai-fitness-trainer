@@ -1,4 +1,7 @@
-import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import NotificationBell from '../components/NotificationBell'
+
 import {
   Brain,
   HeartPulse,
@@ -16,12 +19,94 @@ import {
 
 
 function Workouts() {
+  const navigate = useNavigate()
 
   const [gender, setGender] = useState('male')
+  const [workoutStats, setWorkoutStats] = useState({
+  totalCalories: 0,
+  totalReps: 0,
+  totalWorkouts: 0,
+  dayStreak: 0,
+  aiScore: 0,
+  recovery: 0,
+  strengthGrowth: 0,
+  weeklySessions: 0,
+  nextFocus: 'Start training to generate focus'
+})
   const workoutHero =
   gender === 'male'
     ? '/images/workout-hero-male.jpg'
     : '/images/workout-hero-female.jpg'
+
+    const handleStartTraining = () => {
+  const section = document.querySelector('.workout-section')
+
+  if (section) {
+    section.scrollIntoView({
+      behavior: 'smooth'
+    })
+  }
+}
+
+const calculateAiScore = (data) => {
+  if (!data.totalWorkouts || data.totalWorkouts === 0) {
+    return 0
+  }
+
+  let score = 50
+
+  if (data.totalWorkouts >= 5) score += 10
+  if (data.totalWorkouts >= 10) score += 10
+  if (data.dayStreak >= 3) score += 10
+  if (data.dayStreak >= 7) score += 10
+  if (data.totalCalories >= 1000) score += 10
+
+  return Math.min(score, 100)
+}
+useEffect(() => {
+  const fetchWorkoutStats = async () => {
+    try {
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
+      const response = await fetch(
+        'http://localhost:5000/api/history/stats',
+        {
+          headers: {
+            Authorization: `Bearer ${userInfo?.token}`
+          }
+        }
+      )
+
+      const data = await response.json()
+
+      if (response.ok) {
+        const aiScore = calculateAiScore(data)
+
+        setWorkoutStats({
+          totalCalories: data.totalCalories || 0,
+          totalReps: data.totalReps || 0,
+          totalWorkouts: data.totalWorkouts || 0,
+          dayStreak: data.dayStreak || 0,
+          aiScore,
+          recovery: aiScore >= 80 ? 87 : aiScore >= 60 ? 72 : 50,
+          strengthGrowth: data.totalWorkouts > 0
+            ? Math.min(data.totalWorkouts * 6, 100)
+            : 0,
+          weeklySessions: data.totalWorkouts || 0,
+          nextFocus: aiScore >= 80
+            ? 'Advanced controlled movement'
+            : aiScore >= 60
+              ? 'Controlled lower-body movement'
+              : 'Basic form and consistency'
+        })
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  fetchWorkoutStats()
+}, [])
   return (
     <div className="workouts-page">
     <div className="page-topbar">
@@ -46,13 +131,14 @@ function Workouts() {
 
   <div className="top-actions">
 
-    <button className="icon-btn">
-      <Bell size={19} />
-    </button>
+    <NotificationBell />
 
-    <button className="icon-btn">
-      <Settings size={19} />
-    </button>
+    <button
+  className="icon-btn"
+  onClick={() => navigate('/profile')}
+>
+  <Settings size={19} />
+</button>
 
   </div>
 
@@ -79,9 +165,9 @@ function Workouts() {
             and train with AI posture feedback.
           </p>
 
-          <button>
-            Start Training
-          </button>
+          <button onClick={handleStartTraining}>
+  Start Training
+</button>
         </div>
       </section>
 
@@ -96,8 +182,8 @@ function Workouts() {
     </div>
 
     <div>
-      <span>18%</span>
-      <p>Strength growth this week</p>
+      <span>{workoutStats.strengthGrowth}%</span>
+<p>Strength growth this week</p>
     </div>
 
   </div>
@@ -109,8 +195,8 @@ function Workouts() {
     </div>
 
     <div>
-      <span>4x</span>
-      <p>Weekly training sessions completed</p>
+      <span>{workoutStats.weeklySessions}x</span>
+<p>Workout sessions completed</p>
     </div>
 
   </div>
@@ -123,7 +209,7 @@ function Workouts() {
 
     <div>
       <span>AI</span>
-      <p>Next focus: controlled lower-body movement</p>
+<p>Next focus: {workoutStats.nextFocus}</p>
     </div>
 
   </div>
@@ -164,26 +250,26 @@ function Workouts() {
 
   <div className="metric-circle circle-one">
     <Brain size={28} strokeWidth={2.2} />
-    <h3>92%</h3>
-    <p>AI Form</p>
+    <h3>{workoutStats.aiScore}%</h3>
+<p>AI Form</p>
   </div>
 
   <div className="metric-circle circle-two">
     <HeartPulse size={28} strokeWidth={2.2} />
-    <h3>87%</h3>
-    <p>Recovery</p>
+    <h3>{workoutStats.recovery}%</h3>
+<p>Recovery</p>
   </div>
 
   <div className="metric-circle circle-three">
     <Flame size={28} strokeWidth={2.2} />
-    <h3>320</h3>
-    <p>Calories</p>
+   <h3>{workoutStats.totalCalories}</h3>
+<p>Calories</p>
   </div>
 
   <div className="metric-circle circle-four">
     <Dumbbell size={28} strokeWidth={2.2} />
-    <h3>860</h3>
-    <p>Reps</p>
+    <h3>{workoutStats.totalReps}</h3>
+<p>Reps</p>
   </div>
 
   <div className="metric-circle circle-five">
@@ -209,26 +295,56 @@ function Workouts() {
 
   <div className="workout-category-grid">
 
-  <div className="category-card lower-body" style={{ backgroundImage: "linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/lowerbody-male.jpg')" }}>
-    <h3>Lower Body</h3>
-    <p>Strength, squats, and leg control.</p>
-  </div>
+  <Link
+  to="/workouts/category/strength"
+  className="category-card lower-body"
+  style={{
+    backgroundImage:
+      "linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/lowerbody-male.jpg')"
+  }}
+>
+  <h3>Lower Body</h3>
+  <p>Strength, squats, and leg control.</p>
+</Link>
 
-  <div className="category-card upper-body" style={{ backgroundImage: "linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/upperbody-male.jpg')" }}>
-    <h3>Upper Body</h3>
-    <p>Power and posture stability.</p>
-  </div>
+<Link
+  to="/workouts/category/power"
+  className="category-card upper-body"
+  style={{
+    backgroundImage:
+      "linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/upperbody-male.jpg')"
+  }}
+>
+  <h3>Upper Body</h3>
+  <p>Power and posture stability.</p>
+</Link>
 
-  <div className="category-card core" style={{ backgroundImage: "linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/core-male.jpg')" }}>
-    <h3>Core</h3>
-    <p>Balance and control.</p>
-  </div>
+<Link
+  to="/workouts/category/core"
+  className="category-card core"
+  style={{
+    backgroundImage:
+      "linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/core-male.jpg')"
+  }}
+>
+  <h3>Core</h3>
+  <p>Balance and control.</p>
+</Link>
 
-  <div className="category-card cardio" style={{ backgroundImage: "linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/cardio-male.jpg')" }}>
-    <h3>Cardio</h3>
-    <p>Energy and endurance.</p>
-  </div>
-  <div
+<Link
+  to="/workouts/category/cardio"
+  className="category-card cardio"
+  style={{
+    backgroundImage:
+      "linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/cardio-male.jpg')"
+  }}
+>
+  <h3>Cardio</h3>
+  <p>Energy and endurance.</p>
+</Link>
+
+<Link
+  to="/workouts/category/recovery"
   className="category-card recovery"
   style={{
     backgroundImage:
@@ -237,17 +353,31 @@ function Workouts() {
 >
   <h3>Recovery</h3>
   <p>Relaxation and muscle repair.</p>
-</div>
+</Link>
 
-  <div className="category-card mobility" style={{ backgroundImage: "linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/mobility-male.jpg')" }}>
-    <h3>Mobility</h3>
-    <p>Flexible movement and recovery.</p>
-  </div>
+<Link
+  to="/workouts/category/mobility"
+  className="category-card mobility"
+  style={{
+    backgroundImage:
+      "linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/mobility-male.jpg')"
+  }}
+>
+  <h3>Mobility</h3>
+  <p>Flexible movement and recovery.</p>
+</Link>
 
-  <div className="category-card stretch" style={{ backgroundImage: "linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/stretch-male.jpg')" }}>
-    <h3>Stretch</h3>
-    <p>Cooldown and release.</p>
-  </div>
+<Link
+   to="/workouts/category/stretch"
+  className="category-card stretch"
+  style={{
+    backgroundImage:
+      "linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/stretch-male.jpg')"
+  }}
+>
+  <h3>Stretch</h3>
+  <p>Cooldown and release.</p>
+</Link>
   <div className="category-metric-branch">
 
   <div className="bridge-node bridge-one"></div>

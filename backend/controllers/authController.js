@@ -21,7 +21,8 @@ const signupUser = async (req, res) => {
       height,
       weight,
       fitnessGoal,
-      level
+      level,
+      profileImage
     } = req.body
 
     const userExists = await User.findOne({ email })
@@ -43,16 +44,19 @@ const signupUser = async (req, res) => {
       height,
       weight,
       fitnessGoal,
-      level
+      level,
+      profileImage
     })
 
     res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      token: generateToken(user._id)
-    })
+  _id: user._id,
+  name: user.name,
+  email: user.email,
+  gender: user.gender,
+  profileImage: user.profileImage,
+  role: user.role,
+  token: generateToken(user._id)
+})
   } catch (error) {
     res.status(500).json({
       message: error.message
@@ -84,12 +88,14 @@ const loginUser = async (req, res) => {
     }
 
     res.json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      token: generateToken(user._id)
-    })
+  _id: user._id,
+  name: user.name,
+  email: user.email,
+  gender: user.gender,
+  profileImage: user.profileImage,
+  role: user.role,
+  token: generateToken(user._id)
+})
   } catch (error) {
     res.status(500).json({
       message: error.message

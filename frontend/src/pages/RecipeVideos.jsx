@@ -1,57 +1,125 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Search, Play } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 function RecipeVideos() {
+  const navigate = useNavigate()
 
-  const videos = [
+  const defaultVideos = [
     {
+      _id: 'default-video-1',
       title: 'Greek Yogurt Protein Bowl',
       duration: '0:20 min',
       thumbnail: '/images/greek-yogurt.jpg',
-      video: '/videos/greek-yogurt.mp4'
+      video: '/videos/greek-yogurt.mp4',
+      source: 'default'
     },
     {
+      _id: 'default-video-2',
       title: 'Peanut Butter Banana Smoothie',
       duration: '0:39 min',
       thumbnail: '/images/smoothie-thumb.jpg',
-      video: '/videos/smoothie.mp4'
+      video: '/videos/smoothie.mp4',
+      source: 'default'
     },
     {
+      _id: 'default-video-3',
       title: 'Grilled Chicken Wrap',
       duration: '0:12 min',
       thumbnail: '/images/chicken-wrap.jpg',
-      video: '/videos/chicken-wrap.mp4'
+      video: '/videos/chicken-wrap.mp4',
+      source: 'default'
     },
     {
+      _id: 'default-video-4',
       title: 'Avocado Toast Deluxe',
       duration: '0:37 min',
       thumbnail: '/images/avacado-toast.jpg',
-      video: '/videos/avacado-toast.mp4'
+      video: '/videos/avacado-toast.mp4',
+      source: 'default'
     }
   ]
 
-  const [selectedVideo, setSelectedVideo] =
-    useState(videos[0])
+  const [uploadedVideos, setUploadedVideos] = useState([])
+  const [selectedVideo, setSelectedVideo] = useState(defaultVideos[0])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchApprovedVideos = async () => {
+      try {
+        const response = await fetch(
+          'http://localhost:5000/api/recipes/videos'
+        )
+
+        const data = await response.json()
+
+        if (response.ok) {
+          const formattedVideos = data.map((item) => ({
+  _id: item._id,
+  title: item.title,
+  duration: item.duration || 'Duration not available',
+  thumbnail: item.thumbnail
+    ? `http://localhost:5000${item.thumbnail}`
+    : '',
+  video: `http://localhost:5000${item.videoUrl}`,
+  source: 'uploaded'
+}))
+
+          setUploadedVideos(formattedVideos)
+        } else {
+          console.log(data.message)
+        }
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchApprovedVideos()
+  }, [])
+
+  const allVideos = [
+    ...defaultVideos,
+    ...uploadedVideos
+  ]
+
+  const filteredVideos = allVideos.filter((video) =>
+    video.title.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   return (
     <div className="recipe-videos-page">
 
-      <div className="recipes-heading-block">
+      <div className="recipes-header">
 
-        <span>VIDEO LIBRARY</span>
+        <div className="recipes-heading-block">
+          <span>VIDEO LIBRARY</span>
+          <h1>Recipe Videos</h1>
+        </div>
 
-        <h1>Recipe Videos</h1>
+        <div className="recipe-header-actions">
 
-      </div>
+          <div className="recipe-search">
+            <Search size={18} />
 
-      <div className="recipe-search">
+            <input
+              type="text"
+              placeholder="Search recipes..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
 
-        <Search size={18} />
+          <button
+            className="add-recipe-btn"
+            onClick={() => navigate('/upload-recipe-video')}
+          >
+            + Upload Video
+          </button>
 
-        <input
-          type="text"
-          placeholder="Search recipes..."
-        />
+        </div>
 
       </div>
 
@@ -60,7 +128,7 @@ function RecipeVideos() {
         <video
           controls
           src={selectedVideo.video}
-          poster={selectedVideo.thumbnail}
+          poster={selectedVideo.thumbnail || ''}
         />
 
         <h2>
@@ -69,22 +137,43 @@ function RecipeVideos() {
 
       </div>
 
+      {loading && (
+        <p>Loading approved videos...</p>
+      )}
+
+      {!loading && filteredVideos.length === 0 && (
+        <p>No recipe videos found.</p>
+      )}
+
       <div className="video-list">
 
-        {videos.map((video) => (
+        {filteredVideos.map((video) => (
 
           <div
-            key={video.title}
+            key={video._id}
             className="video-item"
             onClick={() =>
               setSelectedVideo(video)
             }
           >
 
-            <img
-              src={video.thumbnail}
-              alt=""
-            />
+          {video.thumbnail ? (
+  <img
+    src={video.thumbnail}
+    alt={video.title}
+  />
+) : (
+  <div className="uploaded-video-thumb">
+    <video
+      src={video.video}
+      muted
+      preload="metadata"
+    />
+    <div className="thumb-play-overlay">
+      <Play size={20} fill="currentColor" />
+    </div>
+  </div>
+)}
 
             <div>
 
@@ -93,6 +182,12 @@ function RecipeVideos() {
               <p>
                 {video.duration}
               </p>
+
+              <small>
+                {video.source === 'default'
+                  ? 'FitFusion Video'
+                  : 'Community Approved Video'}
+              </small>
 
             </div>
 

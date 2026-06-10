@@ -102,5 +102,59 @@
         "calories_burned": 7.0,
         "status": "completed",
         "date_time": "2026-05-24 00:36:05"
+    },
+    {
+        "exercise": "squat",
+        "reps_completed": 25,
+        "target_reps": 25,
+        "extra_reps_done": false,
+        "calories_burned": 8.75,
+        "status": "completed",
+        "date_time": "2026-06-02 20:27:30"
+    },
+    {
+        "exercise": "squat",
+        "reps_completed": 25,
+        "target_reps": 25,
+        "extra_reps_done": false,
+        "calories_burned": 8.75,
+        "status": "completed",
+        "date_time": "2026-06-08 14:31:14"
+    },
+    {
+        "exercise": "squat",
+        "reps_completed": 25,
+        "target_reps": 25,
+        "extra_reps_done": false,
+        "calories_burned": 8.75,
+        "status": "completed",
+        "date_time": "2026-06-08 15:07:57"
+    },
+    {
+        "exercise": "squat",
+        "reps_completed": 20,
+        "target_reps": 20,
+        "extra_reps_done": false,
+        "calories_burned": 7.0,
+        "status": "completed",
+        "date_time": "2026-06-08 15:20:20"
+    },
+    {
+        "exercise": "squat",
+        "reps_completed": 20,
+        "target_reps": 20,
+        "extra_reps_done": false,
+        "calories_burned": 7.0,
+        "status": "completed",
+        "date_time": "2026-06-10 20:15:55"
+    },
+    {
+        "exercise": "pushup",
+        "reps_completed": 20,
+        "target_reps": 20,
+        "extra_reps_done": false,
+        "calories_burned": 7.0,
+        "status": "completed",
+        "date_time": "2026-06-10 20:22:36"
     }
 ]

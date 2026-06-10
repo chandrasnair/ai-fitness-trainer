@@ -1,3 +1,6 @@
+import { useEffect, useState } from 'react'
+import NotificationBell from '../components/NotificationBell'
+
 import {
   Users,
   Clock,
@@ -14,6 +17,91 @@ import {
 } from 'lucide-react'
 
 function AdminDashboard() {
+  const [pendingItems, setPendingItems] = useState([])
+  const [selectedItem, setSelectedItem] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
+  const fetchPendingItems = async () => {
+    try {
+      const response = await fetch(
+        'http://localhost:5000/api/recipes/pending',
+        {
+          headers: {
+            Authorization: `Bearer ${userInfo?.token}`
+          }
+        }
+      )
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setPendingItems(data)
+      } else {
+        console.log(data.message)
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchPendingItems()
+  }, [])
+
+  const handleApprove = async (id) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/recipes/${id}/approve`,
+        {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${userInfo?.token}`
+          }
+        }
+      )
+
+      if (response.ok) {
+        setSelectedItem(null)
+        fetchPendingItems()
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleReject = async (id) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/recipes/${id}/reject`,
+        {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${userInfo?.token}`
+          }
+        }
+      )
+
+      if (response.ok) {
+        setSelectedItem(null)
+        fetchPendingItems()
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const pendingWritten = pendingItems.filter(
+    item => item.type === 'written'
+  ).length
+
+  const pendingVideos = pendingItems.filter(
+    item => item.type === 'video'
+  ).length
+
   return (
     <div className="admin-page">
 
@@ -40,7 +128,7 @@ function AdminDashboard() {
           </div>
 
           <div className="top-actions">
-            <button className="icon-btn"><Bell size={19} /></button>
+            <NotificationBell />
             <button className="icon-btn"><Settings size={19} /></button>
           </div>
         </div>
@@ -49,25 +137,25 @@ function AdminDashboard() {
 
           <div className="admin-stat-card">
             <Users size={24} />
-            <h3>1,248</h3>
-            <p>Total Users</p>
+            <h3>1</h3>
+            <p>Total Admin</p>
           </div>
 
           <div className="admin-stat-card">
             <Clock size={24} />
-            <h3>18</h3>
+            <h3>{pendingWritten}</h3>
             <p>Pending Recipes</p>
           </div>
 
           <div className="admin-stat-card">
             <Video size={24} />
-            <h3>7</h3>
+            <h3>{pendingVideos}</h3>
             <p>Pending Videos</p>
           </div>
 
           <div className="admin-stat-card">
             <Dumbbell size={24} />
-            <h3>3,920</h3>
+            <h3>Live</h3>
             <p>Workout Sessions</p>
           </div>
 
@@ -84,75 +172,73 @@ function AdminDashboard() {
               </div>
             </div>
 
-            <div className="approval-row">
+            {loading && (
+              <p>Loading pending submissions...</p>
+            )}
 
-              <div className="approval-info">
-                <FileText size={20} />
+            {!loading && pendingItems.length === 0 && (
+              <p>No pending submissions.</p>
+            )}
 
-                <div>
-                  <h3>High Protein Recovery Bowl</h3>
-                  <p>Written Recipe · Pending</p>
-                  <small>
-                    Submitted by: Chandra S Nair · snairchandra@gmail.com
-                  </small>
+            {pendingItems.map((item) => (
+              <div className="approval-row" key={item._id}>
+
+                <div className="approval-info">
+                  {item.type === 'written' ? (
+                    <FileText size={20} />
+                  ) : (
+                    <PlayCircle size={20} />
+                  )}
+
+                  <div>
+                    <h3>{item.title}</h3>
+
+                    <p>
+                      {item.type === 'written'
+                        ? 'Written Recipe'
+                        : 'Video Recipe'} · Pending
+                    </p>
+
+                    <small>
+                      Submitted by:{' '}
+                      {item.submittedBy?.name || 'Unknown'} ·{' '}
+                      {item.submittedBy?.email || 'No email'}
+                    </small>
+                  </div>
                 </div>
-              </div>
 
-              <div className="admin-actions">
-                <button className="view-user-btn">
-                  <Eye size={15} />
-                  Profile
-                </button>
+                <div className="admin-actions">
+                  <button className="view-user-btn">
+                    <Eye size={15} />
+                    Profile
+                  </button>
 
-                <button className="read-recipe-btn">
-                  Read Recipe
-                </button>
+                  <button
+                    className="read-recipe-btn"
+                    onClick={() => setSelectedItem(item)}
+                  >
+                    {item.type === 'written'
+                      ? 'Read Recipe'
+                      : 'Watch Video'}
+                  </button>
 
-                <button className="approve-btn">
-                  <Check size={16} />
-                </button>
+                  <button
+                    className="approve-btn"
+                    onClick={() => handleApprove(item._id)}
+                  >
+                    <Check size={16} />
+                  </button>
 
-                <button className="reject-btn">
-                  <X size={16} />
-                </button>
-              </div>
-
-            </div>
-
-            <div className="approval-row">
-
-              <div className="approval-info">
-                <PlayCircle size={20} />
-
-                <div>
-                  <h3>Banana Smoothie Prep</h3>
-                  <p>Video Recipe · Pending</p>
-                  <small>
-                    Submitted by: Anu Joseph · anu@example.com
-                  </small>
+                  <button
+                    className="reject-btn"
+                    onClick={() => handleReject(item._id)}
+                  >
+                    <X size={16} />
+                  </button>
                 </div>
+
               </div>
-
-              <div className="admin-actions">
-                <button className="view-user-btn">
-                  <Eye size={15} />
-                  Profile
-                </button>
-
-                <button className="read-recipe-btn">
-                  Watch Video
-                </button>
-
-                <button className="approve-btn">
-                  <Check size={16} />
-                </button>
-
-                <button className="reject-btn">
-                  <X size={16} />
-                </button>
-              </div>
-
-            </div>
+            ))}
 
           </div>
 
@@ -167,12 +253,12 @@ function AdminDashboard() {
 
             <div className="activity-admin-item">
               <ShieldCheck size={18} />
-              <p>New recipe submitted for approval.</p>
+              <p>{pendingItems.length} submissions waiting for approval.</p>
             </div>
 
             <div className="activity-admin-item">
               <Users size={18} />
-              <p>New user registered today.</p>
+              <p>Admin account active.</p>
             </div>
 
             <div className="activity-admin-item">
@@ -185,6 +271,85 @@ function AdminDashboard() {
         </section>
 
       </main>
+
+      {selectedItem && (
+        <div className="admin-modal-overlay">
+          <div className="admin-modal">
+
+            <button
+              className="modal-close-btn"
+              onClick={() => setSelectedItem(null)}
+            >
+              <X size={18} />
+            </button>
+
+            <span>
+              {selectedItem.type === 'written'
+                ? 'WRITTEN RECIPE'
+                : 'VIDEO RECIPE'}
+            </span>
+
+            <h2>{selectedItem.title}</h2>
+
+            {selectedItem.type === 'written' && (
+              <>
+                {selectedItem.image && (
+                  <img
+                    src={`http://localhost:5000${selectedItem.image}`}
+                    alt={selectedItem.title}
+                    className="admin-recipe-image"
+                  />
+                )}
+
+                <h4>Ingredients</h4>
+                <p>{selectedItem.ingredients}</p>
+
+                <h4>Way of Cooking</h4>
+                <p>{selectedItem.instructions}</p>
+              </>
+            )}
+
+            {selectedItem.type === 'video' && (
+              <>
+                <video
+                  controls
+                  className="admin-video-preview"
+                  src={`http://localhost:5000${selectedItem.videoUrl}`}
+                />
+
+                <p>
+                  Duration: {selectedItem.duration || 'Not available'}
+                </p>
+              </>
+            )}
+
+            <small>
+              Submitted by:{' '}
+              {selectedItem.submittedBy?.name || 'Unknown'} ·{' '}
+              {selectedItem.submittedBy?.email || 'No email'}
+            </small>
+
+            <div className="modal-actions">
+              <button
+                className="approve-btn"
+                onClick={() => handleApprove(selectedItem._id)}
+              >
+                <Check size={16} />
+                Approve
+              </button>
+
+              <button
+                className="reject-btn"
+                onClick={() => handleReject(selectedItem._id)}
+              >
+                <X size={16} />
+                Reject
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
 
     </div>
   )

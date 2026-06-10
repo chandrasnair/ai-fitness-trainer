@@ -2,19 +2,43 @@ const mongoose = require('mongoose')
 
 const recipeSchema = new mongoose.Schema(
   {
+    type: {
+      type: String,
+      enum: ['written', 'video'],
+      required: true
+    },
+
     title: {
       type: String,
       required: true
     },
 
-    ingredients: [String],
+    ingredients: {
+      type: String,
+      default: ''
+    },
 
     instructions: {
       type: String,
-      required: true
+      default: ''
     },
 
     image: {
+  type: String,
+  default: ''
+  },
+
+    videoUrl: {
+      type: String,
+      default: ''
+    },
+   
+  thumbnail: {
+  type: String,
+  default: ''
+},
+
+    duration: {
       type: String,
       default: ''
     },

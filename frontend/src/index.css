@@ -86,7 +86,6 @@ body {
   display: flex;
   align-items: center;
   gap: 18px;
-
   margin-bottom: 24px;
 }
 
@@ -881,7 +880,7 @@ body {
 
   background: #102615;
 
-  color: white;
+  color: white !important;
 
   font-size: 13px;
   font-weight: 900;
@@ -3076,66 +3075,82 @@ body {
 
 
 /* DIET PAGE*/
-
 .diet-page {
   min-height: 100vh;
   padding: 28px;
-
   background: #e8dfd1;
 }
 
+/* COMPACT NUTRITION HERO */
+
 .nutrition-hero {
-  min-height: 470px;
-  border-radius: 36px;
+  height: 175px;
+  border-radius: 24px;
   overflow: hidden;
 
   display: grid;
-  grid-template-columns: 0.55fr 1fr;
+  grid-template-columns: 0.42fr 1fr;
 
-  background: #071107;
-  box-shadow: 0 24px 55px rgba(20,40,15,.16);
+  background: #f8faf1;
+  box-shadow: 0 14px 35px rgba(20, 40, 15, 0.1);
+  border: 1px solid rgba(65, 120, 45, 0.14);
 }
 
 .nutrition-hero-content {
-  padding: 54px;
-  color: white;
+  padding: 24px 32px;
+  color: #102d18;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
 
-  background: #071107;
+  background: linear-gradient(
+    90deg,
+    rgba(248, 250, 241, 0.98),
+    rgba(248, 250, 241, 0.9),
+    rgba(248, 250, 241, 0.72)
+  );
+
   z-index: 2;
 }
 
 .nutrition-hero-content span {
-  color: #cbe7aa;
-  font-size: 12px;
+  width: fit-content;
+  padding: 6px 12px;
+  border-radius: 999px;
+
+  background: #e6f4dc;
+  color: #2f6b22;
+
+  font-size: 10px;
   font-weight: 900;
-  letter-spacing: 2px;
+  letter-spacing: 1.2px;
 }
 
 .nutrition-hero-content h1 {
-  margin: 18px 0 14px;
-  font-size: 64px;
-  line-height: .92;
+  margin: 10px 0 8px;
+  font-size: 28px;
+  line-height: 1.05;
+  color: #102d18;
 }
 
 .nutrition-hero-content p {
-  max-width: 520px;
-  color: #dbe6d2;
-  line-height: 1.8;
+  max-width: 360px;
+  color: #526652;
+  font-size: 14px;
+  line-height: 1.45;
 }
 
 .nutrition-hero-content button {
-  margin-top: 26px;
+  margin-top: 14px;
   width: fit-content;
   border: none;
-  padding: 14px 24px;
+  padding: 10px 18px;
   border-radius: 999px;
   background: #d8f0bf;
   color: #102615;
   font-weight: 900;
+  font-size: 13px;
 }
 
 .nutrition-hero-image {
@@ -3148,21 +3163,93 @@ body {
   content: "";
   position: absolute;
   inset: 0 auto 0 0;
-  width: 160px;
+  width: 260px;
   z-index: 2;
-  background: linear-gradient(to right, #071107, rgba(7,17,7,.72), transparent);
+  background: linear-gradient(
+    to right,
+    rgba(248, 250, 241, 0.96),
+    rgba(248, 250, 241, 0.62),
+    transparent
+  );
 }
 
 .nutrition-hero-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
+  object-position: center right;
   display: block;
+  transform: translateY(-20px) important;
 }
 
 .nutrition-timeline {
-  margin-top: 30px;
+  margin-top: 24px;
+}
+
+/* DARK MODE */
+
+body.dark-theme .nutrition-hero {
+  background: #071007;
+  border: 1px solid rgba(158, 232, 111, 0.22);
+}
+
+body.dark-theme .nutrition-hero-content {
+  background: linear-gradient(
+    90deg,
+    rgba(7, 16, 7, 0.98),
+    rgba(7, 16, 7, 0.9),
+    rgba(7, 16, 7, 0.72)
+  );
+}
+
+body.dark-theme .nutrition-hero-content span {
+  background: #1f351f;
+  color: #9ee86f;
+}
+
+body.dark-theme .nutrition-hero-content h1 {
+  color: #ffffff;
+}
+
+body.dark-theme .nutrition-hero-content p {
+  color: #cfe6cf;
+}
+
+body.dark-theme .nutrition-hero-image::before {
+  background: linear-gradient(
+    to right,
+    rgba(7, 16, 7, 0.96),
+    rgba(7, 16, 7, 0.62),
+    transparent
+  );
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+  .nutrition-hero {
+    height: 240px;
+    grid-template-columns: 1fr;
+  }
+
+  .nutrition-hero-content {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      rgba(248, 250, 241, 0.96),
+      rgba(248, 250, 241, 0.75),
+      rgba(248, 250, 241, 0.3)
+    );
+  }
+
+  .nutrition-hero-image {
+    height: 100%;
+  }
+
+  .nutrition-hero-content h1 {
+    font-size: 26px;
+  }
 }
 
 .timeline-heading span {
@@ -3460,7 +3547,7 @@ body {
 }
 .diet-hero-soft {
   margin-top: 22px;
-  min-height: 470px;
+  min-height: 450px;
 
   border-radius: 36px;
 
@@ -4531,455 +4618,2933 @@ body {
 }
 
 
-/*progress page*/
+/*progress*/
 
-.progress-page {
-  min-height: 100vh;
-  padding: 28px;
-  background: #eef2e7;
+/* =====================================================
+   PROGRESS PAGE PRO - FINAL
+===================================================== */
+
+.progress-pro-page,
+.progress-pro-page * {
+  box-sizing: border-box;
 }
 
-.progress-hero {
-  min-height: 470px;
-  border-radius: 36px;
-  padding: 54px;
-  background-size: cover;
-  background-position: center;
-  color: white;
+.progress-pro-page {
+  min-height: 100vh;
+  padding: 22px 34px 24px;
+  background: #f6f8f1;
+  color: #10160e;
+  overflow-x: hidden;
+}
+
+/* HEADER */
+
+.progress-pro-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.progress-pro-title-area {
   display: flex;
   align-items: center;
-  box-shadow: 0 24px 55px rgba(20,40,15,.16);
-   transform: translateY(-15px);
-}
-
-.progress-hero span,
-.progress-video-overlay span {
-  color: #d8f0bf;
-  font-size: 12px;
-  font-weight: 900;
-  letter-spacing: 2px;
-}
-
-.progress-hero h1 {
-  margin: 18px 0 14px;
-  font-size: 64px;
-  line-height: .92;
-   
-}
-
-.progress-hero p {
-  max-width: 520px;
-  color: #e6f3df;
-  line-height: 1.7;
-}
-
-.progress-stats-row {
-  margin-top: 24px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
   gap: 18px;
 }
 
-.progress-stat {
-  padding: 20px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.62);
+.progress-pro-main-icon {
+  width: 58px;
+  height: 58px;
+  min-width: 58px;
+  border-radius: 22px;
+  background: #edf5de;
+  color: #5f7f2f;
   display: flex;
   align-items: center;
-  gap: 14px;
+  justify-content: center;
 }
 
-.progress-stat svg {
-  color: #638f35;
+.progress-pro-title-area span {
+  color: #5f7f2f;
+  font-size: 12px;
+  letter-spacing: 2px;
+  font-weight: 900;
 }
 
-.progress-stat h3 {
+.progress-pro-title-area h1 {
+  margin: 5px 0 5px;
+  color: #071007;
+  font-size: 42px;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.progress-pro-title-area p {
   margin: 0;
-  color: #102615;
-  font-size: 24px;
-  
-}
-
-.progress-stat p {
-  margin: 0;
-  color: #667266;
-  font-size: 13px;
+  color: #66705a;
+  font-size: 15px;
   font-weight: 700;
 }
 
-.progress-focus-layout {
-  margin-top: 30px;
-
+.progress-pro-actions {
   display: flex;
-  align-items: center;
-
-  gap: 50px;
+  align-items: flex-start;
+  gap: 24px;
 }
 
-.progress-video-frame {
-  width: 260px;
-  height: 390px;
-
-  border-radius: 32px;
-
-  overflow: hidden;
-
-  position: relative;
-
-  box-shadow:
-    0 20px 45px rgba(20,40,15,.14);
-}
-
-.progress-video-frame video {
-  width: 100%;
-  height: 100%;
-
-  object-fit: cover;
-}
-
-.progress-video-frame::after {
-  content: "";
-
-  position: absolute;
-  inset: 0;
-
-  background:
-    linear-gradient(
-      to top,
-      rgba(5,12,5,.78),
-      rgba(5,12,5,.18),
-      rgba(5,12,5,.05)
-    );
-
-  z-index: 1;
-}
-
-.progress-video-overlay {
-  position: absolute;
-
-  left: 22px;
-  right: 22px;
-  bottom: 24px;
-
-  z-index: 2;
-
-  color: white;
-}
-
-.progress-video-overlay span {
-  color: #d8f0bf;
-
-  font-size: 10px;
-  font-weight: 900;
-
-  letter-spacing: 1.8px;
-}
-
-.progress-video-overlay h2 {
-  margin: 10px 0 8px;
-
-  font-size: 28px;
-  line-height: 1;
-}
-
-.progress-video-overlay p {
-  margin: 0;
-
-  color: #e6f3df;
-
-  font-size: 13px;
-  line-height: 1.5;
-}
-.progress-bottom-grid {
-  margin-top: 30px;
-  display: grid;
-  grid-template-columns: 1fr 1.1fr;
-  gap: 36px;
-  align-items: start;
-}
-
-.workout-history-line span,
-.ai-progress-note span {
-  color: #638f35;
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 2px;
-}
-
-.history-item {
-  padding: 18px 0;
-  border-bottom: 1px solid rgba(99,143,53,.18);
-}
-
-.history-item strong {
-  color: #102615;
-  font-size: 20px;
-}
-
-.history-item p {
-  margin: 6px 0 0;
-  color: #667266;
-}
-
-.ai-progress-note {
-  flex: 1;
-}
-
-.ai-progress-note span {
-  color: #638f35;
-
-  font-size: 11px;
-  font-weight: 900;
-
-  letter-spacing: 2px;
-}
-
-.ai-progress-note h2 {
-  margin: 14px 0;
-
-  color: #102615;
-
-  font-size: 46px;
-
-  line-height: .95;
-}
-
-.ai-progress-note p {
-  color: #526252;
-
-  line-height: 1.9;
-
-  max-width: 600px;
-}
-.progress-focus-layout {
-  margin-top: 32px;
-
-  display: grid;
-
-  grid-template-columns:
-    260px
-    1fr
-    280px;
-
-  gap: 34px;
-
-  align-items: start;
-}
-
-.progress-video-frame {
-  width: 260px;
-  height: 390px;
-
-  border-radius: 32px;
-
-  overflow: hidden;
-
-  position: relative;
-
-  box-shadow:
-    0 20px 45px rgba(20,40,15,.14);
-}
-
-.progress-video-frame video {
-  width: 100%;
-  height: 100%;
-
-  object-fit: cover;
-}
-
-.progress-video-frame::after {
-  content: "";
-
-  position: absolute;
-  inset: 0;
-
-  background:
-    linear-gradient(
-      to top,
-      rgba(5,12,5,.78),
-      rgba(5,12,5,.18),
-      rgba(5,12,5,.05)
-    );
-
-  z-index: 1;
-}
-
-.progress-video-overlay {
-  position: absolute;
-
-  left: 22px;
-  right: 22px;
-  bottom: 24px;
-
-  z-index: 2;
-
-  color: white;
-}
-
-.progress-video-overlay span,
-.ai-progress-photo-note span,
-.workout-history-line span {
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 2px;
-}
-
-.progress-video-overlay span,
-.ai-progress-photo-note span {
-  color: #d8f0bf;
-}
-
-.progress-video-overlay h2 {
-  margin: 10px 0 0;
-
-  font-size: 28px;
-  line-height: 1;
-
-  color: white;
-}
-
-.workout-history-line span {
-  color: #638f35;
-}
-
-.history-item {
-  padding: 16px 0;
-
-  border-bottom:
-    1px solid rgba(99,143,53,.18);
-}
-
-.history-item strong {
-  color: #102615;
-
-  font-size: 20px;
-}
-
-.history-item p {
-  margin: 6px 0 0;
-
-  color: #667266;
-}
-
-.ai-progress-photo-note {
-  width: 280px;
-  height: 280px;
-
-  border-radius: 32px;
-
-  padding: 24px;
-
-  background-size: cover;
-  background-position: center;
-
-  color: white;
-
+.progress-pro-action-item {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-
-  box-shadow:
-    0 20px 45px rgba(20,40,15,.14);
-}
-
-.ai-progress-photo-note h2 {
-  margin: 12px 0 8px;
-
-  font-size: 28px;
-  line-height: 1.05;
-}
-
-.ai-progress-photo-note p {
-  margin: 0;
-
-  color: #e6f3df;
-
-  font-size: 13px;
-}
-.ai-progress-photo-note {
-  margin-top: 30px;
-}
-.history-header {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-
-  margin-bottom: 12px;
-}
-
-.graph-toggle-btn {
-  border: none;
-  background: transparent;
-
-  color: #638f35;
-
-  font-weight: 800;
-
+  gap: 7px;
   cursor: pointer;
 }
 
-.mini-graph {
-  padding-top: 10px;
+.progress-pro-action-item small {
+  color: #354227;
+  font-size: 11px;
+  font-weight: 800;
 }
 
-.mini-graph svg {
+.progress-pro-action-circle {
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+  border: 1px solid #dfe6d3;
+  background: #ffffff;
+  color: #26311f;
+  box-shadow: 0 8px 20px rgba(20, 30, 15, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.progress-pro-action-circle .notification-btn,
+.progress-pro-action-circle button {
+  width: 52px !important;
+  height: 52px !important;
+  border-radius: 18px !important;
+  border: none !important;
+  background: transparent !important;
+  color: #26311f !important;
+  box-shadow: none !important;
+}
+
+/* COMMON */
+
+.progress-pro-card {
+  background: #ffffff;
+  border: 1px solid #dde5d1;
+  border-radius: 24px;
+  box-shadow: 0 14px 34px rgba(23, 31, 18, 0.06);
+  overflow: hidden;
+}
+
+.progress-pro-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.progress-pro-section-head h2 {
+  margin: 0;
+  color: #071007;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.progress-pro-section-head button {
+  border: none;
+  background: transparent;
+  color: #4f7025;
+  font-size: 13px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.progress-pro-primary-btn {
+  border: none;
+  background: #6f8f38;
+  color: #ffffff;
+  min-height: 44px;
+  padding: 0 22px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 12px 24px rgba(76, 100, 42, 0.26);
+}
+
+.progress-pro-primary-btn:hover {
+  background: #5f7f2f;
+}
+
+/* TOP GRID */
+
+.progress-pro-top-grid {
+  display: grid;
+  grid-template-columns: 1.02fr 1.15fr;
+  gap: 22px;
+  margin-bottom: 18px;
+}
+
+.progress-pro-left-stack {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 18px;
+}
+
+/* HERO RIGHT */
+
+.progress-pro-hero-card {
+  height: 420px;
+  border-radius: 24px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 18px 42px rgba(23, 31, 18, 0.12);
+}
+
+.progress-pro-hero-card img {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: 220px;
+  height: 100%;
+  object-fit: cover;
 }
 
-.mini-graph polyline {
+.progress-pro-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(5, 12, 5, 0.88) 0%,
+    rgba(5, 12, 5, 0.72) 38%,
+    rgba(5, 12, 5, 0.26) 70%,
+    rgba(5, 12, 5, 0.06) 100%
+  );
+}
+
+.progress-pro-hero-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  padding: 34px;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 420px;
+}
+
+.progress-pro-hero-badge {
+  width: fit-content;
+  min-height: 38px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: rgba(111, 143, 56, 0.55);
+  color: #e8ffd3;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: blur(8px);
+}
+
+.progress-pro-hero-content h2 {
+  margin: 24px 0 18px;
+  font-size: 42px;
+  line-height: 1.08;
+  font-weight: 900;
+}
+
+.progress-pro-hero-content p {
+  margin: 0 0 28px;
+  color: #eef7e7;
+  font-size: 15px;
+  line-height: 1.7;
+  font-weight: 650;
+}
+
+.progress-pro-confidence-strip {
+  margin-top: 28px;
+  width: 270px;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 14px;
+  background: rgba(7, 16, 7, 0.55);
+  display: grid;
+  grid-template-columns: 1fr 90px 38px;
+  align-items: center;
+  gap: 10px;
+  backdrop-filter: blur(8px);
+}
+
+.progress-pro-confidence-strip span,
+.progress-pro-confidence-strip strong {
+  color: #edf8e8;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.progress-pro-confidence-strip div {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+}
+
+.progress-pro-confidence-strip i {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: #d7efbb;
+}
+
+/* OVERALL CARD */
+
+.progress-pro-overall-card {
+  padding: 22px 24px;
+}
+
+.progress-pro-card-title h2 {
+  margin: 0 0 18px;
+  color: #071007;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.progress-pro-overall-body {
+  display: grid;
+  grid-template-columns: 230px 1fr;
+  gap: 28px;
+  align-items: center;
+}
+
+.progress-pro-circle-wrap {
+  width: 220px;
+  height: 220px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-pro-circle-wrap svg {
+  width: 220px;
+  height: 220px;
+  transform: rotate(-90deg);
+}
+
+.progress-pro-ring-bg {
   fill: none;
-  stroke: #638f35;
-  stroke-width: 5;
+  stroke: #e8efdd;
+  stroke-width: 13;
+}
+
+.progress-pro-ring-fill {
+  fill: none;
+  stroke: #6f8f38;
+  stroke-width: 13;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.5s ease;
+}
+
+.progress-pro-circle-text {
+  position: absolute;
+  text-align: center;
+}
+
+.progress-pro-circle-text h3 {
+  margin: 0;
+  color: #071007;
+  font-size: 45px;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.progress-pro-circle-text p {
+  margin: 9px 0 0;
+  color: #354227;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.progress-pro-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.progress-pro-stat-card {
+  min-height: 102px;
+  padding: 15px;
+  border-radius: 18px;
+  border: 1px solid #e4ebd8;
+  background: #fbfcf7;
+}
+
+.progress-pro-stat-card svg {
+  color: #5f7f2f;
+  margin-bottom: 8px;
+}
+
+.progress-pro-stat-card span {
+  display: block;
+  color: #354227;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.progress-pro-stat-card h3 {
+  margin: 5px 0 2px;
+  color: #071007;
+  font-size: 25px;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.progress-pro-stat-card p {
+  margin: 0;
+  color: #66705a;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+/* POSTURE + REPS */
+
+.progress-pro-metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.progress-pro-mini-panel {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 76px 1fr 20px;
+  gap: 14px;
+  align-items: center;
+}
+
+.progress-pro-mini-circle {
+  position: relative;
+  width: 70px;
+  height: 70px;
+}
+
+.progress-pro-mini-circle svg {
+  width: 70px;
+  height: 70px;
+  transform: rotate(-90deg);
+}
+
+.progress-pro-mini-circle circle:first-child {
+  fill: none;
+  stroke: #e8efdd;
+  stroke-width: 8;
+}
+
+.progress-pro-mini-circle circle:nth-child(2) {
+  fill: none;
+  stroke: #6f8f38;
+  stroke-width: 8;
   stroke-linecap: round;
 }
 
-.mini-graph-labels {
+.progress-pro-mini-circle div {
+  position: absolute;
+  inset: 0;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+}
 
-  margin-top: 8px;
+.progress-pro-mini-circle strong {
+  color: #071007;
+  font-size: 21px;
+  font-weight: 900;
+}
 
-  color: #667266;
+.progress-pro-mini-circle span {
+  color: #66705a;
+  font-size: 11px;
+  font-weight: 800;
+}
 
+.progress-pro-mini-panel h3 {
+  margin: 0 0 7px;
+  color: #071007;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.progress-pro-mini-panel p {
+  margin: 0 0 4px;
+  color: #4f7025;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.progress-pro-mini-panel small {
+  color: #66705a;
+  font-size: 12px;
+  line-height: 1.4;
   font-weight: 700;
 }
-.mini-graph {
-  padding: 18px;
-  border-radius: 24px;
-  background: rgba(255,255,255,.45);
+
+.progress-pro-mini-icon {
+  width: 62px;
+  height: 62px;
+  border-radius: 22px;
+  background: #edf5de;
+  color: #5f7f2f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.mini-graph svg {
-  width: 100%;
-  height: 220px;
-  background:
-    linear-gradient(rgba(99,143,53,.10) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(99,143,53,.10) 1px, transparent 1px);
-  background-size: 100% 55px, 100px 100%;
+.progress-pro-reps-goal-text p {
+  margin: 0 0 6px;
+  color: #071007;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.progress-pro-reps-goal-text p span {
+  color: #66705a;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.progress-pro-goal-line {
+  margin-top: 9px;
+  height: 6px;
+  border-radius: 999px;
+  background: #e5eadb;
+  overflow: hidden;
+}
+
+.progress-pro-goal-line i {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: #6f8f38;
+}
+
+/* RECOMMENDATIONS */
+
+.progress-pro-recommend-section {
+  padding: 20px 22px;
+  margin-bottom: 18px;
+}
+
+.progress-pro-recommend-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.progress-pro-recommend-card {
+  min-height: 116px;
+  padding: 16px;
   border-radius: 18px;
+  border: 1px solid #e4ebd8;
+  background: #ffffff;
+  display: grid;
+  grid-template-columns: 48px 1fr 18px;
+  gap: 14px;
+  align-items: center;
 }
 
-.mini-graph polyline {
+.progress-pro-recommend-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-pro-recommend-icon.olive {
+  background: #edf5de;
+  color: #5f7f2f;
+}
+
+.progress-pro-recommend-icon.blue {
+  background: #e7efff;
+  color: #4f6bb7;
+}
+
+.progress-pro-recommend-icon.green {
+  background: #edf5de;
+  color: #6a8b31;
+}
+
+.progress-pro-recommend-icon.gold {
+  background: #fff3dc;
+  color: #d09a1e;
+}
+
+.progress-pro-recommend-content h3 {
+  margin: 0 0 6px;
+  color: #071007;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.progress-pro-recommend-content p {
+  margin: 0 0 9px;
+  color: #66705a;
+  font-size: 12.5px;
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+.progress-pro-recommend-content span {
+  display: inline-flex;
+  min-height: 24px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: #edf5de;
+  color: #5f7f2f;
+  font-size: 11px;
+  font-weight: 900;
+  align-items: center;
+}
+
+/* LOWER GRID */
+
+.progress-pro-lower-grid {
+  display: grid;
+  grid-template-columns: 1.08fr 1.15fr 0.64fr;
+  gap: 18px;
+  align-items: stretch;
+}
+
+/* RECENT ACTIVITY */
+
+.progress-pro-recent-activity {
+  padding: 20px;
+}
+
+.progress-pro-activity-main {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.progress-pro-activity-main img {
+  width: 96px;
+  height: 62px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.progress-pro-activity-main-text h3 {
+  margin: 0 0 5px;
+  color: #071007;
+  font-size: 17px;
+  font-weight: 900;
+}
+
+.progress-pro-activity-main-text p {
+  margin: 0;
+  color: #66705a;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.progress-pro-activity-main-meta {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 24px;
+  margin-top: -20px;
+}
+
+.progress-pro-activity-main-meta span {
+  color: #26311f;
+  font-size: 13px;
+  font-weight: 850;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.progress-pro-activity-main-meta svg {
+  color: #5f7f2f;
+}
+
+.progress-pro-activity-strip {
+  height: 72px;
+  border-radius: 15px;
+  background: linear-gradient(90deg, #f5f8ee, #eef4e4);
+  border: 1px solid #e1e9d7;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: center;
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.progress-pro-activity-strip span {
+  display: block;
+  color: #66705a;
+  font-size: 12px;
+  font-weight: 750;
+  margin-bottom: 6px;
+}
+
+.progress-pro-activity-strip strong {
+  color: #071007;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.progress-pro-activity-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.progress-pro-activity-row {
+  min-height: 58px;
+  border-bottom: 1px solid #edf1e8;
+  display: grid;
+  grid-template-columns: 44px 1fr 116px;
+  gap: 12px;
+  align-items: center;
+}
+
+.progress-pro-row-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: #edf5de;
+  color: #5f7f2f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-pro-row-text h4 {
+  margin: 0 0 4px;
+  color: #071007;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.progress-pro-row-text p {
+  margin: 0;
+  color: #66705a;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.progress-pro-best-box {
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid #e4ebd8;
+  background: #fbfcf7;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  text-align: center;
+}
+
+.progress-pro-best-box span {
+  color: #66705a;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.progress-pro-best-box strong {
+  color: #071007;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.progress-pro-empty-state {
+  min-height: 220px;
+  border-radius: 18px;
+  background: #fbfcf7;
+  border: 1px solid #e4ebd8;
+  color: #66705a;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* PERFORMANCE GRAPH */
+
+.progress-pro-performance-card {
+  padding: 20px;
+}
+
+.progress-pro-chart {
+  height: 250px;
+  border-radius: 18px;
+  background: linear-gradient(
+    to top,
+    rgba(237, 245, 222, 0.9),
+    rgba(255, 255, 255, 0.5)
+  );
+  border: 1px solid #e5ecd9;
+  overflow: hidden;
+}
+
+.progress-pro-chart svg {
+  width: 100%;
+  height: 100%;
+}
+
+.progress-pro-chart line {
+  stroke: rgba(99, 143, 53, 0.15);
+  stroke-width: 1;
+  stroke-dasharray: 5;
+}
+
+.progress-pro-chart polyline {
   fill: none;
-  stroke: #7fb34d;
-  stroke-width: 5;
+  stroke: #6f8f38;
+  stroke-width: 4;
   stroke-linecap: round;
   stroke-linejoin: round;
-  filter: drop-shadow(0 6px 10px rgba(99,143,53,.22));
 }
 
-.mini-graph circle {
-  fill: #102615;
+.progress-pro-chart circle {
+  fill: #ffffff;
+  stroke: #5f7f2f;
+  stroke-width: 4;
 }
 
-.mini-graph-labels {
+.progress-pro-performance-summary {
+  margin-top: 16px;
+  min-height: 76px;
+  border-radius: 15px;
+  background: linear-gradient(90deg, #f5f8ee, #eef4e4);
+  border: 1px solid #e1e9d7;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  text-align: center;
+  align-items: center;
+}
+
+.progress-pro-performance-summary div {
+  border-right: 1px solid #dde5d1;
+}
+
+.progress-pro-performance-summary div:last-child {
+  border-right: none;
+}
+
+.progress-pro-performance-summary span {
+  display: block;
+  color: #66705a;
+  font-size: 12px;
+  font-weight: 750;
+  margin-bottom: 4px;
+}
+
+.progress-pro-performance-summary strong {
+  color: #071007;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.progress-pro-performance-summary small {
+  color: #66705a;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* FOCUS VIDEO */
+
+.progress-pro-focus-card {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.progress-pro-focus-card h2 {
+  margin: 0 0 14px;
+  color: #071007;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.progress-pro-video-card {
+  flex: 1;
+  min-height: 430px;
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+  background: #071007;
+}
+
+.progress-pro-video-card video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.progress-pro-video-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(5, 12, 5, 0.84),
+    rgba(5, 12, 5, 0.34),
+    rgba(5, 12, 5, 0.08)
+  );
+}
+
+.progress-pro-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.progress-pro-video-text {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 18px;
+  z-index: 2;
+}
+
+.progress-pro-video-text p {
+  margin: 0 0 14px;
+  color: #ffffff;
+  font-size: 13px;
+  line-height: 1.55;
+  font-weight: 700;
+}
+
+.progress-pro-video-text button {
+  width: 100%;
+  min-height: 44px;
+  border: none;
+  border-radius: 14px;
+  background: #6f8f38;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+/* DARK MODE */
+
+body.dark-theme .progress-pro-page {
+  background: #071007;
+  color: #f4fff4;
+}
+
+body.dark-theme .progress-pro-card,
+body.dark-theme .progress-pro-action-circle,
+body.dark-theme .progress-pro-stat-card,
+body.dark-theme .progress-pro-best-box,
+body.dark-theme .progress-pro-recommend-card,
+body.dark-theme .progress-pro-chart,
+body.dark-theme .progress-pro-empty-state {
+  background: #101b10;
+  border-color: rgba(155, 191, 90, 0.25);
+}
+
+body.dark-theme .progress-pro-main-icon,
+body.dark-theme .progress-pro-mini-icon,
+body.dark-theme .progress-pro-row-icon,
+body.dark-theme .progress-pro-recommend-icon.olive,
+body.dark-theme .progress-pro-recommend-icon.green {
+  background: #182818;
+  color: #9bbf5a;
+}
+
+body.dark-theme .progress-pro-recommend-icon.blue {
+  background: #182033;
+  color: #91aef8;
+}
+
+body.dark-theme .progress-pro-recommend-icon.gold {
+  background: #312713;
+  color: #f0c35a;
+}
+
+body.dark-theme .progress-pro-title-area h1,
+body.dark-theme .progress-pro-card-title h2,
+body.dark-theme .progress-pro-section-head h2,
+body.dark-theme .progress-pro-circle-text h3,
+body.dark-theme .progress-pro-stat-card h3,
+body.dark-theme .progress-pro-mini-panel h3,
+body.dark-theme .progress-pro-recommend-content h3,
+body.dark-theme .progress-pro-activity-main-text h3,
+body.dark-theme .progress-pro-row-text h4,
+body.dark-theme .progress-pro-performance-summary strong,
+body.dark-theme .progress-pro-focus-card h2 {
+  color: #ffffff;
+}
+
+body.dark-theme .progress-pro-title-area span,
+body.dark-theme .progress-pro-section-head button,
+body.dark-theme .progress-pro-mini-panel p,
+body.dark-theme .progress-pro-recommend-content span {
+  color: #9bbf5a;
+}
+
+body.dark-theme .progress-pro-title-area p,
+body.dark-theme .progress-pro-action-item small,
+body.dark-theme .progress-pro-circle-text p,
+body.dark-theme .progress-pro-stat-card span,
+body.dark-theme .progress-pro-stat-card p,
+body.dark-theme .progress-pro-mini-panel small,
+body.dark-theme .progress-pro-recommend-content p,
+body.dark-theme .progress-pro-activity-main-text p,
+body.dark-theme .progress-pro-activity-strip span,
+body.dark-theme .progress-pro-row-text p,
+body.dark-theme .progress-pro-performance-summary span,
+body.dark-theme .progress-pro-performance-summary small {
+  color: #cfe6cf;
+}
+
+body.dark-theme .progress-pro-ring-bg,
+body.dark-theme .progress-pro-mini-circle circle:first-child {
+  stroke: #243524;
+}
+
+body.dark-theme .progress-pro-ring-fill,
+body.dark-theme .progress-pro-mini-circle circle:nth-child(2) {
+  stroke: #9bbf5a;
+}
+
+body.dark-theme .progress-pro-goal-line {
+  background: #243524;
+}
+
+body.dark-theme .progress-pro-goal-line i,
+body.dark-theme .progress-pro-confidence-strip i,
+body.dark-theme .progress-pro-video-text button,
+body.dark-theme .progress-pro-primary-btn {
+  background: #9bbf5a;
+  color: #071007;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1250px) {
+  .progress-pro-top-grid,
+  .progress-pro-lower-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .progress-pro-hero-card {
+    order: 2;
+  }
+
+  .progress-pro-left-stack {
+    order: 1;
+  }
+}
+
+@media (max-width: 980px) {
+  .progress-pro-recommend-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .progress-pro-overall-body {
+    grid-template-columns: 1fr;
+  }
+
+  .progress-pro-circle-wrap {
+    margin: 0 auto;
+  }
+
+  .progress-pro-stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .progress-pro-page {
+    padding: 20px;
+  }
+
+  .progress-pro-header {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .progress-pro-title-area h1 {
+    font-size: 34px;
+  }
+
+  .progress-pro-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .progress-pro-metrics-grid,
+  .progress-pro-recommend-grid,
+  .progress-pro-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .progress-pro-activity-strip,
+  .progress-pro-performance-summary {
+    grid-template-columns: 1fr 1fr;
+    height: auto;
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .progress-pro-activity-main {
+    grid-template-columns: 1fr;
+  }
+
+  .progress-pro-activity-main img {
+    width: 100%;
+    height: 170px;
+  }
+
+  .progress-pro-activity-main-meta {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-top: 0;
+  }
+
+  .progress-pro-activity-row {
+    grid-template-columns: 44px 1fr;
+  }
+
+  .progress-pro-best-box {
+    grid-column: 2;
+  }
+
+  .progress-pro-video-card {
+    min-height: 340px;
+  }
+}
+
+
+/* =====================================================
+   PROGRESS PAGE PRO - POLISH FIX 1
+   Paste at the VERY BOTTOM of index.css
+===================================================== */
+
+/* give page breathing space from browser top */
+.progress-pro-page {
+  padding-top: 34px !important;
+}
+
+/* fix header position and spacing */
+.progress-pro-header {
+  margin-bottom: 24px !important;
+  align-items: center !important;
+}
+
+.progress-pro-title-area h1 {
+  font-size: 40px !important;
+  margin: 4px 0 5px !important;
+}
+
+.progress-pro-title-area p {
+  font-size: 14px !important;
+}
+
+/* make top area less bulky */
+.progress-pro-top-grid {
+  grid-template-columns: 0.95fr 1.05fr !important;
+  gap: 22px !important;
+  align-items: stretch !important;
+}
+
+/* compact overall progress card */
+.progress-pro-overall-card {
+  min-height: 330px !important;
+  padding: 22px 24px !important;
+}
+
+.progress-pro-card-title h2 {
+  margin-bottom: 14px !important;
+}
+
+.progress-pro-overall-body {
+  grid-template-columns: 220px 1fr !important;
+  gap: 20px !important;
+}
+
+/* reduce empty space around circle */
+.progress-pro-circle-wrap {
+  width: 205px !important;
+  height: 205px !important;
+}
+
+.progress-pro-circle-wrap svg {
+  width: 205px !important;
+  height: 205px !important;
+}
+
+.progress-pro-circle-text h3 {
+  font-size: 42px !important;
+}
+
+.progress-pro-circle-text p {
+  font-size: 13px !important;
+  margin-top: 7px !important;
+}
+
+/* cleaner stat cards */
+.progress-pro-stat-grid {
+  gap: 12px !important;
+}
+
+.progress-pro-stat-card {
+  min-height: 94px !important;
+  padding: 13px 14px !important;
+}
+
+.progress-pro-stat-card svg {
+  margin-bottom: 6px !important;
+}
+
+.progress-pro-stat-card span {
+  font-size: 11.5px !important;
+  line-height: 1.2 !important;
+}
+
+.progress-pro-stat-card h3 {
+  font-size: 25px !important;
+  margin-top: 5px !important;
+}
+
+.progress-pro-stat-card p {
+  font-size: 11.5px !important;
+}
+
+/* posture and reps cards better spacing */
+.progress-pro-metrics-grid {
+  gap: 18px !important;
+}
+
+.progress-pro-mini-panel {
+  min-height: 128px !important;
+  padding: 18px 20px !important;
+  grid-template-columns: 72px 1fr 18px !important;
+  gap: 14px !important;
+}
+
+.progress-pro-mini-circle,
+.progress-pro-mini-circle svg {
+  width: 66px !important;
+  height: 66px !important;
+}
+
+.progress-pro-mini-panel h3 {
+  font-size: 14px !important;
+}
+
+.progress-pro-mini-panel p {
+  font-size: 13.5px !important;
+  line-height: 1.25 !important;
+}
+
+.progress-pro-mini-panel small {
+  font-size: 11.8px !important;
+}
+
+/* hero card should show image more clearly */
+.progress-pro-hero-card {
+  height: 420px !important;
+}
+
+.progress-pro-hero-overlay {
+  background: linear-gradient(
+    90deg,
+    rgba(5, 12, 5, 0.78) 0%,
+    rgba(5, 12, 5, 0.58) 38%,
+    rgba(5, 12, 5, 0.18) 68%,
+    rgba(5, 12, 5, 0.02) 100%
+  ) !important;
+}
+
+/* move hero text slightly left and make it professional */
+.progress-pro-hero-content {
+  padding: 32px 34px !important;
+  max-width: 390px !important;
+}
+
+.progress-pro-hero-badge {
+  min-height: 34px !important;
+  padding: 0 14px !important;
+  font-size: 11px !important;
+}
+
+.progress-pro-hero-content h2 {
+  font-size: 38px !important;
+  line-height: 1.08 !important;
+  margin: 20px 0 16px !important;
+}
+
+.progress-pro-hero-content p {
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  margin-bottom: 24px !important;
+}
+
+/* button cleaner */
+.progress-pro-primary-btn {
+  min-height: 42px !important;
+  padding: 0 20px !important;
+  font-size: 13px !important;
+}
+
+/* fix insight confidence text breaking */
+.progress-pro-confidence-strip {
+  width: 300px !important;
+  min-height: 42px !important;
+  grid-template-columns: 120px 1fr 40px !important;
+  gap: 10px !important;
+  margin-top: 24px !important;
+}
+
+.progress-pro-confidence-strip span {
+  white-space: nowrap !important;
+  font-size: 11.5px !important;
+}
+
+.progress-pro-confidence-strip strong {
+  font-size: 11.5px !important;
+}
+
+/* reduce first screen scroll feeling */
+.progress-pro-left-stack {
+  gap: 18px !important;
+}
+
+/* make notification/settings not too high */
+.progress-pro-actions {
+  margin-top: 2px !important;
+}
+/* =====================================================
+   PROGRESS PAGE PRO - POLISH FIX 2
+   Paste below POLISH FIX 1
+===================================================== */
+
+/* slightly reduce top section height feeling */
+.progress-pro-top-grid {
+  grid-template-columns: 0.92fr 1.08fr !important;
+  gap: 22px !important;
+}
+
+/* make overall card tighter and more premium */
+.progress-pro-overall-card {
+  min-height: 318px !important;
+  padding: 20px 24px !important;
+}
+
+.progress-pro-overall-body {
+  grid-template-columns: 205px 1fr !important;
+  gap: 18px !important;
+}
+
+.progress-pro-circle-wrap {
+  width: 192px !important;
+  height: 192px !important;
+}
+
+.progress-pro-circle-wrap svg {
+  width: 192px !important;
+  height: 192px !important;
+}
+
+.progress-pro-ring-bg,
+.progress-pro-ring-fill {
+  stroke-width: 12 !important;
+}
+
+.progress-pro-circle-text h3 {
+  font-size: 40px !important;
+}
+
+.progress-pro-circle-text p {
+  font-size: 12.5px !important;
+}
+
+/* premium stat cards */
+.progress-pro-stat-card {
+  min-height: 88px !important;
+  padding: 12px 13px !important;
+  border-radius: 17px !important;
+  background: linear-gradient(145deg, #ffffff, #f7faf2) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
+}
+
+.progress-pro-stat-card svg {
+  width: 20px !important;
+  height: 20px !important;
+  padding: 6px !important;
+  box-sizing: content-box !important;
+  border-radius: 13px !important;
+  background: #edf5de !important;
+  margin-bottom: 7px !important;
+}
+
+.progress-pro-stat-card span {
+  font-size: 11px !important;
+  line-height: 1.15 !important;
+  max-width: 95px !important;
+}
+
+.progress-pro-stat-card h3 {
+  font-size: 24px !important;
+}
+
+/* make posture/reps section cleaner */
+.progress-pro-metrics-grid {
+  gap: 18px !important;
+}
+
+.progress-pro-mini-panel {
+  min-height: 118px !important;
+  padding: 18px 20px !important;
+  grid-template-columns: 68px 1fr 16px !important;
+  gap: 16px !important;
+}
+
+.progress-pro-mini-circle,
+.progress-pro-mini-circle svg {
+  width: 62px !important;
+  height: 62px !important;
+}
+
+.progress-pro-mini-circle circle:first-child,
+.progress-pro-mini-circle circle:nth-child(2) {
+  stroke-width: 7 !important;
+}
+
+.progress-pro-mini-circle strong {
+  font-size: 19px !important;
+}
+
+.progress-pro-mini-circle span {
+  font-size: 10px !important;
+}
+
+.progress-pro-mini-panel h3 {
+  margin-bottom: 6px !important;
+}
+
+.progress-pro-mini-panel p {
+  font-size: 13px !important;
+  margin-bottom: 5px !important;
+}
+
+.progress-pro-mini-panel small {
+  font-size: 11.5px !important;
+  line-height: 1.35 !important;
+}
+
+.progress-pro-mini-icon {
+  width: 58px !important;
+  height: 58px !important;
+}
+
+/* hero: make image subject more visible and move focus right */
+.progress-pro-hero-card {
+  height: 405px !important;
+}
+
+.progress-pro-hero-card img {
+  object-position: 68% center !important;
+  transform: scale(1.02);
+}
+
+/* left dark enough for text, right lighter for image */
+.progress-pro-hero-overlay {
+  background: linear-gradient(
+    90deg,
+    rgba(5, 12, 5, 0.86) 0%,
+    rgba(5, 12, 5, 0.70) 34%,
+    rgba(5, 12, 5, 0.34) 55%,
+    rgba(5, 12, 5, 0.08) 78%,
+    rgba(5, 12, 5, 0.02) 100%
+  ) !important;
+}
+
+.progress-pro-hero-content {
+  padding: 30px 34px !important;
+  max-width: 365px !important;
+  justify-content: center !important;
+}
+
+.progress-pro-hero-badge {
+  min-height: 32px !important;
+  padding: 0 13px !important;
+  font-size: 10.5px !important;
+}
+
+.progress-pro-hero-content h2 {
+  font-size: 35px !important;
+  line-height: 1.08 !important;
+  margin: 18px 0 14px !important;
+  letter-spacing: -0.5px;
+}
+
+.progress-pro-hero-content p {
+  font-size: 13.5px !important;
+  line-height: 1.55 !important;
+  margin-bottom: 22px !important;
+}
+
+.progress-pro-primary-btn {
+  min-height: 40px !important;
+  border-radius: 13px !important;
+}
+
+/* confidence bar cleaner and smaller */
+.progress-pro-confidence-strip {
+  width: 285px !important;
+  min-height: 38px !important;
+  grid-template-columns: 112px 1fr 35px !important;
+  margin-top: 22px !important;
+  padding: 0 13px !important;
+}
+
+.progress-pro-confidence-strip span,
+.progress-pro-confidence-strip strong {
+  font-size: 11px !important;
+}
+
+.progress-pro-confidence-strip div {
+  height: 5px !important;
+}
+
+/* bring next section slightly upward */
+.progress-pro-recommend-section {
+  margin-top: -2px !important;
+}
+
+/* =====================================================
+   PROGRESS PAGE PRO - STRONG TOP POLISH
+   Paste at the VERY BOTTOM
+===================================================== */
+
+.progress-pro-top-grid {
+  grid-template-columns: 0.9fr 1.1fr !important;
+  gap: 24px !important;
+  align-items: stretch !important;
+}
+
+.progress-pro-overall-card {
+  min-height: 300px !important;
+  padding: 20px 24px !important;
+}
+
+.progress-pro-overall-body {
+  grid-template-columns: 190px 1fr !important;
+  gap: 18px !important;
+  align-items: center !important;
+}
+
+.progress-pro-circle-wrap,
+.progress-pro-circle-wrap svg {
+  width: 178px !important;
+  height: 178px !important;
+}
+
+.progress-pro-circle-text h3 {
+  font-size: 38px !important;
+}
+
+.progress-pro-circle-text p {
+  font-size: 12px !important;
+}
+
+.progress-pro-stat-grid {
+  gap: 12px !important;
+}
+
+.progress-pro-stat-card {
+  min-height: 82px !important;
+  padding: 12px 14px !important;
+  border-radius: 18px !important;
+  background: linear-gradient(145deg, #ffffff, #f7faf1) !important;
+}
+
+.progress-pro-stat-card svg {
+  width: 18px !important;
+  height: 18px !important;
+  padding: 7px !important;
+  border-radius: 13px !important;
+  background: #edf5de !important;
+  margin-bottom: 6px !important;
+  box-sizing: content-box !important;
+}
+
+.progress-pro-stat-card span {
+  font-size: 11px !important;
+  line-height: 1.15 !important;
+}
+
+.progress-pro-stat-card h3 {
+  font-size: 23px !important;
+  margin: 4px 0 1px !important;
+}
+
+.progress-pro-stat-card p {
+  font-size: 11px !important;
+}
+
+/* make hero clearly changed */
+.progress-pro-hero-card {
+  height: 370px !important;
+}
+
+.progress-pro-hero-card img {
+  object-position: 75% center !important;
+  transform: scale(1.05) !important;
+}
+
+.progress-pro-hero-overlay {
+  background: linear-gradient(
+    90deg,
+    rgba(5, 12, 5, 0.9) 0%,
+    rgba(5, 12, 5, 0.72) 32%,
+    rgba(5, 12, 5, 0.28) 55%,
+    rgba(5, 12, 5, 0.04) 100%
+  ) !important;
+}
+
+.progress-pro-hero-content {
+  max-width: 350px !important;
+  padding: 28px 34px !important;
+}
+
+.progress-pro-hero-content h2 {
+  font-size: 33px !important;
+  line-height: 1.08 !important;
+  margin: 16px 0 13px !important;
+}
+
+.progress-pro-hero-content p {
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+  margin-bottom: 20px !important;
+}
+
+.progress-pro-hero-badge {
+  min-height: 30px !important;
+  font-size: 10px !important;
+  padding: 0 12px !important;
+}
+
+.progress-pro-primary-btn {
+  min-height: 38px !important;
+  padding: 0 18px !important;
+}
+
+.progress-pro-confidence-strip {
+  width: 270px !important;
+  min-height: 36px !important;
+  grid-template-columns: 110px 1fr 34px !important;
+  margin-top: 18px !important;
+}
+
+/* lower small cards */
+.progress-pro-metrics-grid {
+  gap: 18px !important;
+}
+
+.progress-pro-mini-panel {
+  min-height: 112px !important;
+  padding: 16px 18px !important;
+  grid-template-columns: 62px 1fr 16px !important;
+  gap: 14px !important;
+}
+
+.progress-pro-mini-circle,
+.progress-pro-mini-circle svg {
+  width: 58px !important;
+  height: 58px !important;
+}
+
+.progress-pro-mini-icon {
+  width: 54px !important;
+  height: 54px !important;
+}
+
+.progress-pro-mini-panel p {
+  font-size: 12.5px !important;
+}
+
+.progress-pro-mini-panel small {
+  font-size: 11px !important;
+}
+/* =====================================================
+   PROGRESS PAGE PRO - MATCH LEFT HEIGHT WITH HERO
+   Paste at the VERY BOTTOM
+===================================================== */
+
+/* keep hero and left side same visual height */
+.progress-pro-top-grid {
+  align-items: stretch !important;
+}
+
+/* reduce gap between overall card and posture/reps */
+.progress-pro-left-stack {
+  gap: 12px !important;
+}
+
+/* make overall progress card shorter */
+.progress-pro-overall-card {
+  min-height: 260px !important;
+  height: 260px !important;
+  padding: 18px 22px !important;
+}
+
+/* reduce title space inside overall box */
+.progress-pro-card-title h2 {
+  margin-bottom: 8px !important;
+  font-size: 18px !important;
+}
+
+/* make circle + stats fit tighter */
+.progress-pro-overall-body {
+  grid-template-columns: 170px 1fr !important;
+  gap: 14px !important;
+  align-items: center !important;
+}
+
+/* smaller progress circle */
+.progress-pro-circle-wrap,
+.progress-pro-circle-wrap svg {
+  width: 160px !important;
+  height: 160px !important;
+}
+
+.progress-pro-ring-bg,
+.progress-pro-ring-fill {
+  stroke-width: 11 !important;
+}
+
+.progress-pro-circle-text h3 {
+  font-size: 34px !important;
+}
+
+.progress-pro-circle-text p {
+  font-size: 11.5px !important;
+  margin-top: 5px !important;
+}
+
+/* smaller stat cards */
+.progress-pro-stat-grid {
+  gap: 10px !important;
+}
+
+.progress-pro-stat-card {
+  min-height: 76px !important;
+  height: 76px !important;
+  padding: 9px 12px !important;
+  border-radius: 16px !important;
+}
+
+.progress-pro-stat-card svg {
+  width: 16px !important;
+  height: 16px !important;
+  padding: 6px !important;
+  margin-bottom: 4px !important;
+  border-radius: 12px !important;
+}
+
+.progress-pro-stat-card span {
+  font-size: 10.5px !important;
+  line-height: 1.08 !important;
+  max-width: 100px !important;
+}
+
+.progress-pro-stat-card h3 {
+  font-size: 21px !important;
+  margin: 3px 0 0 !important;
+}
+
+.progress-pro-stat-card p {
+  font-size: 10.5px !important;
+  line-height: 1.1 !important;
+}
+
+/* move posture/reps upward by reducing height */
+.progress-pro-metrics-grid {
+  gap: 12px !important;
+}
+
+.progress-pro-mini-panel {
+  min-height: 98px !important;
+  height: 98px !important;
+  padding: 14px 16px !important;
+  grid-template-columns: 56px 1fr 14px !important;
+  gap: 12px !important;
+}
+
+/* smaller posture mini circle */
+.progress-pro-mini-circle,
+.progress-pro-mini-circle svg {
+  width: 52px !important;
+  height: 52px !important;
+}
+
+.progress-pro-mini-circle circle:first-child,
+.progress-pro-mini-circle circle:nth-child(2) {
+  stroke-width: 7 !important;
+}
+
+.progress-pro-mini-circle strong {
+  font-size: 17px !important;
+}
+
+.progress-pro-mini-circle span {
+  font-size: 9px !important;
+}
+
+/* smaller reps icon */
+.progress-pro-mini-icon {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 17px !important;
+}
+
+/* text compact inside posture/reps */
+.progress-pro-mini-panel h3 {
+  font-size: 13px !important;
+  margin-bottom: 4px !important;
+}
+
+.progress-pro-mini-panel p {
+  font-size: 12px !important;
+  margin-bottom: 3px !important;
+  line-height: 1.15 !important;
+}
+
+.progress-pro-mini-panel small {
+  font-size: 10.5px !important;
+  line-height: 1.25 !important;
+}
+
+/* reps goal text compact */
+.progress-pro-reps-goal-text p {
+  font-size: 18px !important;
+  margin-bottom: 3px !important;
+}
+
+.progress-pro-reps-goal-text p span {
+  font-size: 13px !important;
+}
+
+.progress-pro-goal-line {
+  height: 5px !important;
+  margin-top: 6px !important;
+}
+
+/* keep hero height aligned with left content */
+.progress-pro-hero-card {
+  height: 370px !important;
+}
+
+
+/* =====================================================
+   PROGRESS PAGE - OVERALL PROGRESS CARD TEXT FIX
+   Paste at the VERY BOTTOM of index.css
+===================================================== */
+
+/* make the overall progress card cleaner without changing layout */
+.progress-pro-overall-card {
+  height: 260px !important;
+  min-height: 260px !important;
+  padding: 20px 24px !important;
+}
+
+/* keep title neat */
+.progress-pro-card-title h2 {
+  margin-bottom: 10px !important;
+}
+
+/* better alignment between circle and stat cards */
+.progress-pro-overall-body {
+  grid-template-columns: 172px 1fr !important;
+  gap: 16px !important;
+  align-items: center !important;
+}
+
+/* slightly smaller circle so card breathes */
+.progress-pro-circle-wrap,
+.progress-pro-circle-wrap svg {
+  width: 158px !important;
+  height: 158px !important;
+}
+
+.progress-pro-circle-text h3 {
+  font-size: 33px !important;
+}
+
+.progress-pro-circle-text p {
+  font-size: 11px !important;
+  margin-top: 4px !important;
+}
+
+/* fix cramped stat cards */
+.progress-pro-stat-grid {
+  gap: 10px !important;
+}
+
+.progress-pro-stat-card {
+  height: 78px !important;
+  min-height: 78px !important;
+  padding: 10px 12px !important;
+  display: grid !important;
+  grid-template-columns: 34px 1fr !important;
+  grid-template-rows: auto auto auto !important;
+  column-gap: 9px !important;
+  align-items: center !important;
+}
+
+/* icon on left, content on right */
+.progress-pro-stat-card svg {
+  grid-row: 1 / 4 !important;
+  width: 17px !important;
+  height: 17px !important;
+  padding: 7px !important;
+  margin: 0 !important;
+  border-radius: 13px !important;
+  background: #edf5de !important;
+  color: #5f7f2f !important;
+  box-sizing: content-box !important;
+}
+
+/* label should not collide with value */
+.progress-pro-stat-card span {
+  font-size: 10.5px !important;
+  line-height: 1.15 !important;
+  font-weight: 900 !important;
+  margin: 0 !important;
+}
+
+/* value spacing fixed */
+.progress-pro-stat-card h3 {
+  font-size: 21px !important;
+  line-height: 1 !important;
+  margin: 3px 0 1px !important;
+}
+
+/* unit text */
+.progress-pro-stat-card p {
+  font-size: 10.5px !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+}
+/* =====================================================
+   PROGRESS PAGE - WHY MODAL
+===================================================== */
+
+.progress-pro-why-btn {
+  border: none;
+  min-height: 24px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: #edf5de;
+  color: #5f7f2f;
+  font-size: 11px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.progress-pro-why-btn:hover {
+  background: #dfeccf;
+}
+
+.progress-pro-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(7, 16, 7, 0.58);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.progress-pro-why-modal {
+  position: relative;
+  width: min(460px, 94vw);
+  background: #ffffff;
+  border: 1px solid #dbe7c9;
+  border-radius: 26px;
+  padding: 30px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+  text-align: left;
+}
+
+.progress-pro-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: #edf5de;
+  color: #4f7025;
+  font-size: 23px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.progress-pro-modal-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.progress-pro-modal-icon.olive,
+.progress-pro-modal-icon.green {
+  background: #edf5de;
+  color: #5f7f2f;
+}
+
+.progress-pro-modal-icon.blue {
+  background: #e7efff;
+  color: #4f6bb7;
+}
+
+.progress-pro-modal-icon.gold {
+  background: #fff3dc;
+  color: #d09a1e;
+}
+
+.progress-pro-why-modal span {
+  color: #5f7f2f;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+}
+
+.progress-pro-why-modal h2 {
+  margin: 10px 0 12px;
+  color: #071007;
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.progress-pro-why-modal p {
+  margin: 0;
+  color: #596451;
+  font-size: 15px;
+  line-height: 1.7;
+  font-weight: 700;
+}
+
+.progress-pro-modal-ok {
+  width: 100%;
+  height: 44px;
+  margin-top: 24px;
+  border: none;
+  border-radius: 14px;
+  background: #6f8f38;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.progress-pro-modal-ok:hover {
+  background: #5f7f2f;
+}
+
+/* dark mode for why modal */
+
+body.dark-theme .progress-pro-why-modal {
+  background: #101b10;
+  border-color: rgba(155, 191, 90, 0.25);
+}
+
+body.dark-theme .progress-pro-why-modal h2 {
+  color: #ffffff;
+}
+
+body.dark-theme .progress-pro-why-modal p {
+  color: #cfe6cf;
+}
+
+body.dark-theme .progress-pro-modal-close {
+  background: #182818;
+  color: #9bbf5a;
+}
+/* =====================================================
+   PROGRESS PAGE - MOTIVATION VIDEO MODAL
+===================================================== */
+
+.progress-pro-video-modal {
+  position: relative;
+  width: min(520px, 94vw);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #ffffff;
+  border: 1px solid #dbe7c9;
+  border-radius: 26px;
+  padding: 28px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+}
+
+.progress-pro-video-modal span {
+  color: #5f7f2f;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+}
+
+.progress-pro-video-modal h2 {
+  margin: 10px 0 18px;
+  color: #071007;
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.progress-pro-video-modal video {
+  width: 100%;
+  height: 520px;
+  border-radius: 22px;
+  object-fit: cover;
+  background: #071007;
+}
+
+.progress-pro-video-modal p {
+  margin: 18px 0 0;
+  color: #596451;
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 700;
+}
+
+/* dark mode */
+
+body.dark-theme .progress-pro-video-modal {
+  background: #101b10;
+  border-color: rgba(155, 191, 90, 0.25);
+}
+
+body.dark-theme .progress-pro-video-modal h2 {
+  color: #ffffff;
+}
+
+body.dark-theme .progress-pro-video-modal p {
+  color: #cfe6cf;
+}
+
+/* =====================================================
+   PROGRESS PAGE - ACTIVE HERO CONTROLS
+===================================================== */
+
+.progress-pro-confidence-strip {
+  border: none !important;
+  cursor: pointer !important;
+  text-align: left !important;
+}
+
+.progress-pro-confidence-strip:hover {
+  transform: translateY(-2px);
+  background: rgba(7, 16, 7, 0.68) !important;
+}
+
+.progress-pro-performance-card {
+  scroll-margin-top: 90px;
+}
+
+/* =====================================================
+   PROGRESS PAGE - PREMIUM AI POPUP REDESIGN
+   Paste at VERY BOTTOM of index.css
+===================================================== */
+
+.progress-premium-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(155, 191, 90, 0.2), transparent 32%),
+    rgba(7, 16, 7, 0.62);
+  backdrop-filter: blur(14px) saturate(1.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.progress-premium-modal {
+  position: relative;
+  width: min(780px, 94vw);
+  min-height: 470px;
+  border-radius: 34px;
+  background: #ffffff;
+  border: 1px solid rgba(111, 143, 56, 0.22);
+  box-shadow:
+    0 42px 110px rgba(7, 16, 7, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  display: grid;
+  grid-template-columns: 255px 1fr;
+  overflow: hidden;
+  animation: premiumModalIn 0.25s ease both;
+}
+
+.progress-premium-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 5;
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 50%;
+  background: #edf5de;
+  color: #4f7025;
+  font-size: 23px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.progress-premium-close:hover {
+  transform: rotate(90deg) scale(1.05);
+  background: #dfeccf;
+}
+
+.progress-premium-left-panel {
+  padding: 34px 28px;
+  background:
+    linear-gradient(160deg, rgba(7, 16, 7, 0.94), rgba(40, 62, 30, 0.9)),
+    linear-gradient(135deg, #263d1c, #071007);
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-premium-left-panel::before {
+  content: "";
+  position: absolute;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background: rgba(155, 191, 90, 0.16);
+  top: -70px;
+  right: -80px;
+}
+
+.progress-premium-left-panel::after {
+  content: "";
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 1px solid rgba(214, 239, 187, 0.2);
+  bottom: 36px;
+  left: -56px;
+}
+
+.progress-premium-icon {
+  width: 66px;
+  height: 66px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 34px;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.18);
+}
+
+.progress-premium-icon.olive,
+.progress-premium-icon.green {
+  background: #dcecc8;
+  color: #4f7025;
+}
+
+.progress-premium-icon.blue {
+  background: #dfe9ff;
+  color: #4f6bb7;
+}
+
+.progress-premium-icon.gold {
+  background: #ffe9ba;
+  color: #a66f0c;
+}
+
+.progress-premium-left-panel span {
+  position: relative;
+  z-index: 2;
+  color: #bdda91;
+  font-size: 11px;
+  font-weight: 950;
+  letter-spacing: 2.5px;
+  margin-bottom: 13px;
+}
+
+.progress-premium-left-panel h3 {
+  position: relative;
+  z-index: 2;
+  margin: 0 0 16px;
+  color: #ffffff;
+  font-size: 27px;
+  line-height: 1.08;
+  letter-spacing: -0.8px;
+  font-weight: 950;
+}
+
+.progress-premium-left-panel p {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  color: #dfeeda;
+  font-size: 13.5px;
+  line-height: 1.7;
+  font-weight: 650;
+}
+
+.progress-premium-content {
+  padding: 38px 42px 34px;
+  background:
+    linear-gradient(180deg, #ffffff 0%, #fbfdf7 100%);
+}
+
+.progress-premium-topline {
   display: flex;
   justify-content: space-between;
-  margin-top: 10px;
-  color: #667266;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.progress-premium-topline span {
+  color: #6f8f38;
+  font-size: 10.5px;
+  letter-spacing: 2.2px;
+  font-weight: 950;
+}
+
+.progress-premium-topline strong {
+  min-height: 30px;
+  padding: 0 13px;
+  border-radius: 999px;
+  background: #edf5de;
+  color: #4f7025;
+  display: flex;
+  align-items: center;
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 950;
+}
+
+.progress-premium-content h2 {
+  margin: 0 0 22px;
+  color: #071007;
+  font-size: 34px;
+  line-height: 1.04;
+  letter-spacing: -1.2px;
+  font-weight: 950;
+}
+
+.progress-premium-insight-box {
+  padding: 20px 22px;
+  border-radius: 22px;
+  background:
+    linear-gradient(145deg, #f6f8f1, #ffffff);
+  border: 1px solid #e0e8d5;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.9),
+    0 12px 30px rgba(23, 31, 18, 0.05);
+  margin-bottom: 18px;
+}
+
+.progress-premium-insight-box small {
+  display: block;
+  color: #6f8f38;
+  font-size: 10px;
+  letter-spacing: 1.8px;
+  font-weight: 950;
+  margin-bottom: 10px;
+}
+
+.progress-premium-insight-box p {
+  margin: 0;
+  color: #46533f;
+  font-size: 14.5px;
+  line-height: 1.75;
+  font-weight: 650;
+}
+
+.progress-premium-data-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #dce7ce;
+  background: #edf5de;
+  margin-bottom: 18px;
+}
+
+.progress-premium-data-grid div {
+  min-height: 76px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px solid #d4e4c3;
+}
+
+.progress-premium-data-grid div:last-child {
+  border-right: none;
+}
+
+.progress-premium-data-grid small {
+  color: #66705a;
+  font-size: 10.5px;
+  font-weight: 900;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.progress-premium-data-grid strong {
+  color: #071007;
+  font-size: 23px;
+  font-weight: 950;
+  letter-spacing: -0.4px;
+}
+
+.progress-premium-action-note {
+  display: grid;
+  grid-template-columns: 82px 1fr;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: #fbfcf7;
+  border: 1px dashed #d5e4c4;
+  margin-bottom: 22px;
+}
+
+.progress-premium-action-note span {
+  color: #4f7025;
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.progress-premium-action-note p {
+  margin: 0;
+  color: #596451;
+  font-size: 13px;
+  line-height: 1.55;
+  font-weight: 650;
+}
+
+.progress-premium-done {
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #6f8f38, #55772b);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 950;
+  cursor: pointer;
+  box-shadow: 0 18px 32px rgba(95, 127, 47, 0.28);
+  transition: 0.2s ease;
+}
+
+.progress-premium-done:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 40px rgba(95, 127, 47, 0.36);
+}
+
+@keyframes premiumModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive */
+
+@media (max-width: 760px) {
+  .progress-premium-modal {
+    grid-template-columns: 1fr;
+  }
+
+  .progress-premium-left-panel {
+    min-height: 220px;
+  }
+
+  .progress-premium-content {
+    padding: 30px 24px;
+  }
+
+  .progress-premium-content h2 {
+    font-size: 28px;
+  }
+
+  .progress-premium-data-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .progress-premium-data-grid div {
+    border-right: none;
+    border-bottom: 1px solid #d4e4c3;
+  }
+
+  .progress-premium-data-grid div:last-child {
+    border-bottom: none;
+  }
+}
+
+/* =====================================================
+   PROGRESS PREMIUM POPUP - SIZE SHRINK
+   Paste at the VERY BOTTOM
+===================================================== */
+
+.progress-premium-modal {
+  width: min(640px, 92vw) !important;
+  min-height: 390px !important;
+  grid-template-columns: 215px 1fr !important;
+  border-radius: 28px !important;
+}
+
+.progress-premium-left-panel {
+  padding: 28px 22px !important;
+}
+
+.progress-premium-icon {
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 20px !important;
+  margin-bottom: 26px !important;
+}
+
+.progress-premium-left-panel span {
+  font-size: 10px !important;
+  letter-spacing: 2px !important;
+  margin-bottom: 10px !important;
+}
+
+.progress-premium-left-panel h3 {
+  font-size: 23px !important;
+  line-height: 1.08 !important;
+  margin-bottom: 12px !important;
+}
+
+.progress-premium-left-panel p {
+  font-size: 12.2px !important;
+  line-height: 1.55 !important;
+}
+
+.progress-premium-content {
+  padding: 30px 32px 28px !important;
+}
+
+.progress-premium-topline {
+  margin-bottom: 14px !important;
+}
+
+.progress-premium-topline span {
+  font-size: 9.8px !important;
+  letter-spacing: 1.8px !important;
+}
+
+.progress-premium-topline strong {
+  min-height: 26px !important;
+  padding: 0 11px !important;
+  font-size: 11px !important;
+}
+
+.progress-premium-content h2 {
+  font-size: 28px !important;
+  line-height: 1.05 !important;
+  margin-bottom: 16px !important;
+}
+
+.progress-premium-insight-box {
+  padding: 16px 18px !important;
+  border-radius: 18px !important;
+  margin-bottom: 14px !important;
+}
+
+.progress-premium-insight-box small {
+  font-size: 9.5px !important;
+  letter-spacing: 1.5px !important;
+  margin-bottom: 8px !important;
+}
+
+.progress-premium-insight-box p {
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+}
+
+.progress-premium-data-grid {
+  margin-bottom: 14px !important;
+  border-radius: 16px !important;
+}
+
+.progress-premium-data-grid div {
+  min-height: 62px !important;
+}
+
+.progress-premium-data-grid small {
+  font-size: 9.5px !important;
+  margin-bottom: 4px !important;
+}
+
+.progress-premium-data-grid strong {
+  font-size: 20px !important;
+}
+
+.progress-premium-action-note {
+  grid-template-columns: 72px 1fr !important;
+  gap: 10px !important;
+  padding: 12px 14px !important;
+  border-radius: 15px !important;
+  margin-bottom: 16px !important;
+}
+
+.progress-premium-action-note span {
+  font-size: 11px !important;
+}
+
+.progress-premium-action-note p {
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+}
+
+.progress-premium-done {
+  height: 42px !important;
+  border-radius: 14px !important;
+  font-size: 13px !important;
+}
+
+.progress-premium-close {
+  top: 14px !important;
+  right: 14px !important;
+  width: 34px !important;
+  height: 34px !important;
+  font-size: 20px !important;
+}
+/* =====================================================
+   PROGRESS PREMIUM POPUP - SMALLER SIZE FIX
+   Paste at the VERY BOTTOM of index.css
+===================================================== */
+
+.progress-premium-modal {
+  width: min(560px, 90vw) !important;
+  min-height: 330px !important;
+  max-height: 82vh !important;
+  grid-template-columns: 180px 1fr !important;
+  border-radius: 24px !important;
+}
+
+.progress-premium-left-panel {
+  padding: 24px 18px !important;
+}
+
+.progress-premium-icon {
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
+  border-radius: 17px !important;
+  margin-bottom: 20px !important;
+}
+
+.progress-premium-icon svg {
+  width: 21px !important;
+  height: 21px !important;
+}
+
+.progress-premium-left-panel span {
+  font-size: 9px !important;
+  letter-spacing: 1.7px !important;
+  margin-bottom: 8px !important;
+}
+
+.progress-premium-left-panel h3 {
+  font-size: 19px !important;
+  line-height: 1.08 !important;
+  margin-bottom: 10px !important;
+}
+
+.progress-premium-left-panel p {
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+}
+
+.progress-premium-content {
+  padding: 24px 26px 22px !important;
+}
+
+.progress-premium-topline {
+  margin-bottom: 10px !important;
+}
+
+.progress-premium-topline span {
+  font-size: 9px !important;
+  letter-spacing: 1.5px !important;
+}
+
+.progress-premium-topline strong {
+  min-height: 24px !important;
+  padding: 0 10px !important;
+  font-size: 10px !important;
+}
+
+.progress-premium-content h2 {
+  font-size: 24px !important;
+  line-height: 1.05 !important;
+  margin-bottom: 12px !important;
+}
+
+.progress-premium-insight-box {
+  padding: 13px 15px !important;
+  border-radius: 16px !important;
+  margin-bottom: 12px !important;
+}
+
+.progress-premium-insight-box small {
+  font-size: 8.8px !important;
+  letter-spacing: 1.3px !important;
+  margin-bottom: 6px !important;
+}
+
+.progress-premium-insight-box p {
+  font-size: 11.8px !important;
+  line-height: 1.45 !important;
+}
+
+.progress-premium-data-grid {
+  margin-bottom: 12px !important;
+  border-radius: 14px !important;
+}
+
+.progress-premium-data-grid div {
+  min-height: 52px !important;
+}
+
+.progress-premium-data-grid small {
+  font-size: 8.8px !important;
+  margin-bottom: 3px !important;
+}
+
+.progress-premium-data-grid strong {
+  font-size: 17px !important;
+}
+
+.progress-premium-action-note {
+  grid-template-columns: 62px 1fr !important;
+  gap: 8px !important;
+  padding: 10px 12px !important;
+  border-radius: 13px !important;
+  margin-bottom: 12px !important;
+}
+
+.progress-premium-action-note span {
+  font-size: 10px !important;
+}
+
+.progress-premium-action-note p {
+  font-size: 10.8px !important;
+  line-height: 1.35 !important;
+}
+
+.progress-premium-done {
+  height: 38px !important;
+  border-radius: 12px !important;
+  font-size: 12px !important;
+}
+
+.progress-premium-close {
+  top: 12px !important;
+  right: 12px !important;
+  width: 30px !important;
+  height: 30px !important;
+  font-size: 18px !important;
+}
+/* =====================================================
+   FIX POSTURE SCORE NUMBER VISIBILITY
+   Paste at VERY BOTTOM of index.css
+===================================================== */
+
+.progress-pro-mini-circle {
+  width: 64px !important;
+  height: 64px !important;
+  min-width: 64px !important;
+}
+
+.progress-pro-mini-circle svg {
+  width: 64px !important;
+  height: 64px !important;
+}
+
+.progress-pro-mini-circle div {
+  width: 100% !important;
+  text-align: center !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+.progress-pro-mini-circle strong {
+  font-size: 18px !important;
+  line-height: 1 !important;
+}
+
+.progress-pro-mini-circle span {
+  font-size: 9px !important;
+  line-height: 1 !important;
+}
+/* =====================================================
+   POSTURE SCORE CIRCLE - CENTERED NUMBER FIX
+   Paste at VERY BOTTOM
+===================================================== */
+
+.progress-pro-mini-circle {
+  position: relative !important;
+  width: 62px !important;
+  height: 62px !important;
+  min-width: 62px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.progress-pro-mini-circle svg {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 62px !important;
+  height: 62px !important;
+}
+
+.progress-pro-mini-circle div {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  transform: none !important;
+  width: auto !important;
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: center !important;
+  gap: 1px !important;
+  z-index: 2 !important;
+}
+
+.progress-pro-mini-circle strong {
+  font-size: 14px !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+}
+
+.progress-pro-mini-circle span {
+  font-size: 7px !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+}
+
+/* =====================================================
+   POSTURE / REPS GOAL POPUP ARROW
+===================================================== */
+
+.progress-pro-mini-arrow {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  border: none;
+  border-radius: 50%;
+  background: #f1f6e8;
+  color: #5f7f2f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.progress-pro-mini-arrow:hover {
+  background: #dfeecb;
+  transform: translateX(3px);
+}
+
+.progress-pro-metric-value {
+  margin: 8px 0 14px;
+  font-size: 30px;
+  font-weight: 900;
+  color: #4f6f28;
+}
+
+.progress-pro-metric-note {
+  margin-top: 14px;
+  padding: 13px 15px;
+  border-radius: 16px;
+  background: #f4f8ed;
+  color: #5a6748;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+/* =====================================================
+   MINI CARD ARROW POSITION FIX - NO CRAMPING
+===================================================== */
+
+.progress-pro-mini-panel {
+  position: relative !important;
+  padding-right: 54px !important;
+}
+
+.progress-pro-mini-arrow {
+  position: absolute !important;
+  right: 18px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+}
+
+.progress-pro-mini-arrow:hover {
+  transform: translateY(-50%) translateX(2px) !important;
+}
+
+/* Move Posture Score and Reps Goal arrow slightly left */
+
+.progress-pro-mini-panel {
+  padding-right: 18px !important;
+}
+
+.progress-pro-mini-arrow {
+  margin-right: 12px !important;
 }
 
 /*profile*/
@@ -6376,23 +8941,39 @@ body {
 }
 
 .profile-upload-circle {
-  width: 92px;
-  height: 92px;
+  width: 110px;
+  height: 110px;
+  border: 2px dashed #b8c8a6;
   border-radius: 50%;
-  background: rgba(255,255,255,.82);
-  border: 1px dashed rgba(99,143,53,.45);
+  cursor: pointer;
+
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  color: #638f35;
-  margin-bottom: 18px;
+  align-items: center;
+
+  gap: 8px;
+
+  text-align: center;
+  overflow: hidden;
+
+  transition: all 0.3s ease;
+}
+
+.profile-upload-circle:hover {
+  transform: scale(1.03);
+  border-color: #7ea45a;
 }
 
 .profile-upload-circle p {
-  margin: 6px 0 0;
-  font-size: 11px;
-  font-weight: 800;
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.profile-upload-circle svg {
+  color: #6b8d45;
 }
 
 .signup-two-col {
@@ -6842,4 +9423,4259 @@ body {
   background: #9ee46c;
 
   transform: translateY(-50%);
+}
+/* Push right-side controls to end */
+
+.top-actions {
+  margin-left: auto;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 90px;
+  height: 42px;
+
+  border: none;
+  border-radius: 999px;
+
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+
+  color: inherit;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  transform: translateY(-2px);
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.icon-btn:hover {
+  transform: translateY(-2px);
+}
+
+/*workoutcategory*/
+
+
+/* =========================
+   WORKOUT CATEGORY PAGE
+========================= */
+
+.category-page {
+  padding: 40px;
+  min-height: 100vh;
+}
+
+.category-page h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.category-page p {
+  opacity: 0.8;
+  margin-bottom: 30px;
+}
+
+.exercise-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+.exercise-card {
+  padding: 24px;
+  border-radius: 20px;
+
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(12px);
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  transition: 0.3s ease;
+}
+
+.exercise-card:hover {
+  transform: translateY(-5px);
+}
+
+.exercise-card h3 {
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+}
+
+.exercise-card button {
+  width: 100%;
+
+  padding: 12px;
+
+  border: none;
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  font-weight: 600;
+
+  background: #7ea45a;
+  color: white;
+}
+.auth-link {
+  color: #638f35 !important;
+  font-weight: 900;
+  cursor: pointer;
+  position: relative;
+  z-index: 20;
+  text-decoration: none;
+}
+
+.signup-text {
+  position: relative;
+  z-index: 20;
+}
+
+.signup-text {
+  margin-top: 22px;
+  text-align: center;
+  color: #667266;
+  position: relative;
+  z-index: 50;
+}
+
+.auth-link {
+  color: #638f35 !important;
+  font-weight: 900;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  z-index: 60;
+  pointer-events: auto;
+}
+.auth-link-btn {
+  border: none;
+  background: transparent;
+  color: #638f35;
+  font-weight: 900;
+  cursor: pointer;
+  padding: 0;
+}
+.login-form-side {
+  position: relative;
+  z-index: 10;
+}
+
+.login-form {
+  position: relative;
+  z-index: 20;
+}
+
+.login-text {
+  position: relative;
+  z-index: 50;
+}
+
+.login-text a {
+  color: #638f35 !important;
+  font-weight: 900;
+  text-decoration: none;
+  cursor: pointer;
+  pointer-events: auto;
+  position: relative;
+  z-index: 60;
+}
+/* FIX LOGIN CLICK BLOCKING */
+
+.login-page {
+  position: relative;
+}
+
+.login-form-side {
+  position: relative !important;
+  z-index: 100 !important;
+}
+
+.login-form {
+  position: relative !important;
+  z-index: 200 !important;
+}
+
+.login-text,
+.login-text button,
+.login-text a {
+  position: relative !important;
+  z-index: 300 !important;
+  pointer-events: auto !important;
+}
+
+.login-image-side {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.auth-link-btn {
+  border: none;
+  background: transparent;
+  color: #638f35;
+  font-weight: 900;
+  cursor: pointer;
+  padding: 0;
+}
+.auth-link-btn {
+  border: none !important;
+  background: transparent !important;
+  color: #638f35 !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+  padding-left: 6px !important;
+  pointer-events: auto !important;
+}
+/* FINAL LOGIN SIGNUP LINK FIX */
+
+.login-page {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: 42% 58% !important;
+}
+
+.login-form-side {
+  position: relative !important;
+  z-index: 999 !important;
+}
+
+.login-form {
+  position: relative !important;
+  z-index: 1000 !important;
+}
+
+.login-switch {
+  margin-top: 22px;
+  text-align: center;
+  color: #667266;
+  position: relative !important;
+  z-index: 2000 !important;
+  pointer-events: auto !important;
+}
+
+.login-switch button {
+  border: none !important;
+  background: transparent !important;
+  color: #638f35 !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+  padding-left: 6px !important;
+  position: relative !important;
+  z-index: 3000 !important;
+  pointer-events: auto !important;
+}
+
+.login-image-side {
+  z-index: 1 !important;
+}
+.workout-large,
+.workout-small,
+.workout-tall {
+  text-decoration: none;
+  color: white;
+}
+.hero-btn,
+.ai-report-btn {
+  text-decoration: none;
+}
+.recipe-card {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.explore-diet-btn,
+.analytics-card {
+  text-decoration: none;
+  color: inherit;
+}
+
+.explore-diet-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notification-wrapper {
+  position: relative;
+}
+
+.notification-btn {
+  position: relative;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+
+  width: 18px;
+  height: 18px;
+
+  border-radius: 50%;
+
+  background: #e63946;
+  color: white;
+
+  font-size: 11px;
+  font-weight: 900;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notification-panel {
+  position: absolute;
+  top: 52px;
+  right: 0;
+
+  width: 300px;
+
+  padding: 18px;
+
+  border-radius: 22px;
+
+  background: rgba(255,255,255,.96);
+
+  box-shadow: 0 18px 45px rgba(20,40,15,.18);
+
+  z-index: 999;
+}
+
+.notification-panel h4 {
+  margin: 0 0 12px;
+
+  color: #102615;
+  font-size: 18px;
+}
+
+.notification-item {
+  padding: 12px 0;
+
+  border-bottom: 1px solid rgba(99,143,53,.16);
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-item strong {
+  color: #102615;
+  font-size: 14px;
+}
+
+.notification-item p {
+  margin: 5px 0 0;
+
+  color: #526252;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+
+/* EXERCISE DETAIL PAGE */
+
+.exercise-detail-page {
+  min-height: 100vh;
+  padding: 34px;
+  background: #eef2e7;
+}
+
+.exercise-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 22px;
+  color: #638f35;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.exercise-detail-card {
+  min-height: 520px;
+  border-radius: 34px;
+  padding: 42px;
+  display: grid;
+  grid-template-columns: 1.4fr .8fr;
+  gap: 28px;
+  align-items: center;
+  background:
+    radial-gradient(circle at top right, rgba(99,143,53,.24), transparent 36%),
+    linear-gradient(135deg, #ffffff, #edf6e7);
+  box-shadow: 0 22px 55px rgba(20,40,15,.12);
+}
+
+.exercise-detail-content span {
+  color: #638f35;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.exercise-detail-content h1 {
+  margin: 14px 0;
+  color: #102615;
+  font-size: 64px;
+  line-height: .95;
+}
+
+.exercise-detail-content > p {
+  max-width: 580px;
+  color: #526252;
+  line-height: 1.7;
+}
+
+.exercise-metrics {
+  margin: 28px 0;
+  display: grid;
+  grid-template-columns: repeat(3, 150px);
+  gap: 14px;
+}
+
+.exercise-metrics div {
+  padding: 18px;
+  border-radius: 22px;
+  background: rgba(255,255,255,.72);
+  box-shadow: 0 12px 26px rgba(20,40,15,.07);
+}
+
+.exercise-metrics svg {
+  color: #638f35;
+}
+
+.exercise-metrics strong {
+  display: block;
+  margin-top: 10px;
+  color: #102615;
+  font-size: 20px;
+}
+
+.exercise-metrics p {
+  margin: 4px 0 0;
+  color: #667266;
+  font-size: 13px;
+}
+
+.start-exercise-btn {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 24px;
+  border-radius: 999px;
+  background: #102615;
+  color: white;
+  text-decoration: none;
+  font-weight: 900;
+}
+
+.exercise-ai-panel {
+  padding: 30px;
+  border-radius: 30px;
+  background: #102615;
+  color: white;
+}
+
+.exercise-ai-panel svg {
+  color: #9ee46c;
+}
+
+.exercise-ai-panel h3 {
+  margin: 18px 0 8px;
+  font-size: 30px;
+}
+
+.exercise-ai-panel p {
+  color: #dcebd2;
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .exercise-detail-card {
+    grid-template-columns: 1fr;
+  }
+
+  .exercise-detail-content h1 {
+    font-size: 42px;
+  }
+
+  .exercise-metrics {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* WORKOUT CATEGORY PAGE - PREMIUM */
+
+.category-page {
+  min-height: 100vh;
+  padding: 34px;
+  background: #eef2e7;
+}
+
+.category-page h1 {
+  margin: 0;
+  color: #102615;
+  font-size: 58px;
+  line-height: 1;
+}
+
+.category-page > p {
+  margin: 12px 0 28px;
+  color: #526252;
+  font-size: 16px;
+}
+
+.exercise-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.exercise-card {
+  min-height: 230px;
+  padding: 24px;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at top right, rgba(99,143,53,.2), transparent 38%),
+    rgba(255,255,255,.75);
+  box-shadow: 0 14px 32px rgba(20,40,15,.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.exercise-card h3 {
+  margin: 0;
+  color: #102615;
+  font-size: 25px;
+}
+
+.exercise-card::before {
+  content: "AI GUIDED";
+  width: fit-content;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(99,143,53,.14);
+  color: #638f35;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+}
+
+.exercise-start-btn {
+  width: fit-content;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: #102615;
+  color: white;
+  text-decoration: none;
+  font-weight: 900;
+  font-size: 13px;
+}
+
+.exercise-card:hover {
+  transform: translateY(-5px);
+  transition: .25s ease;
+}
+
+@media (max-width: 900px) {
+  .exercise-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .category-page h1 {
+    font-size: 42px;
+  }
+}
+.category-card {
+  text-decoration: none;
+  color: white;
+}
+
+
+
+/* =========================
+   START EXERCISE PAGE
+========================= */
+
+.start-exercise-page {
+  min-height: 100vh;
+  padding: 34px;
+  background: #eef2e7;
+}
+
+.start-workout-card {
+  min-height: 520px;
+
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 28px;
+
+  padding: 32px;
+
+  border-radius: 32px;
+
+  background:
+    radial-gradient(circle at top right, rgba(99,143,53,.22), transparent 38%),
+    white;
+
+  box-shadow: 0 22px 55px rgba(20,40,15,.12);
+}
+
+.camera-preview-box {
+  border-radius: 28px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #102615,
+      #1f3b22
+    );
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  color: white;
+
+  min-height: 420px;
+}
+
+.camera-preview-box svg {
+  color: #9ee46c;
+}
+
+.camera-preview-box p {
+  margin-top: 18px;
+  color: #dcebd2;
+}
+
+.start-workout-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.start-workout-info span {
+  color: #638f35;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.start-workout-info h1 {
+  margin: 14px 0;
+  color: #102615;
+  font-size: 60px;
+  line-height: .95;
+}
+
+.start-workout-info p {
+  color: #526252;
+  line-height: 1.7;
+  max-width: 500px;
+}
+
+.begin-session-btn {
+  margin-top: 28px;
+
+  width: fit-content;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  border: none;
+  border-radius: 999px;
+
+  padding: 15px 24px;
+
+  background: #102615;
+  color: white;
+
+  font-weight: 900;
+
+  cursor: pointer;
+}
+
+.begin-session-btn:hover {
+  transform: translateY(-2px);
+  transition: .25s ease;
+}
+
+@media (max-width: 900px) {
+
+  .start-workout-card {
+    grid-template-columns: 1fr;
+  }
+
+  .start-workout-info h1 {
+    font-size: 42px;
+  }
+
+  .camera-preview-box {
+    min-height: 300px;
+  }
+}
+.camera-preview-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 28px;
+}
+
+.camera-preview-box {
+  overflow: hidden;
+}
+.exercise-back-link {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+.ai-reply-box {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(99, 143, 53, 0.25);
+}
+
+.ai-reply-box p {
+  margin: 0;
+  color: #102615 !important;
+  line-height: 1.6;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+/*workouthistory*/
+
+.history-page {
+  min-height: 100vh;
+  padding: 34px;
+  background: #eef2e7;
+}
+
+.history-header span {
+  color: #638f35;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.history-header h1 {
+  margin: 12px 0;
+  color: #102615;
+  font-size: 54px;
+}
+
+.history-header p {
+  color: #526252;
+}
+
+.history-grid {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.history-card {
+  padding: 24px;
+  border-radius: 26px;
+  background: white;
+  box-shadow: 0 14px 32px rgba(20,40,15,.08);
+}
+
+.history-card-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.history-card-top svg {
+  color: #638f35;
+}
+
+.history-card-top h3 {
+  text-transform: uppercase;
+  color: #102615;
+}
+
+.history-details p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #526252;
+  font-size: 14px;
+}
+
+.history-status {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(99,143,53,.14);
+  color: #638f35;
+  font-weight: 900;
+  font-size: 12px;
+}
+.recent-activity-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(99,143,53,.15);
+}
+
+.recent-activity-item h4 {
+  margin: 0;
+  color: #102615;
+}
+
+.recent-activity-item p {
+  margin: 4px 0 0;
+  color: #667266;
+  font-size: 13px;
+}
+
+.recent-activity-item span {
+  color: #638f35;
+  font-weight: 900;
+  font-size: 12px;
+}
+.recent-activity-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.08);
+}
+
+.recent-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.recent-header span {
+  font-size: 11px;
+  font-weight: 800;
+  color: #638f35;
+  letter-spacing: 2px;
+}
+
+.recent-header h3 {
+  margin-top: 6px;
+  color: #102615;
+}
+
+.view-all-btn {
+  text-decoration: none;
+  color: #638f35;
+  font-weight: 700;
+}
+
+.recent-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(0,0,0,.08);
+}
+
+.recent-item:last-child {
+  border-bottom: none;
+}
+
+.recent-item h4 {
+  margin: 0;
+  color: #102615;
+}
+
+.recent-item p {
+  margin-top: 4px;
+  color: #667266;
+  font-size: 13px;
+}
+
+.recent-date {
+  color: #8a9687;
+  font-size: 12px;
+}
+
+.recipe-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.add-recipe-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 12px 18px;
+  background: #264d2a;
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(38, 77, 42, 0.18);
+}
+
+.add-recipe-btn:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .recipes-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .recipe-header-actions {
+    width: 100%;
+  }
+
+  .recipe-search {
+    flex: 1;
+  }
+
+  .add-recipe-btn {
+    width: 100%;
+  }
+}
+
+
+
+/*addwittenrecipe and uploadvideorecipe*/
+
+
+.add-recipe-page {
+  min-height: 100vh;
+  padding: 36px;
+  background: #f6f8f3;
+}
+
+.add-recipe-header {
+  max-width: 760px;
+  margin-bottom: 28px;
+}
+
+.add-recipe-header span {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+  color: #6f8f3c;
+}
+
+.add-recipe-header h1 {
+  font-size: 42px;
+  margin: 8px 0;
+  color: #1e301f;
+}
+
+.add-recipe-header p {
+  color: #657064;
+  font-size: 15px;
+}
+
+.add-recipe-form {
+  max-width: 760px;
+  background: white;
+  padding: 28px;
+  border-radius: 26px;
+  box-shadow: 0 18px 45px rgba(20, 45, 20, 0.08);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #263b26;
+}
+
+.form-group input,
+.form-group textarea {
+  border: 1px solid #dfe7d6;
+  border-radius: 16px;
+  padding: 13px 15px;
+  font-size: 14px;
+  outline: none;
+  font-family: inherit;
+}
+
+.form-group textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.add-recipe-form button {
+  border: none;
+  border-radius: 999px;
+  padding: 13px 22px;
+  background: #264d2a;
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.recipe-message {
+  margin-top: 16px;
+  font-weight: 700;
+  color: #264d2a;
+}
+
+.video-upload-info {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #edf7e8;
+  color: #254728;
+  font-size: 14px;
+}
+
+.video-upload-preview {
+  width: 100%;
+  max-height: 360px;
+  border-radius: 18px;
+  margin-bottom: 18px;
+  background: #111;
+}
+.add-recipe-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.dish-photo-box {
+  background: white;
+  padding: 24px;
+  border-radius: 26px;
+  box-shadow: 0 18px 45px rgba(20, 45, 20, 0.08);
+}
+
+.dish-photo-box h3 {
+  margin-bottom: 8px;
+  color: #1e301f;
+}
+
+.dish-photo-box p {
+  color: #657064;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.dish-upload-area {
+  width: 100%;
+  height: 320px;
+  border: 2px dashed #b9c9ad;
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: #f6f8f3;
+  overflow: hidden;
+}
+
+.dish-upload-area span {
+  color: #60745c;
+  font-weight: 700;
+}
+
+.dish-upload-area img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 900px) {
+  .add-recipe-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  padding: 24px;
+}
+
+.admin-modal {
+  position: relative;
+  width: min(720px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 26px;
+  padding: 28px;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25);
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  border: none;
+  background: #f0f0f0;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+}
+
+.admin-modal span {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  color: #6f8f3c;
+}
+
+.admin-modal h2 {
+  margin: 10px 0 18px;
+  color: #1e301f;
+}
+
+.admin-modal h4 {
+  margin-top: 18px;
+  margin-bottom: 6px;
+  color: #263b26;
+}
+
+.admin-modal p {
+  color: #4f5c4f;
+  line-height: 1.6;
+}
+
+.admin-recipe-image {
+  width: 100%;
+  max-height: 320px;
+  object-fit: cover;
+  border-radius: 18px;
+  margin-bottom: 16px;
+}
+
+.admin-video-preview {
+  width: 100%;
+  max-height: 380px;
+  border-radius: 18px;
+  background: #111;
+  margin-bottom: 16px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.uploaded-video-thumb {
+  position: relative;
+  width: 90px;
+  height: 70px;
+  border-radius: 14px;
+  background: #111;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.uploaded-video-thumb video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumb-play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.thumbnail-upload-preview {
+  width: 220px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 16px;
+  margin-bottom: 16px;
+  border: 1px solid #dfe7d6;
+}
+
+.rejected {
+  color: #c0392b;
+}
+
+.pending {
+  color: #d68910;
+}
+
+.approved {
+  color: #229954;
+}
+
+.profile-photo-wrap {
+  position: relative;
+}
+
+.photo-options-popup {
+  position: absolute;
+  top: 95px;
+  left: 10px;
+  width: 220px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.16);
+  padding: 10px;
+  z-index: 50;
+}
+
+.photo-options-popup button {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 11px 12px;
+  text-align: left;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 12px;
+  color: #263b26;
+}
+
+.photo-options-popup button:hover {
+  background: #f1f5ec;
+}
+.profile-photo-wrap {
+  position: relative;
+  overflow: visible;
+  z-index: 30;
+}
+
+.photo-options-popup {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 12px;
+  width: 230px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
+  padding: 10px;
+  z-index: 9999;
+}
+
+.photo-options-popup button {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 12px;
+  text-align: left;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 12px;
+  color: #263b26;
+}
+
+.photo-options-popup button:hover {
+  background: #f1f5ec;
+}
+
+.profile-edit-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 24px;
+}
+
+.profile-edit-modal {
+  position: relative;
+  width: min(760px, 100%);
+  background: white;
+  border-radius: 28px;
+  padding: 30px;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25);
+}
+
+.profile-edit-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  border: none;
+  background: #f0f0f0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.profile-edit-modal span {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #6f8f3c;
+}
+
+.profile-edit-modal h2 {
+  margin: 8px 0 22px;
+  color: #1e301f;
+}
+
+.edit-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.edit-form-grid div {
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-form-grid label {
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #263b26;
+}
+
+.edit-form-grid input,
+.edit-form-grid select {
+  border: 1px solid #dfe7d6;
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-size: 14px;
+  outline: none;
+}
+
+.save-profile-btn {
+  margin-top: 24px;
+  border: none;
+  border-radius: 999px;
+  padding: 13px 22px;
+  background: #264d2a;
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .edit-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.logout-btn {
+  background: #c0392b !important;
+  color: white !important;
+}
+
+.logout-btn:hover {
+  background: #a93226 !important;
+}
+.quick-actions .logout-btn {
+  background: #c0392b !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+.quick-actions .logout-btn:hover {
+  background: #a93226 !important;
+  color: #ffffff !important;
+}
+.locked-badge {
+  opacity: 0.45;
+  filter: grayscale(1);
+}
+
+.locked-badge small {
+  font-size: 11px;
+  color: #777;
+  font-weight: 700;
+}
+
+.sidebar-toggle-btn {
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #263b26;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+}
+
+.sidebar-close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  border: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.profile-sidebar {
+  transition: transform 0.3s ease;
+}
+
+@media (max-width: 900px) {
+  .sidebar-toggle-btn {
+    display: flex;
+  }
+
+  .sidebar-close-btn {
+    display: flex;
+  }
+
+  .profile-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 999;
+  }
+
+  .profile-sidebar.sidebar-closed {
+    transform: translateX(-100%);
+  }
+
+  .profile-sidebar.sidebar-open {
+    transform: translateX(0);
+  }
+
+  .profile-content {
+    width: 100%;
+  }
+}
+
+.profile-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 999;
+  transition: transform 0.3s ease;
+}
+
+.profile-sidebar.sidebar-closed {
+  transform: translateX(-100%);
+}
+
+.profile-sidebar.sidebar-open {
+  transform: translateX(0);
+}
+
+.profile-content {
+  width: 100%;
+  margin-left: 0 !important;
+}
+
+.sidebar-toggle-btn {
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #263b26;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+}
+
+.sidebar-close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  border: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.profile-shell {
+  display: block !important;
+  width: 100% !important;
+}
+
+.profile-content {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+}
+
+.profile-sidebar {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 9999;
+  transition: transform 0.3s ease;
+}
+
+.profile-sidebar.sidebar-closed {
+  transform: translateX(-100%);
+}
+
+.profile-sidebar.sidebar-open {
+  transform: translateX(0);
+}
+
+.sidebar-toggle-btn {
+  position: fixed;
+  top: 145px;
+  left: 24px;
+  z-index: 9998;
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #263b26;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+}
+
+.sidebar-close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  border: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.submit-choice-modal {
+  max-width: 520px;
+}
+
+.submit-choice-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.submit-choice-actions button {
+  border: none;
+  border-radius: 20px;
+  padding: 22px;
+  background: #f1f5ec;
+  color: #263b26;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.2s ease;
+}
+
+.submit-choice-actions button:hover {
+  transform: translateY(-3px);
+  background: #e4efd9;
+}
+
+@media (max-width: 600px) {
+  .submit-choice-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+.account-settings-modal {
+  max-width: 560px;
+}
+
+.account-settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.account-settings-list button {
+  border: none;
+  border-radius: 16px;
+  padding: 14px 16px;
+  background: #f1f5ec;
+  color: #263b26;
+  font-weight: 800;
+  text-align: left;
+  cursor: pointer;
+}
+
+.account-settings-list button:hover {
+  background: #e4efd9;
+}
+
+.account-settings-list .danger-setting {
+  background: #fdecea;
+  color: #c0392b;
+}
+
+.account-settings-list .danger-setting:hover {
+  background: #f8d7d3;
+}
+
+.settings-toggle-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.settings-toggle-list label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f1f5ec;
+  padding: 14px 16px;
+  border-radius: 16px;
+  font-weight: 800;
+  color: #263b26;
+}
+
+.settings-toggle-list input {
+  width: 18px;
+  height: 18px;
+}
+
+.theme-choice-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.theme-choice-list button {
+  border: none;
+  border-radius: 18px;
+  padding: 18px;
+  background: #f1f5ec;
+  color: #263b26;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.theme-choice-list .active-theme-choice {
+  background: #264d2a;
+  color: white;
+}
+
+.delete-confirm-label {
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 8px;
+  font-weight: 800;
+  color: #263b26;
+}
+
+.delete-confirm-input {
+  width: 100%;
+  border: 1px solid #dfe7d6;
+  border-radius: 14px;
+  padding: 13px 15px;
+  font-size: 14px;
+  outline: none;
+  margin-bottom: 18px;
+}
+
+.delete-account-final-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 13px 22px;
+  background: #c0392b;
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.delete-account-final-btn:hover {
+  background: #a93226;
+}
+
+.ai-coach-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-hero-metrics {
+  position: absolute;
+  right: 42px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  width: 220px;
+}
+
+.hero-ai-metric {
+  background: rgba(4, 20, 8, 0.72);
+  border: 1px solid rgba(105, 211, 74, 0.45);
+  backdrop-filter: blur(8px);
+  border-radius: 18px;
+  padding: 16px;
+  color: white;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.25);
+}
+
+.hero-ai-metric svg {
+  color: #75d94c;
+  margin-bottom: 8px;
+}
+
+.hero-ai-metric span {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  color: #9ee86f;
+}
+
+.hero-ai-metric h3 {
+  margin-top: 6px;
+  font-size: 26px;
+  color: white;
+}
+
+@media (max-width: 900px) {
+  .ai-hero-metrics {
+    position: static;
+    transform: none;
+    width: 100%;
+    margin-top: 24px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ai-coach-hero {
+    padding-bottom: 28px;
+  }
+}
+.daily-goals-tile {
+  grid-column: span 2;
+  min-height: 170px;
+}
+
+.daily-goals-tile .goal-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+}
+
+.daily-goals-tile .goal-line p {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+@media (min-width: 1000px) {
+  .daily-goals-tile {
+    grid-column: span 3;
+  }
+
+  .daily-goals-tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+.ai-dashboard-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 16px !important;
+}
+
+.daily-goals-tile {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  min-height: 180px;
+}
+
+@media (max-width: 1000px) {
+  .ai-dashboard-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .daily-goals-tile {
+    grid-column: auto !important;
+  }
+}
+
+.ai-dashboard-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 16px !important;
+}
+
+.daily-goals-tile {
+  grid-column: auto !important;
+  grid-row: auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 290px !important;
+}
+
+@media (max-width: 1000px) {
+  .ai-dashboard-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .daily-goals-tile {
+    grid-column: auto !important;
+    min-height: auto !important;
+  }
+}
+
+.ai-hero-metrics {
+  right: 46px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 240px !important;
+  gap: 10px !important;
+}
+
+.hero-ai-metric {
+  padding: 12px 16px !important;
+  min-height: 78px !important;
+  border-radius: 16px !important;
+}
+
+.hero-ai-metric svg {
+  width: 18px !important;
+  height: 18px !important;
+  margin-bottom: 4px !important;
+}
+
+.hero-ai-metric span {
+  font-size: 10px !important;
+  letter-spacing: 1.2px !important;
+}
+
+.hero-ai-metric h3 {
+  font-size: 24px !important;
+  margin-top: 3px !important;
+  line-height: 1.1 !important;
+}
+
+@media (max-width: 1000px) {
+  .ai-hero-metrics {
+    position: static !important;
+    transform: none !important;
+    width: 100% !important;
+    margin-top: 24px !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+.ai-hero-metrics {
+  position: absolute !important;
+  right: 38px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+
+  width: 330px !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 12px !important;
+}
+
+.hero-ai-metric {
+  min-height: 105px !important;
+  padding: 14px !important;
+  border-radius: 18px !important;
+}
+
+.hero-ai-metric svg {
+  width: 18px !important;
+  height: 18px !important;
+  margin-bottom: 6px !important;
+}
+
+.hero-ai-metric span {
+  font-size: 10px !important;
+  letter-spacing: 1px !important;
+}
+
+.hero-ai-metric h3 {
+  font-size: 22px !important;
+  line-height: 1.1 !important;
+  margin-top: 5px !important;
+}
+
+@media (max-width: 1050px) {
+  .ai-hero-metrics {
+    position: static !important;
+    transform: none !important;
+    width: 100% !important;
+    margin-top: 24px !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+.stability-card-clean img {
+  object-position: center right;
+}
+
+.stability-card-clean h3 {
+  display: none;
+}
+
+.stability-card-clean div {
+  max-width: 82%;
+}
+
+.ai-coach-hero {
+  min-height: 480px !important;
+  border-radius: 36px !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 60px 52px !important;
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+.ai-hero-content h2 {
+  font-size: 58px !important;
+  line-height: 1.05 !important;
+}
+
+.ai-hero-content p {
+  font-size: 18px !important;
+  line-height: 1.7 !important;
+  max-width: 560px !important;
+}
+
+.ai-hero-metrics {
+  right: 42px !important;
+}
+
+.coming-soon-card {
+  opacity: 0.75;
+  filter: grayscale(0.25);
+}
+
+.coming-soon-btn {
+  cursor: not-allowed !important;
+  background: #d8ddd1 !important;
+  color: #63705f !important;
+}
+
+.workouts-page .page-topbar {
+  position: relative;
+}
+
+.workouts-page .topbar-mini-icons {
+  position: absolute;
+  right: 155px;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0 !important;
+}
+
+.workouts-page .top-actions {
+  margin-left: auto;
+}
+
+.avatar-choice-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.avatar-choice-actions button {
+  border: none;
+  border-radius: 20px;
+  background: #f1f5ec;
+  padding: 20px;
+  cursor: pointer;
+  font-weight: 800;
+  color: #263b26;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar-choice-actions button:hover {
+  background: #e4efd9;
+}
+
+.avatar-choice-actions img {
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+@media (max-width: 600px) {
+  .avatar-choice-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+body.dark-theme {
+  background: #071007;
+  color: #f4fff4;
+}
+
+body.dark-theme .page-topbar,
+body.dark-theme .profile-content,
+body.dark-theme .progress-page,
+body.dark-theme .diet-page,
+body.dark-theme .workouts-page,
+body.dark-theme .ai-coach-page,
+body.dark-theme .history-page {
+  background: #071007;
+  color: #f4fff4;
+}
+
+body.dark-theme .profile-panel,
+body.dark-theme .progress-stat,
+body.dark-theme .history-card,
+body.dark-theme .meal-plan-side,
+body.dark-theme .nutrition-strip,
+body.dark-theme .account-settings-modal,
+body.dark-theme .profile-edit-modal {
+  background: #101b10;
+  color: #f4fff4;
+}
+
+/* SAFE DARK MODE TEXT FIX ONLY */
+
+body.dark-theme {
+  background: #071007;
+  color: #f4fff4;
+}
+
+/* Page base text */
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4,
+body.dark-theme p,
+body.dark-theme small,
+body.dark-theme strong,
+body.dark-theme label {
+  color: #f4fff4;
+}
+
+/* Muted text */
+body.dark-theme .page-title-block span,
+body.dark-theme .profile-top span,
+body.dark-theme .recipes-heading-block span,
+body.dark-theme .section-heading span,
+body.dark-theme .admin-topbar span {
+  color: #9ee86f !important;
+}
+
+/* Light cards that do NOT use background images */
+body.dark-theme .profile-panel,
+body.dark-theme .progress-stat,
+body.dark-theme .history-card,
+body.dark-theme .meal-plan-side,
+body.dark-theme .nutrition-strip,
+body.dark-theme .recent-activity-card,
+body.dark-theme .workout-history-line,
+body.dark-theme .ask-ai-tile,
+body.dark-theme .daily-goals-tile,
+body.dark-theme .profile-edit-modal,
+body.dark-theme .account-settings-modal {
+  background: #101b10 !important;
+  color: #f4fff4 !important;
+}
+
+/* Do not touch image-card backgrounds */
+body.dark-theme .ai-feature-card,
+body.dark-theme .diet-card,
+body.dark-theme .analytics-card,
+body.dark-theme .recipe-card,
+body.dark-theme .category-card,
+body.dark-theme .workout-large,
+body.dark-theme .workout-small,
+body.dark-theme .workout-tall,
+body.dark-theme .ai-mini-photo,
+body.dark-theme .training-message-box,
+body.dark-theme .ai-progress-photo-note {
+  color: #ffffff !important;
+}
+
+/* Text inside normal cards */
+body.dark-theme .profile-panel p,
+body.dark-theme .progress-stat p,
+body.dark-theme .history-card p,
+body.dark-theme .meal-item p,
+body.dark-theme .nutrition-strip p,
+body.dark-theme .recent-item p,
+body.dark-theme .details-mini-grid span,
+body.dark-theme .progress-line span {
+  color: #cfe6cf !important;
+}
+
+/* Inputs */
+body.dark-theme input,
+body.dark-theme select,
+body.dark-theme textarea {
+  background: #0b160b !important;
+  color: #f4fff4 !important;
+  border-color: #314531 !important;
+}
+
+body.dark-theme input::placeholder,
+body.dark-theme textarea::placeholder {
+  color: #9fb89f !important;
+}
+
+/* Buttons and tabs */
+body.dark-theme .tabs button {
+  background: #182818 !important;
+  color: #dff5df !important;
+}
+
+body.dark-theme .tabs button.active {
+  background: #75d94c !important;
+  color: #071007 !important;
+}
+
+body.dark-theme .account-settings-list button,
+body.dark-theme .submit-choice-actions button,
+body.dark-theme .avatar-choice-actions button,
+body.dark-theme .theme-choice-list button,
+body.dark-theme .settings-toggle-list label {
+  background: #182818 !important;
+  color: #f4fff4 !important;
+}
+
+/* PROFILE STATS DARK MODE FIX */
+
+body.dark-theme .profile-overview .mini-stat {
+  background: #101b10 !important;
+  border: 1px solid rgba(158, 232, 111, 0.25) !important;
+  color: #f4fff4 !important;
+}
+
+body.dark-theme .profile-overview .mini-stat h3 {
+  color: #ffffff !important;
+}
+
+body.dark-theme .profile-overview .mini-stat p {
+  color: #cfe6cf !important;
+}
+
+body.dark-theme .profile-overview .mini-stat svg {
+  color: #9ee86f !important;
+}
+
+body.dark-theme .profile-panel {
+  background: #101b10 !important;
+  color: #f4fff4 !important;
+}
+
+body.dark-theme .profile-panel h3,
+body.dark-theme .profile-panel strong {
+  color: #ffffff !important;
+}
+
+body.dark-theme .profile-panel p,
+body.dark-theme .profile-panel span {
+  color: #cfe6cf !important;
+}
+
+body.dark-theme .progress-line span {
+  color: #cfe6cf !important;
+}
+
+body.dark-theme .progress-line strong {
+  color: #ffffff !important;
+}
+/* PROFILE PHOTO CARD DARK MODE FIX */
+
+body.dark-theme .profile-card-main {
+  background: #101b10 !important;
+  border: 1px solid rgba(158, 232, 111, 0.25) !important;
+  color: #f4fff4 !important;
+}
+
+body.dark-theme .profile-card-main h2 {
+  color: #ffffff !important;
+}
+
+body.dark-theme .profile-card-main p,
+body.dark-theme .profile-card-main small {
+  color: #cfe6cf !important;
+}
+
+body.dark-theme .active-badge {
+  color: #9ee86f !important;
+}
+
+body.dark-theme .profile-photo-wrap {
+  background: #182818 !important;
+  border: 1px solid rgba(158, 232, 111, 0.25) !important;
+}
+
+body.dark-theme .photo-upload-btn {
+  background: #75d94c !important;
+  color: #071007 !important;
+}
+
+body.dark-theme .photo-options-popup {
+  background: #101b10 !important;
+  border: 1px solid rgba(158, 232, 111, 0.25) !important;
+}
+
+body.dark-theme .photo-options-popup button {
+  color: #f4fff4 !important;
+}
+
+body.dark-theme .photo-options-popup button:hover {
+  background: #182818 !important;
+}
+/* PROGRESS GRAPH DARK MODE FIX */
+
+body.dark-theme .mini-graph {
+  background: #101b10 !important;
+  border: 1px solid rgba(158, 232, 111, 0.25) !important;
+}
+
+body.dark-theme .mini-graph svg {
+  background: transparent !important;
+}
+
+body.dark-theme .mini-graph polyline {
+  stroke: #9ee86f !important;
+  stroke-width: 5 !important;
+  fill: none !important;
+}
+
+body.dark-theme .mini-graph circle {
+  fill: #75d94c !important;
+  stroke: #ffffff !important;
+  stroke-width: 2 !important;
+}
+
+body.dark-theme .mini-graph-labels span {
+  color: #cfe6cf !important;
+}
+
+body.dark-theme .workout-history-line {
+  background: #101b10 !important;
+  color: #f4fff4 !important;
+  border: 1px solid rgba(158, 232, 111, 0.25) !important;
+}
+
+body.dark-theme .history-header span,
+body.dark-theme .history-item strong {
+  color: #ffffff !important;
+}
+
+body.dark-theme .history-item p {
+  color: #cfe6cf !important;
+}
+/* WORKOUTS DARK MODE FIX */
+
+body.dark-theme .training-strip {
+  background: #101b10 !important;
+  border: 1px solid rgba(158, 232, 111, 0.35) !important;
+  color: #f4fff4 !important;
+}
+
+body.dark-theme .training-strip span {
+  color: #9ee86f !important;
+}
+
+body.dark-theme .training-strip p {
+  color: #ffffff !important;
+}
+
+body.dark-theme .training-strip .strip-icon {
+  background: #182818 !important;
+  color: #9ee86f !important;
+}
+
+body.dark-theme .metric-circle {
+  background: #101b10 !important;
+  border: 1px solid rgba(158, 232, 111, 0.35) !important;
+  color: #f4fff4 !important;
+}
+
+body.dark-theme .metric-circle h3 {
+  color: #ffffff !important;
+}
+
+body.dark-theme .metric-circle p {
+  color: #9ee86f !important;
+}
+
+body.dark-theme .metric-circle svg {
+  color: #9ee86f !important;
+}
+
+body.dark-theme .main-line,
+body.dark-theme .side-line {
+  background: #75d94c !important;
+}
+
+/* DIET PAGE DARK MODE FIX */
+
+body.dark-theme .meal-plan-side {
+  background: #101b10 !important;
+  color: #f4fff4 !important;
+}
+
+body.dark-theme .meal-plan-heading h2,
+body.dark-theme .meal-item h3 {
+  color: #ffffff !important;
+}
+
+body.dark-theme .meal-plan-heading p,
+body.dark-theme .meal-item p {
+  color: #cfe6cf !important;
+}
+
+body.dark-theme .meal-time {
+  color: #9ee86f !important;
+}
+
+body.dark-theme .nutrition-strip {
+  background: #101b10 !important;
+  border: 1px solid rgba(158, 232, 111, 0.25) !important;
+}
+
+body.dark-theme .nutrition-strip span {
+  color: #9ee86f !important;
+}
+
+body.dark-theme .nutrition-strip h3 {
+  color: #ffffff !important;
+}
+
+body.dark-theme .nutrition-strip p {
+  color: #cfe6cf !important;
+}
+
+body.dark-theme .written-recipe-mini,
+body.dark-theme .today-target-mini {
+  background: #101b10 !important;
+  border: 1px solid rgba(158, 232, 111, 0.3) !important;
+  color: #f4fff4 !important;
+}
+
+body.dark-theme .written-recipe-mini span,
+body.dark-theme .today-target-mini span {
+  color: #9ee86f !important;
+}
+
+body.dark-theme .written-recipe-mini h3,
+body.dark-theme .today-target-mini strong {
+  color: #ffffff !important;
+}
+
+body.dark-theme .written-recipe-mini p,
+body.dark-theme .today-target-mini p {
+  color: #cfe6cf !important;
+}
+
+body.dark-theme .written-recipe-mini button {
+  background: #75d94c !important;
+  color: #071007 !important;
+}
+
+body.dark-theme .view-videos-btn {
+  background: #ffffff !important;
+  color: #071007 !important;
+}
+/* KEEP DIET BOX SIZE, FIX TEXT VISIBILITY */
+
+body.dark-theme .nutrition-strip {
+  min-height: 120px !important;
+  padding: 22px 26px !important;
+  border-radius: 24px !important;
+  overflow: hidden !important;
+}
+
+body.dark-theme .nutrition-strip .strip-content {
+  position: relative;
+  z-index: 5;
+  max-width: 46%;
+}
+
+body.dark-theme .nutrition-strip .strip-content span {
+  color: #9ee86f !important;
+}
+
+body.dark-theme .nutrition-strip .strip-content h3 {
+  color: #ffffff !important;
+  font-size: 24px !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+}
+
+body.dark-theme .nutrition-strip .strip-content p {
+  color: #e8ffe8 !important;
+  font-size: 14px !important;
+  font-weight: 700;
+  line-height: 1.5 !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+}
+
+body.dark-theme .nutrition-strip .strip-image {
+  width: 250px !important;
+  height: 95px !important;
+  opacity: 0.9 !important;
+}
+
+body.dark-theme .nutrition-strip .strip-image::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(16, 27, 16, 0.98),
+    rgba(16, 27, 16, 0.75),
+    rgba(16, 27, 16, 0.08)
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+/* RESET DIET NUTRITION BOX SIZE AFTER DARK FIX */
+
+body.dark-theme .nutrition-strip {
+  min-height: 105px !important;
+  height: 105px !important;
+  padding: 16px 22px !important;
+  border-radius: 22px !important;
+  display: flex !important;
+  align-items: center !important;
+  overflow: hidden !important;
+}
+
+body.dark-theme .nutrition-strip .strip-icon {
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
+  font-size: 20px !important;
+}
+
+body.dark-theme .nutrition-strip .strip-content {
+  max-width: 42% !important;
+  z-index: 5 !important;
+}
+
+body.dark-theme .nutrition-strip .strip-content span {
+  font-size: 11px !important;
+  color: #9ee86f !important;
+}
+
+body.dark-theme .nutrition-strip .strip-content h3 {
+  font-size: 20px !important;
+  line-height: 1.15 !important;
+  margin: 4px 0 !important;
+  color: #ffffff !important;
+}
+
+body.dark-theme .nutrition-strip .strip-content p {
+  font-size: 13px !important;
+  line-height: 1.3 !important;
+  color: #dff5df !important;
+  font-weight: 600 !important;
+}
+
+body.dark-theme .nutrition-strip .strip-image {
+  width: 230px !important;
+  height: 78px !important;
+  right: 34px !important;
+}
+
+body.dark-theme .nutrition-strip .strip-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+body.dark-theme .nutrition-strip .strip-image::before {
+  background: linear-gradient(
+    90deg,
+    rgba(16, 27, 16, 0.9),
+    rgba(16, 27, 16, 0.55),
+    rgba(16, 27, 16, 0.05)
+  ) !important;
+}
+/* DAILY MEAL PLAN ICON DARK MODE FIX */
+
+body.dark-theme .meal-plan-heading > span {
+  background: #182818 !important;
+  color: #9ee86f !important;
+  border: 1px solid rgba(158, 232, 111, 0.35) !important;
+}
+
+body.dark-theme .meal-plan-heading {
+  color: #f4fff4 !important;
+}
+
+/* GLOBAL NOTIFICATION POPUP POSITION FIX */
+
+.notification-wrapper {
+  position: relative;
+}
+
+.notification-panel {
+  position: fixed !important;
+  top: 82px !important;
+  right: 32px !important;
+  width: 330px !important;
+  z-index: 99999 !important;
+}
+
+.notification-badge {
+  z-index: 10;
+}
+.notification-panel {
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+/* GLOBAL NOTIFICATION PANEL - FINAL FIX */
+
+.global-notification-panel {
+  position: fixed !important;
+  top: 82px !important;
+  right: 32px !important;
+  left: auto !important;
+  bottom: auto !important;
+  width: 330px !important;
+  max-height: 360px !important;
+  overflow-y: auto !important;
+  z-index: 999999 !important;
+  margin: 0 !important;
+  transform: none !important;
+
+  background: #ffffff !important;
+  color: #263b26 !important;
+  border-radius: 22px !important;
+  padding: 18px !important;
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.22) !important;
+}
+
+.global-notification-panel h4 {
+  margin-bottom: 12px !important;
+  color: #263b26 !important;
+}
+
+.global-notification-panel .notification-item {
+  background: #f1f5ec !important;
+  border-radius: 16px !important;
+  padding: 12px !important;
+  margin-bottom: 10px !important;
+}
+
+.global-notification-panel .notification-item strong {
+  color: #263b26 !important;
+}
+
+.global-notification-panel .notification-item p {
+  color: #607060 !important;
+  margin-top: 4px !important;
+}
+
+/* Dark mode notification panel */
+body.dark-theme .global-notification-panel {
+  background: #101b10 !important;
+  color: #f4fff4 !important;
+  border: 1px solid rgba(158, 232, 111, 0.3) !important;
+}
+
+body.dark-theme .global-notification-panel h4 {
+  color: #ffffff !important;
+}
+
+body.dark-theme .global-notification-panel .notification-item {
+  background: #182818 !important;
+}
+
+body.dark-theme .global-notification-panel .notification-item strong {
+  color: #ffffff !important;
+}
+
+body.dark-theme .global-notification-panel .notification-item p {
+  color: #cfe6cf !important;
+}
+
+.global-notification-panel {
+  position: fixed !important;
+  top: 82px !important;
+  right: 32px !important;
+  width: 330px !important;
+  max-height: 360px !important;
+  overflow-y: auto !important;
+  z-index: 999999 !important;
+  margin: 0 !important;
+
+  background: #ffffff !important;
+  color: #263b26 !important;
+  border-radius: 22px !important;
+  padding: 18px !important;
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.22) !important;
+}
+
+.global-notification-panel h4 {
+  margin-bottom: 12px !important;
+  color: #263b26 !important;
+}
+
+.global-notification-panel .notification-item {
+  background: #f1f5ec !important;
+  border-radius: 16px !important;
+  padding: 12px !important;
+  margin-bottom: 10px !important;
+}
+
+.global-notification-panel .notification-item strong {
+  color: #263b26 !important;
+}
+
+.global-notification-panel .notification-item p {
+  color: #607060 !important;
+  margin-top: 4px !important;
+}
+
+body.dark-theme .global-notification-panel {
+  background: #101b10 !important;
+  color: #f4fff4 !important;
+  border: 1px solid rgba(158, 232, 111, 0.3) !important;
+}
+
+body.dark-theme .global-notification-panel h4 {
+  color: #ffffff !important;
+}
+
+body.dark-theme .global-notification-panel .notification-item {
+  background: #182818 !important;
+}
+
+body.dark-theme .global-notification-panel .notification-item strong {
+  color: #ffffff !important;
+}
+
+body.dark-theme .global-notification-panel .notification-item p {
+  color: #cfe6cf !important;
+}
+.global-notification-panel .notification-item {
+  cursor: pointer;
+}
+
+.global-notification-panel .notification-item:hover {
+  transform: translateY(-2px);
+}
+
+/* =====================================================
+   DIET PAGE V2 - OLIVE / WHITE / BLACK DASHBOARD
+   Add this at the VERY BOTTOM of index.css
+===================================================== */
+
+.diet-v2-page,
+.diet-v2-page * {
+  box-sizing: border-box;
+}
+
+.diet-v2-page {
+  min-height: 100vh;
+  padding: 26px 34px 24px;
+  background: #f6f8f1;
+  color: #10160e;
+  overflow-x: hidden;
+}
+
+/* HEADER */
+
+.diet-v2-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 22px;
+}
+
+.diet-v2-title-area {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.diet-v2-leaf-icon {
+  width: 58px;
+  height: 58px;
+  min-width: 58px;
+  border-radius: 22px;
+  background: #edf5de;
+  color: #5f7f2f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.diet-v2-title-area span {
+  color: #5f7f2f;
+  font-size: 12px;
+  letter-spacing: 2px;
+  font-weight: 900;
+}
+
+.diet-v2-title-area h1 {
+  margin: 5px 0 5px;
+  font-size: 42px;
+  line-height: 1;
+  font-weight: 900;
+  color: #071007;
+}
+
+.diet-v2-title-area p {
+  margin: 0;
+  color: #66705a;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.diet-v2-actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.diet-v2-action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+}
+
+.diet-v2-action-item small {
+  color: #354227;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.diet-v2-action-circle {
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+  border: 1px solid #dfe6d3;
+  background: #ffffff;
+  color: #26311f;
+  box-shadow: 0 8px 20px rgba(20, 30, 15, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* make NotificationBell button fit inside same round style */
+.diet-v2-action-circle .notification-btn,
+.diet-v2-action-circle button {
+  width: 52px !important;
+  height: 52px !important;
+  border-radius: 18px !important;
+  border: none !important;
+  background: transparent !important;
+  color: #26311f !important;
+  box-shadow: none !important;
+}
+
+/* COMMON */
+
+.diet-v2-card {
+  background: #ffffff;
+  border: 1px solid #dde5d1;
+  border-radius: 24px;
+  box-shadow: 0 14px 34px rgba(23, 31, 18, 0.06);
+  overflow: hidden;
+}
+
+.diet-v2-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.diet-v2-section-title {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.diet-v2-section-icon {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  border-radius: 16px;
+  background: #edf5de;
+  color: #5f7f2f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.diet-v2-section-title h2,
+.diet-v2-section-head h2 {
+  margin: 0;
+  color: #071007;
+  font-size: 23px;
+  font-weight: 900;
+}
+
+.diet-v2-section-head p {
+  margin: 4px 0 0;
+  color: #66705a;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* BUTTONS */
+
+.diet-v2-outline-btn {
+  border: 1px solid #d8e2c8;
+  background: #ffffff;
+  color: #354227;
+  min-height: 42px;
+  padding: 0 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+}
+
+.diet-v2-outline-btn:hover {
+  background: #f0f6e5;
+}
+
+.diet-v2-primary-btn {
+  border: none;
+  background: #6f8f38;
+  color: #ffffff;
+  min-height: 44px;
+  padding: 0 22px;
+  border-radius: 14px;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 12px 24px rgba(76, 100, 42, 0.25);
+}
+
+.diet-v2-primary-btn:hover {
+  background: #5f7f2f;
+}
+
+/* TOP ROW */
+
+.diet-v2-top-row {
+  display: grid;
+  grid-template-columns: 1.16fr 1fr;
+  gap: 22px;
+  margin-bottom: 18px;
+}
+
+/* TARGET */
+
+.diet-v2-target-section {
+  height: 270px;
+  padding: 20px;
+}
+
+.diet-v2-target-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.diet-v2-target-card {
+  height: 178px;
+  padding: 15px 13px;
+  border-radius: 18px;
+  background: #fbfcf7;
+  border: 1px solid #e5ecd9;
+  text-align: center;
+  overflow: hidden;
+}
+
+.diet-v2-target-icon {
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 10px;
+  border-radius: 15px;
+  background: #edf5de;
+  color: #5f7f2f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.diet-v2-target-card p {
+  margin: 0;
+  color: #586451;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.diet-v2-target-card h3 {
+  margin: 8px 0 3px;
+  color: #071007;
+  font-size: 27px;
+  font-weight: 900;
+}
+
+.diet-v2-target-card span {
+  color: #68725e;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.diet-v2-progress-line {
+  height: 5px;
+  margin-top: 14px;
+  border-radius: 999px;
+  background: #e5eadb;
+  overflow: hidden;
+}
+
+.diet-v2-progress-line div {
+  width: 78%;
+  height: 100%;
+  border-radius: 999px;
+  background: #6f8f38;
+}
+
+/* HERO */
+
+.diet-v2-hero-card {
+  height: 270px;
+  position: relative;
+  padding: 34px;
+  background: #eef5df;
+  display: flex;
+  align-items: center;
+}
+
+.diet-v2-hero-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    rgba(238, 245, 223, 0.98) 0%,
+    rgba(238, 245, 223, 0.9) 36%,
+    rgba(238, 245, 223, 0.5) 58%,
+    rgba(238, 245, 223, 0.05) 100%
+  );
+}
+
+.diet-v2-hero-card img {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 58%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center right;
+  z-index: 0;
+}
+
+.diet-v2-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 330px;
+}
+
+.diet-v2-hero-content span {
+  color: #5f7f2f;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1.6px;
+}
+
+.diet-v2-hero-content h2 {
+  margin: 10px 0 14px;
+  color: #071007;
+  font-size: 31px;
+  line-height: 1.12;
+  font-weight: 900;
+}
+
+.diet-v2-hero-content p {
+  margin: 0 0 22px;
+  color: #354227;
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 700;
+}
+
+/* MEALS */
+
+.diet-v2-meal-section {
+  height: 265px;
+  padding: 20px;
+  margin-bottom: 18px;
+}
+
+.diet-v2-meal-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.diet-v2-meal-card {
+  height: 180px;
+  border-radius: 18px;
+  border: 1px solid #e4ebd8;
+  background: #ffffff;
+  padding: 14px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.diet-v2-meal-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.diet-v2-meal-top strong,
+.diet-v2-meal-top span {
+  color: #5f7f2f;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.diet-v2-meal-card img {
+  width: 145px;
+  height: 78px;
+  border-radius: 999px;
+  object-fit: cover;
+  margin-bottom: 8px;
+}
+
+.diet-v2-meal-card h3 {
+  margin: 0 0 5px;
+  color: #071007;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.diet-v2-meal-card p {
+  margin: 0;
+  color: #66705a;
+  font-size: 12px;
+  line-height: 1.35;
+  font-weight: 750;
+}
+
+/* BOTTOM */
+
+.diet-v2-bottom-row {
+  display: grid;
+  grid-template-columns: 1.08fr 0.92fr;
+  gap: 18px;
+  margin-bottom: 12px;
+}
+
+/* RECIPES */
+
+.diet-v2-recipes-section {
+  height: 258px;
+  padding: 18px 20px;
+}
+
+.diet-v2-recipes-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.diet-v2-tabs {
+  display: flex;
+  gap: 10px;
+}
+
+.diet-v2-tabs button {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 1px solid #dfe8d1;
+  background: #ffffff;
+  color: #586451;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.diet-v2-tabs button.active {
+  background: #edf5de;
+  border-color: #cbdcaa;
+  color: #4f7025;
+}
+
+.diet-v2-recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 13px;
+}
+
+.diet-v2-recipe-card {
+  height: 138px;
+  border-radius: 15px;
+  border: 1px solid #e4ebd8;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.diet-v2-recipe-image {
+  height: 68px;
+  position: relative;
+  overflow: hidden;
+}
+
+.diet-v2-recipe-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.diet-v2-play-btn {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(17, 24, 15, 0.82);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.diet-v2-recipe-card h3 {
+  margin: 7px 9px 3px;
+  color: #071007;
+  font-size: 13px;
+  line-height: 1.15;
+  font-weight: 900;
+}
+
+.diet-v2-recipe-meta {
+  margin: 0 9px;
+  color: #66705a;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.diet-v2-recipe-meta span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.diet-v2-recipe-card p {
+  margin: 4px 9px 0;
+  color: #66705a;
+  font-size: 11px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.diet-v2-view-more-btn {
+  margin-top: 10px;
+  width: 100%;
+  height: 34px;
+  border: none;
+  border-radius: 12px;
+  background: #edf5de;
+  color: #4f7025;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* TIPS */
+
+.diet-v2-tips-section {
+  height: 258px;
+  padding: 18px 20px;
+}
+
+.diet-v2-tips-title {
+  margin-bottom: 16px;
+}
+
+.diet-v2-tips-body {
+  display: grid;
+  grid-template-columns: 1fr 150px;
+  gap: 16px;
+  align-items: center;
+}
+
+.diet-v2-tip-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.diet-v2-tip-item {
+  min-height: 48px;
+  width: 100%;
+  border-radius: 15px;
+  background: #fbfcf7;
+  border: 1px solid #e4ebd8;
+  padding: 10px 12px;
+  color: #5f7f2f;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.diet-v2-tip-item p {
+  margin: 0;
+  color: #535f4a;
+  font-size: 12.5px;
+  line-height: 1.38;
+  font-weight: 750;
+}
+
+.diet-v2-tips-body img {
+  width: 150px;
+  height: 150px;
+  border-radius: 17px;
+  object-fit: cover;
+}
+
+/* QUOTE */
+
+.diet-v2-quote-strip {
+  height: 52px;
+  border-radius: 20px;
+  background: #edf5de;
+  border: 1px solid #dbe7c9;
+  color: #596451;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  font-weight: 800;
+}
+
+.diet-v2-quote-strip svg,
+.diet-v2-quote-strip strong {
+  color: #4f7025;
+}
+
+.diet-v2-quote-strip p {
+  margin: 0;
+}
+
+/* DARK MODE */
+
+body.dark-theme .diet-v2-page {
+  background: #071007;
+  color: #f4fff4;
+}
+
+body.dark-theme .diet-v2-card,
+body.dark-theme .diet-v2-action-circle,
+body.dark-theme .diet-v2-target-card,
+body.dark-theme .diet-v2-meal-card,
+body.dark-theme .diet-v2-recipe-card,
+body.dark-theme .diet-v2-tip-item {
+  background: #101b10;
+  border-color: rgba(155, 191, 90, 0.25);
+}
+
+body.dark-theme .diet-v2-leaf-icon,
+body.dark-theme .diet-v2-section-icon,
+body.dark-theme .diet-v2-target-icon {
+  background: #182818;
+  color: #9bbf5a;
+}
+
+body.dark-theme .diet-v2-title-area span,
+body.dark-theme .diet-v2-hero-content span,
+body.dark-theme .diet-v2-meal-top strong,
+body.dark-theme .diet-v2-meal-top span,
+body.dark-theme .diet-v2-tip-item,
+body.dark-theme .diet-v2-quote-strip svg,
+body.dark-theme .diet-v2-quote-strip strong {
+  color: #9bbf5a;
+}
+
+body.dark-theme .diet-v2-title-area h1,
+body.dark-theme .diet-v2-section-title h2,
+body.dark-theme .diet-v2-section-head h2,
+body.dark-theme .diet-v2-target-card h3,
+body.dark-theme .diet-v2-meal-card h3,
+body.dark-theme .diet-v2-recipe-card h3,
+body.dark-theme .diet-v2-hero-content h2 {
+  color: #ffffff;
+}
+
+body.dark-theme .diet-v2-title-area p,
+body.dark-theme .diet-v2-action-item small,
+body.dark-theme .diet-v2-section-head p,
+body.dark-theme .diet-v2-target-card p,
+body.dark-theme .diet-v2-target-card span,
+body.dark-theme .diet-v2-meal-card p,
+body.dark-theme .diet-v2-recipe-meta,
+body.dark-theme .diet-v2-recipe-card p,
+body.dark-theme .diet-v2-hero-content p,
+body.dark-theme .diet-v2-tip-item p,
+body.dark-theme .diet-v2-quote-strip {
+  color: #cfe6cf;
+}
+
+body.dark-theme .diet-v2-hero-card,
+body.dark-theme .diet-v2-quote-strip {
+  background: #132313;
+}
+
+body.dark-theme .diet-v2-hero-card::after {
+  background: linear-gradient(
+    90deg,
+    rgba(19, 35, 19, 0.98) 0%,
+    rgba(19, 35, 19, 0.9) 36%,
+    rgba(19, 35, 19, 0.5) 58%,
+    rgba(19, 35, 19, 0.06) 100%
+  );
+}
+
+body.dark-theme .diet-v2-outline-btn,
+body.dark-theme .diet-v2-tabs button {
+  background: #101b10;
+  color: #cfe6cf;
+  border-color: rgba(155, 191, 90, 0.25);
+}
+
+body.dark-theme .diet-v2-tabs button.active,
+body.dark-theme .diet-v2-view-more-btn {
+  background: #182818;
+  color: #9bbf5a;
+}
+
+body.dark-theme .diet-v2-progress-line {
+  background: #243524;
+}
+
+body.dark-theme .diet-v2-progress-line div {
+  background: #9bbf5a;
+}
+
+body.dark-theme .diet-v2-primary-btn {
+  background: #9bbf5a;
+  color: #071007;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1150px) {
+  .diet-v2-top-row,
+  .diet-v2-bottom-row {
+    grid-template-columns: 1fr;
+  }
+
+  .diet-v2-target-section,
+  .diet-v2-hero-card,
+  .diet-v2-meal-section,
+  .diet-v2-recipes-section,
+  .diet-v2-tips-section {
+    height: auto;
+  }
+
+  .diet-v2-target-grid,
+  .diet-v2-meal-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .diet-v2-recipe-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .diet-v2-page {
+    padding: 20px;
+  }
+
+  .diet-v2-header {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .diet-v2-title-area h1 {
+    font-size: 32px;
+  }
+
+  .diet-v2-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .diet-v2-target-grid,
+  .diet-v2-meal-grid,
+  .diet-v2-recipe-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .diet-v2-tips-body {
+    grid-template-columns: 1fr;
+  }
+
+  .diet-v2-tips-body img {
+    width: 100%;
+    height: 150px;
+  }
+
+  .diet-v2-hero-card img {
+    width: 78%;
+    opacity: 0.45;
+  }
+}
+/* DIET V2 FINAL COMPACT POLISH */
+
+.diet-v2-page {
+  padding: 22px 34px 20px !important;
+}
+
+/* reduce big section spacing */
+.diet-v2-meal-section {
+  height: 250px !important;
+  padding: 18px 20px !important;
+  margin-bottom: 18px !important;
+}
+
+.diet-v2-section-head {
+  margin-bottom: 14px !important;
+}
+
+/* meal cards compact */
+.diet-v2-meal-card {
+  height: 166px !important;
+  padding: 12px !important;
+}
+
+.diet-v2-meal-card img {
+  width: 135px !important;
+  height: 68px !important;
+  margin-bottom: 7px !important;
+}
+
+.diet-v2-meal-card h3 {
+  font-size: 15px !important;
+  line-height: 1.15 !important;
+}
+
+.diet-v2-meal-card p {
+  font-size: 11.5px !important;
+}
+
+/* recipes section fix */
+.diet-v2-recipes-section,
+.diet-v2-tips-section {
+  height: 270px !important;
+  padding: 18px 20px !important;
+}
+
+.diet-v2-recipe-card {
+  height: 155px !important;
+}
+
+.diet-v2-recipe-image {
+  height: 74px !important;
+}
+
+.diet-v2-recipe-card h3 {
+  font-size: 13px !important;
+  line-height: 1.15 !important;
+  margin: 7px 9px 3px !important;
+}
+
+.diet-v2-recipe-card p {
+  font-size: 10.8px !important;
+  line-height: 1.25 !important;
+  margin-top: 3px !important;
+}
+
+/* tips image better */
+.diet-v2-tips-body {
+  grid-template-columns: 1fr 165px !important;
+}
+
+.diet-v2-tips-body img {
+  width: 165px !important;
+  height: 150px !important;
+}
+
+/* bottom strip slightly smaller */
+.diet-v2-quote-strip {
+  height: 48px !important;
+}
+/* FIX TODAY'S MEAL PLAN CARD CUTTING */
+
+.diet-v2-meal-section {
+  height: auto !important;
+  min-height: 250px !important;
+  padding: 20px 20px 26px !important;
+  overflow: visible !important;
+}
+
+.diet-v2-meal-grid {
+  align-items: stretch !important;
+  gap: 16px !important;
+}
+
+.diet-v2-meal-card {
+  height: auto !important;
+  min-height: 168px !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+  padding-bottom: 14px !important;
+}
+/* MAKE MEAL PLAN IMAGES BIGGER */
+
+.diet-v2-meal-section {
+  height: auto !important;
+  min-height: 270px !important;
+  padding: 20px 20px 28px !important;
+  overflow: visible !important;
+}
+
+.diet-v2-meal-card {
+  height: auto !important;
+  min-height: 190px !important;
+  padding: 14px 16px 16px !important;
+  overflow: visible !important;
+}
+
+.diet-v2-meal-card img {
+  width: 185px !important;
+  height: 92px !important;
+  border-radius: 999px !important;
+  object-fit: cover !important;
+  margin: 8px auto 10px !important;
+  display: block !important;
+}
+
+.diet-v2-meal-card h3 {
+  font-size: 16px !important;
+  line-height: 1.15 !important;
+  margin: 0 0 5px !important;
+}
+
+.diet-v2-meal-card p {
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+}
+
+/* RECIPE SECTION - MATCH REFERENCE STYLE */
+
+.diet-v2-recipes-section {
+  height: auto !important;
+  min-height: 290px !important;
+  padding: 22px 22px 20px !important;
+  overflow: visible !important;
+}
+
+.diet-v2-recipes-head {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-bottom: 18px !important;
+}
+
+.diet-v2-tabs {
+  display: flex !important;
+  gap: 14px !important;
+}
+
+.diet-v2-tabs button {
+  height: 46px !important;
+  min-width: 170px !important;
+  padding: 0 22px !important;
+  border-radius: 12px !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  border: 1px solid #dbe7c9 !important;
+  background: #ffffff !important;
+  color: #596451 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 9px !important;
+}
+
+.diet-v2-tabs button.active {
+  background: #edf5de !important;
+  color: #4f7025 !important;
+  border-color: #cbdcaa !important;
+  box-shadow: inset 0 -3px 0 #6f8f38 !important;
+}
+
+/* recipe cards like reference */
+
+.diet-v2-recipe-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 16px !important;
+}
+
+.diet-v2-recipe-card {
+  height: 170px !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  background: #ffffff !important;
+  border: 1px solid #e0e8d5 !important;
+}
+
+.diet-v2-recipe-image {
+  height: 92px !important;
+}
+
+.diet-v2-recipe-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.diet-v2-recipe-card h3 {
+  margin: 8px 10px 5px !important;
+  font-size: 14px !important;
+  line-height: 1.15 !important;
+  font-weight: 900 !important;
+  color: #071007 !important;
+}
+
+.diet-v2-recipe-meta {
+  margin: 0 10px !important;
+  font-size: 11.5px !important;
+  color: #66705a !important;
+  font-weight: 700 !important;
+}
+
+.diet-v2-recipe-card p {
+  display: none !important;
+}
+
+/* bottom view button like reference */
+
+.diet-v2-view-more-btn {
+  margin-top: 12px !important;
+  width: 100% !important;
+  height: 42px !important;
+  border-radius: 13px !important;
+  background: #edf5de !important;
+  color: #4f7025 !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+}
+/* MOVE WRITTEN / VIDEO RECIPE BUTTONS LITTLE LEFT */
+
+.diet-v2-tabs {
+  transform: translateX(-28px) !important;
+}
+/* MOVE ONLY VIDEO RECIPES BUTTON LITTLE RIGHT */
+
+.diet-v2-tabs button:nth-child(2) {
+  transform: translateX(12px) !important;
+}
+/* DIET MODALS + ACTIVE RECIPE PREVIEW */
+
+.diet-v2-recipe-card {
+  cursor: pointer !important;
+}
+
+.diet-v2-recipe-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgba(20, 30, 15, 0.12);
+}
+
+.diet-v2-recipe-image video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.diet-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: rgba(7, 16, 7, 0.58);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.diet-choice-modal,
+.diet-plan-modal,
+.diet-recipe-modal,
+.diet-video-modal {
+  position: relative;
+  width: min(620px, 95vw);
+  max-height: 88vh;
+  overflow-y: auto;
+  background: #ffffff;
+  color: #071007;
+  border-radius: 26px;
+  padding: 26px;
+  border: 1px solid #dbe7c9;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+}
+
+.diet-video-modal {
+  width: min(720px, 95vw);
+}
+
+.diet-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 50%;
+  background: #edf5de;
+  color: #4f7025;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.diet-choice-modal h2,
+.diet-plan-modal h2,
+.diet-recipe-modal h2,
+.diet-video-modal h2 {
+  margin: 0 0 8px;
+  color: #071007;
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.diet-choice-modal > p,
+.diet-plan-modal > p,
+.diet-video-modal > p {
+  color: #596451;
+  font-weight: 700;
+  margin-bottom: 22px;
+}
+
+.diet-choice-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.diet-choice-buttons button {
+  height: 88px;
+  border-radius: 20px;
+  border: 1px solid #dbe7c9;
+  background: #f6f8f1;
+  color: #4f7025;
+  font-size: 16px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.diet-choice-buttons button:hover {
+  background: #edf5de;
+}
+
+.diet-plan-modal-list {
+  display: grid;
+  gap: 14px;
+}
+
+.diet-plan-modal-item {
+  display: flex;
+  gap: 15px;
+  padding: 14px;
+  border-radius: 18px;
+  background: #f6f8f1;
+  border: 1px solid #dbe7c9;
+}
+
+.diet-plan-modal-item img {
+  width: 120px;
+  height: 80px;
+  border-radius: 18px;
+  object-fit: cover;
+}
+
+.diet-plan-modal-item span {
+  color: #5f7f2f;
+  font-weight: 900;
+  font-size: 13px;
+}
+
+.diet-plan-modal-item h3 {
+  margin: 6px 0 5px;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.diet-plan-modal-item p {
+  margin: 0;
+  color: #596451;
+  font-weight: 700;
+}
+
+.diet-recipe-modal > img {
+  width: 100%;
+  height: 230px;
+  border-radius: 22px;
+  object-fit: cover;
+  margin-bottom: 18px;
+}
+
+.diet-recipe-modal > span,
+.diet-video-modal > span {
+  display: inline-block;
+  color: #5f7f2f;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.diet-recipe-modal h4 {
+  margin: 18px 0 7px;
+  color: #4f7025;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.diet-recipe-modal p {
+  color: #354227;
+  line-height: 1.7;
+  font-weight: 650;
+}
+
+.diet-video-modal video {
+  width: 100%;
+  height: 330px;
+  border-radius: 22px;
+  object-fit: cover;
+  background: #071007;
+  margin-bottom: 18px;
+}
+
+/* DARK MODE MODALS */
+
+body.dark-theme .diet-choice-modal,
+body.dark-theme .diet-plan-modal,
+body.dark-theme .diet-recipe-modal,
+body.dark-theme .diet-video-modal {
+  background: #101b10;
+  color: #ffffff;
+  border-color: rgba(155, 191, 90, 0.25);
+}
+
+body.dark-theme .diet-choice-modal h2,
+body.dark-theme .diet-plan-modal h2,
+body.dark-theme .diet-recipe-modal h2,
+body.dark-theme .diet-video-modal h2,
+body.dark-theme .diet-plan-modal-item h3 {
+  color: #ffffff;
+}
+
+body.dark-theme .diet-choice-modal p,
+body.dark-theme .diet-plan-modal p,
+body.dark-theme .diet-recipe-modal p,
+body.dark-theme .diet-video-modal p,
+body.dark-theme .diet-plan-modal-item p {
+  color: #cfe6cf;
+}
+
+body.dark-theme .diet-choice-buttons button,
+body.dark-theme .diet-plan-modal-item,
+body.dark-theme .diet-modal-close {
+  background: #182818;
+  color: #9bbf5a;
+  border-color: rgba(155, 191, 90, 0.25);
+}
+
+/* EDIT TARGET MODAL */
+
+.diet-edit-target-modal {
+  position: relative;
+  width: min(520px, 95vw);
+  background: #ffffff;
+  color: #071007;
+  border-radius: 26px;
+  padding: 28px;
+  border: 1px solid #dbe7c9;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+}
+
+.diet-edit-target-modal h2 {
+  margin: 0 0 8px;
+  color: #071007;
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.diet-edit-target-modal p {
+  margin: 0 0 22px;
+  color: #596451;
+  font-weight: 700;
+}
+
+.diet-edit-target-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.diet-edit-target-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #354227;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.diet-edit-target-grid input {
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid #dbe7c9;
+  background: #f6f8f1;
+  color: #071007;
+  padding: 0 14px;
+  font-size: 15px;
+  font-weight: 800;
+  outline: none;
+}
+
+.diet-edit-target-grid input:focus {
+  border-color: #6f8f38;
+  box-shadow: 0 0 0 3px rgba(111, 143, 56, 0.16);
+}
+
+.diet-save-target-btn {
+  margin-top: 22px;
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: 15px;
+  background: #6f8f38;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.diet-save-target-btn:hover {
+  background: #5f7f2f;
+}
+
+/* DARK MODE */
+
+body.dark-theme .diet-edit-target-modal {
+  background: #101b10;
+  color: #ffffff;
+  border-color: rgba(155, 191, 90, 0.25);
+}
+
+body.dark-theme .diet-edit-target-modal h2 {
+  color: #ffffff;
+}
+
+body.dark-theme .diet-edit-target-modal p,
+body.dark-theme .diet-edit-target-grid label {
+  color: #cfe6cf;
+}
+
+body.dark-theme .diet-edit-target-grid input {
+  background: #182818;
+  color: #ffffff;
+  border-color: rgba(155, 191, 90, 0.25);
+}
+
+body.dark-theme .diet-save-target-btn {
+  background: #9bbf5a;
+  color: #071007;
+}
+
+.diet-target-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* GOAL OPTION BUTTONS IN EDIT TARGET */
+
+.diet-goal-option-box {
+  margin-bottom: 22px;
+}
+
+.diet-goal-option-box h3 {
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-weight: 900;
+  color: #071007;
+}
+
+.diet-goal-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.diet-goal-options button {
+  min-height: 74px;
+  border-radius: 18px;
+  border: 1px solid #dbe7c9;
+  background: #f6f8f1;
+  color: #071007;
+  padding: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.diet-goal-options button:hover {
+  background: #edf5de;
+  border-color: #9bbf5a;
+}
+
+.diet-goal-options button strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 900;
+  color: #4f7025;
+  margin-bottom: 5px;
+}
+
+.diet-goal-options button span {
+  display: block;
+  font-size: 12px;
+  font-weight: 750;
+  color: #596451;
+}
+
+/* DARK MODE */
+
+body.dark-theme .diet-goal-option-box h3 {
+  color: #ffffff;
+}
+
+body.dark-theme .diet-goal-options button {
+  background: #182818;
+  color: #ffffff;
+  border-color: rgba(155, 191, 90, 0.25);
+}
+
+body.dark-theme .diet-goal-options button strong {
+  color: #9bbf5a;
+}
+
+body.dark-theme .diet-goal-options button span {
+  color: #cfe6cf;
+}
+
+.diet-meal-total-text {
+  margin: 6px 0 0;
+  font-size: 13px;
+  font-weight: 800;
+  color: #596451;
+}
+
+.diet-meal-empty-text {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 18px;
+  border-radius: 18px;
+  background: #f6f8f1;
+  color: #596451;
+  font-size: 14px;
+  font-weight: 800;
+  text-align: center;
+}
+
+body.dark-theme .diet-meal-total-text,
+body.dark-theme .diet-meal-empty-text {
+  color: #cfe6cf;
+}
+
+body.dark-theme .diet-meal-empty-text {
+  background: #182818;
+}
+
+.diet-goal-options button.selected {
+  background: #edf5de !important;
+  border-color: #6f8f38 !important;
+  box-shadow: 0 0 0 2px rgba(111, 143, 56, 0.18);
+}
+
+body.dark-theme .diet-goal-options button.selected {
+  background: #243824 !important;
+  border-color: #9bbf5a !important;
+}
+.diet-v2-target-card {
+  position: relative;
+  padding-bottom: 28px !important;
+}
+
+.diet-v2-progress-line {
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  bottom: 10px;
+}
+.diet-v2-target-card {
+  min-height: 178px !important;
+  padding-bottom: 34px !important;
+  position: relative;
+}
+
+.diet-v2-target-card span {
+  min-height: 34px;
+  line-height: 1.35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 6px;
+}
+
+.diet-v2-progress-line {
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  bottom: 12px;
+}
+
+.diet-v2-target-card {
+  min-height: 178px !important;
+  padding: 16px 14px 18px !important;
+}
+
+.diet-v2-target-card span {
+  display: block !important;
+  min-height: 36px !important;
+  line-height: 1.25 !important;
+  text-align: center !important;
+  margin-bottom: 8px !important;
+}
+
+.diet-v2-progress-line {
+  width: 85% !important;
+  height: 5px !important;
+  margin: 0 auto !important;
+  display: block !important;
+}
+
+.diet-v2-progress-line div {
+  height: 100% !important;
+  display: block !important;
+}
+.diet-v2-target-card span {
+  white-space: nowrap !important;
+  font-size: 12px !important;
+  line-height: 1.2 !important;
 }

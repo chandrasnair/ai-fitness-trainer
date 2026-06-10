@@ -759,3 +759,10 @@ def run_workout(exercise, cap=None, landmarker=None):
                         pass
 
                     break
+if __name__ == "__main__":
+    import sys
+    exercise = "squat"
+    if len(sys.argv) > 1:
+        exercise = sys.argv[1]  
+    print("Starting workout from command line:", exercise)
+    run_workout(exercise)         

@@ -1,4 +1,7 @@
+import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+
+
 import {
   User,
   Mail,
@@ -6,6 +9,7 @@ import {
   Camera,
   ArrowRight
 } from 'lucide-react'
+
 
 function Signup() {
   const slides = [
@@ -27,6 +31,7 @@ function Signup() {
   ]
 
   const [activeSlide, setActiveSlide] = useState(0)
+
   const [formData, setFormData] = useState({
   name: '',
   email: '',
@@ -36,8 +41,11 @@ function Signup() {
   height: '',
   weight: '',
   fitnessGoal: 'Strength & Fat Loss',
-  level: 'Beginner'
+  level: 'Beginner',
+  profileImage: ''
 })
+
+const [selectedImage, setSelectedImage] = useState(null)
 
 
 const handleChange = (e) => {
@@ -47,10 +55,43 @@ const handleChange = (e) => {
   })
 }
 
+const handleImageChange = (e) => {
+  setSelectedImage(e.target.files[0])
+}
+
 const handleSubmit = async (e) => {
   e.preventDefault()
 
   try {
+    let uploadedImagePath = ''
+
+    if (selectedImage) {
+      const imageData = new FormData()
+      imageData.append('profileImage', selectedImage)
+
+      const uploadResponse = await fetch(
+        'http://localhost:5000/api/upload/profile',
+        {
+          method: 'POST',
+          body: imageData
+        }
+      )
+
+      const uploadResult = await uploadResponse.json()
+
+      if (!uploadResponse.ok) {
+        alert(uploadResult.message)
+        return
+      }
+
+      uploadedImagePath = uploadResult.imagePath
+    }
+
+    const signupData = {
+      ...formData,
+      profileImage: uploadedImagePath
+    }
+
     const response = await fetch(
       'http://localhost:5000/api/auth/signup',
       {
@@ -58,7 +99,7 @@ const handleSubmit = async (e) => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(signupData)
       }
     )
 
@@ -69,15 +110,17 @@ const handleSubmit = async (e) => {
       return
     }
 
+    localStorage.setItem('userInfo', JSON.stringify(data))
+
     alert('Account created successfully')
-    console.log(data)
+
+    window.location.href = '/'
 
   } catch (error) {
     alert('Something went wrong')
     console.log(error)
   }
 }
-
 
 
   useEffect(() => {
@@ -103,10 +146,22 @@ const handleSubmit = async (e) => {
   onSubmit={handleSubmit}
 >
 
-  <div className="profile-upload-circle">
-    <Camera size={22} />
-    <p>Upload Photo</p>
-  </div>
+  <label className="profile-upload-circle">
+
+  <input
+    type="file"
+    accept="image/*"
+    onChange={handleImageChange}
+    hidden
+  />
+
+  <Camera size={22} />
+
+  <p>
+    {selectedImage ? selectedImage.name : 'Upload Photo'}
+  </p>
+
+</label>
 
   <div className="signup-two-col">
 
@@ -177,7 +232,7 @@ const handleSubmit = async (e) => {
         <input
           type="number"
           name="height"
-          placeholder="172 cm"
+          placeholder="Enter height"
           value={formData.height}
           onChange={handleChange}
         />
@@ -190,7 +245,7 @@ const handleSubmit = async (e) => {
         <input
           type="number"
           name="weight"
-          placeholder="68 kg"
+          placeholder="Enter weight"
           value={formData.weight}
           onChange={handleChange}
         />
@@ -207,7 +262,7 @@ const handleSubmit = async (e) => {
         <input
           type="number"
           name="age"
-          placeholder="21"
+          placeholder="Enter age"
           value={formData.age}
           onChange={handleChange}
         />
@@ -263,8 +318,8 @@ const handleSubmit = async (e) => {
   </button>
 
   <p className="login-text">
-    Already have an account? <a>Login</a>
-  </p>
+  Already have an account? <Link to="/login">Login</Link>
+</p>
 
 </form>
 

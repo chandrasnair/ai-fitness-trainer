@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import {
   BrowserRouter,
   Routes,
@@ -15,9 +16,25 @@ import RecipeVideos from './pages/RecipeVideos'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import AdminDashboard from './pages/AdminDashboard'
-
+import WorkoutCategory from './pages/WorkoutCategory'
+import ExerciseDetail from './pages/ExerciseDetail'
+import StartExercise from './pages/StartExercise'
+import WorkoutHistory from './pages/WorkoutHistory'
+import AddWrittenRecipe from './pages/AddWrittenRecipe'
+import UploadRecipeVideo from './pages/UploadRecipeVideo'
+import AdminRoute from './components/AdminRoute'
 
 function App() {
+
+  useEffect(() => {
+  const savedTheme = localStorage.getItem('themeMode') || 'light'
+
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-theme')
+  } else {
+    document.body.classList.remove('dark-theme')
+  }
+}, [])
 
   return (
     <BrowserRouter>
@@ -28,6 +45,7 @@ function App() {
           path="/"
           element={<Home />}
         />
+        <Route path="/home" element={<Home />} />
 
         <Route
           path="/workouts"
@@ -76,10 +94,44 @@ function App() {
   path="/signup"
   element={<Signup />}
 />
+
 <Route
   path="/admin"
-  element={<AdminDashboard />}
+  element={
+    <AdminRoute>
+      <AdminDashboard />
+    </AdminRoute>
+  }
 />
+
+<Route
+  path="/workouts/category/:category"
+  element={<WorkoutCategory />}
+/>
+
+<Route
+  path="/exercise/:exerciseName"
+  element={<ExerciseDetail />}
+/>
+
+<Route
+  path="/start-exercise/:exerciseName"
+  element={<StartExercise />}
+/>
+
+<Route path="/workout-history" element={<WorkoutHistory />} />
+
+<Route
+  path="/add-written-recipe"
+  element={<AddWrittenRecipe />}
+/>
+
+<Route
+  path="/upload-recipe-video"
+  element={<UploadRecipeVideo />}
+/>
+
+
 
 
       </Routes>
