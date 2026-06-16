@@ -48,11 +48,16 @@ const signupUser = async (req, res) => {
       profileImage
     })
 
-    res.status(201).json({
+   res.status(201).json({
   _id: user._id,
   name: user.name,
   email: user.email,
   gender: user.gender,
+  age: user.age,
+  height: user.height,
+  weight: user.weight,
+  fitnessGoal: user.fitnessGoal,
+  level: user.level,
   profileImage: user.profileImage,
   role: user.role,
   token: generateToken(user._id)
@@ -92,6 +97,11 @@ const loginUser = async (req, res) => {
   name: user.name,
   email: user.email,
   gender: user.gender,
+  age: user.age,
+  height: user.height,
+  weight: user.weight,
+  fitnessGoal: user.fitnessGoal,
+  level: user.level,
   profileImage: user.profileImage,
   role: user.role,
   token: generateToken(user._id)
