@@ -83,64 +83,113 @@ const profileImage = userInfo?.profileImage
    const [showGenderPrompt, setShowGenderPrompt] = useState(false)
 
   useEffect(() => {
-    const fetchContributions = async () => {
-      try {
-        const response = await fetch(
-         `${API_URL}/api/recipes/my-contributions`,
-          {
-            headers: {
-              Authorization: `Bearer ${userInfo?.token}`
-            }
-          }
-        )
+  const fetchFreshProfile = async () => {
+    try {
+      const storedUser = JSON.parse(localStorage.getItem('userInfo'))
 
-        const data = await response.json()
-
-        if (response.ok) {
-          setContributions(data)
-        } else {
-          console.log(data.message)
-        }
-      } catch (error) {
-        console.log(error)
-      } finally {
-        setLoading(false)
+      if (!storedUser?.token) {
+        navigate('/login')
+        return
       }
-    }
 
-    fetchContributions()
-    const fetchProfileStats = async () => {
-  try {
-   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+      const response = await fetch(
+        `${API_URL}/api/users/profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${storedUser.token}`
+          }
+        }
+      )
 
-const response = await fetch(
-  `${API_URL}/api/history/stats`,
-  {
-    headers: {
-      Authorization: `Bearer ${userInfo?.token}`
+      const data = await response.json()
+
+      if (response.ok) {
+        const updatedUser = {
+          ...storedUser,
+          ...data,
+          token: storedUser.token
+        }
+
+        localStorage.setItem('userInfo', JSON.stringify(updatedUser))
+        setCurrentUser(updatedUser)
+
+        setEditForm({
+          name: updatedUser?.name || '',
+          gender: updatedUser?.gender || '',
+          age: updatedUser?.age || '',
+          height: updatedUser?.height || '',
+          weight: updatedUser?.weight || '',
+          fitnessGoal: updatedUser?.fitnessGoal || '',
+          level: updatedUser?.level || ''
+        })
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
-)
-    const data = await response.json()
 
-    if (response.ok) {
-      const aiScore = calculateAiScore(data)
+  const fetchContributions = async () => {
+    try {
+      const storedUser = JSON.parse(localStorage.getItem('userInfo'))
 
-      setProfileStats({
-        dayStreak: data.dayStreak || 0,
-        totalWorkouts: data.totalWorkouts || 0,
-        totalCalories: data.totalCalories || 0,
-        totalReps: data.totalReps || 0,
-        aiScore
-      })
+      const response = await fetch(
+        `${API_URL}/api/recipes/my-contributions`,
+        {
+          headers: {
+            Authorization: `Bearer ${storedUser?.token}`
+          }
+        }
+      )
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setContributions(data)
+      } else {
+        console.log(data.message)
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
     }
-  } catch (error) {
-    console.log(error)
   }
-}
 
-fetchProfileStats()
-  }, [])
+  const fetchProfileStats = async () => {
+    try {
+      const storedUser = JSON.parse(localStorage.getItem('userInfo'))
+
+      const response = await fetch(
+        `${API_URL}/api/history/stats`,
+        {
+          headers: {
+            Authorization: `Bearer ${storedUser?.token}`
+          }
+        }
+      )
+
+      const data = await response.json()
+
+      if (response.ok) {
+        const aiScore = calculateAiScore(data)
+
+        setProfileStats({
+          dayStreak: data.dayStreak || 0,
+          totalWorkouts: data.totalWorkouts || 0,
+          totalCalories: data.totalCalories || 0,
+          totalReps: data.totalReps || 0,
+          aiScore
+        })
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  fetchFreshProfile()
+  fetchContributions()
+  fetchProfileStats()
+}, [])
 
   const getContributionImage = (item) => {
     if (item.type === 'written' && item.image) {
