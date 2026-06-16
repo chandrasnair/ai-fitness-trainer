@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import NotificationBell from '../components/NotificationBell'
+import { API_URL } from '../api'
 
 import {
   Users,
@@ -9,7 +10,6 @@ import {
   Check,
   X,
   Eye,
-  Bell,
   Settings,
   ShieldCheck,
   FileText,
@@ -20,13 +20,21 @@ function AdminDashboard() {
   const [pendingItems, setPendingItems] = useState([])
   const [selectedItem, setSelectedItem] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [activeAdminPopup, setActiveAdminPopup] = useState(null)
+  const approvalSectionRef = useRef(null)
+
+  const [adminCounts, setAdminCounts] = useState({
+    totalUsers: 0,
+    totalAdmins: 0,
+    totalAccounts: 0
+  })
 
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
   const fetchPendingItems = async () => {
     try {
       const response = await fetch(
-        'http://localhost:5000/api/recipes/pending',
+        `${API_URL}/api/recipes/pending`,
         {
           headers: {
             Authorization: `Bearer ${userInfo?.token}`
@@ -48,14 +56,42 @@ function AdminDashboard() {
     }
   }
 
+  const fetchAdminCounts = async () => {
+    try {
+      const response = await fetch(
+        `${API_URL}/api/users/count`,
+        {
+          headers: {
+            Authorization: `Bearer ${userInfo?.token}`
+          }
+        }
+      )
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setAdminCounts({
+          totalUsers: data.totalUsers || 0,
+          totalAdmins: data.totalAdmins || 0,
+          totalAccounts: data.totalAccounts || 0
+        })
+      } else {
+        console.log(data.message)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     fetchPendingItems()
+    fetchAdminCounts()
   }, [])
 
   const handleApprove = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/recipes/${id}/approve`,
+        `${API_URL}/api/recipes/${id}/approve`,
         {
           method: 'PUT',
           headers: {
@@ -76,7 +112,7 @@ function AdminDashboard() {
   const handleReject = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/recipes/${id}/reject`,
+       `${API_URL}/api/recipes/${id}/reject`,
         {
           method: 'PUT',
           headers: {
@@ -102,6 +138,17 @@ function AdminDashboard() {
     item => item.type === 'video'
   ).length
 
+  const scrollToApprovalSection = () => {
+  setActiveAdminPopup(null)
+
+  setTimeout(() => {
+    approvalSectionRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    })
+  }, 100)
+}
+
   return (
     <div className="admin-page">
 
@@ -110,12 +157,32 @@ function AdminDashboard() {
         <span>ADMIN PANEL</span>
 
         <nav>
-          <a className="active">Dashboard</a>
-          <a>Users</a>
-          <a>Recipe Approvals</a>
-          <a>Video Approvals</a>
-          <a>Reports</a>
-          <a>Settings</a>
+          <button
+            className={!activeAdminPopup ? 'active' : ''}
+            onClick={() => setActiveAdminPopup(null)}
+          >
+            Dashboard
+          </button>
+
+          <button onClick={() => setActiveAdminPopup('users')}>
+            Users
+          </button>
+
+          <button onClick={() => setActiveAdminPopup('recipes')}>
+            Recipe Approvals
+          </button>
+
+          <button onClick={() => setActiveAdminPopup('videos')}>
+            Video Approvals
+          </button>
+
+          <button onClick={() => setActiveAdminPopup('reports')}>
+            Reports
+          </button>
+
+          <button onClick={() => setActiveAdminPopup('settings')}>
+            Settings
+          </button>
         </nav>
       </aside>
 
@@ -129,7 +196,12 @@ function AdminDashboard() {
 
           <div className="top-actions">
             <NotificationBell />
-            <button className="icon-btn"><Settings size={19} /></button>
+            <button
+              className="icon-btn"
+              onClick={() => setActiveAdminPopup('settings')}
+            >
+              <Settings size={19} />
+            </button>
           </div>
         </div>
 
@@ -137,8 +209,8 @@ function AdminDashboard() {
 
           <div className="admin-stat-card">
             <Users size={24} />
-            <h3>1</h3>
-            <p>Total Admin</p>
+            <h3>{adminCounts.totalUsers}</h3>
+            <p>Total Users</p>
           </div>
 
           <div className="admin-stat-card">
@@ -163,7 +235,7 @@ function AdminDashboard() {
 
         <section className="admin-grid">
 
-          <div className="approval-panel">
+          <div className="approval-panel" ref={approvalSectionRef}>
 
             <div className="admin-section-head">
               <div>
@@ -258,7 +330,7 @@ function AdminDashboard() {
 
             <div className="activity-admin-item">
               <Users size={18} />
-              <p>Admin account active.</p>
+              <p>{adminCounts.totalUsers} member users registered.</p>
             </div>
 
             <div className="activity-admin-item">
@@ -271,6 +343,136 @@ function AdminDashboard() {
         </section>
 
       </main>
+
+      {activeAdminPopup && (
+        <div className="admin-side-popup-overlay">
+          <div className="admin-side-popup">
+
+            <button
+              className="admin-side-popup-close"
+              onClick={() => setActiveAdminPopup(null)}
+            >
+              <X size={18} />
+            </button>
+
+            {activeAdminPopup === 'users' && (
+              <>
+                <span>USER MANAGEMENT</span>
+                <h2>Users Overview</h2>
+
+                <div className="admin-popup-count-grid">
+                  <div>
+                    <h3>{adminCounts.totalUsers}</h3>
+                    <p>Member Users</p>
+                  </div>
+
+                  <div>
+                    <h3>{adminCounts.totalAdmins}</h3>
+                    <p>Admin Accounts</p>
+                  </div>
+
+                  <div>
+                    <h3>{adminCounts.totalAccounts}</h3>
+                    <p>Total Accounts</p>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {activeAdminPopup === 'recipes' && (
+              <>
+                <span>RECIPE APPROVALS</span>
+                <h2>Written Recipe Approvals</h2>
+
+                <div className="admin-popup-count-grid">
+                  <div>
+                    <h3>{pendingWritten}</h3>
+                    <p>Pending Written Recipes</p>
+                  </div>
+                </div>
+
+                <p className="admin-popup-note">
+                  Pending written recipes are listed in the main dashboard approval section.
+                </p>
+                <button
+  className="admin-popup-action-btn"
+  onClick={scrollToApprovalSection}
+>
+  Go to Approval Section
+</button>
+              </>
+            )}
+
+            {activeAdminPopup === 'videos' && (
+              <>
+                <span>VIDEO APPROVALS</span>
+                <h2>Video Recipe Approvals</h2>
+
+                <div className="admin-popup-count-grid">
+                  <div>
+                    <h3>{pendingVideos}</h3>
+                    <p>Pending Video Recipes</p>
+                  </div>
+                </div>
+
+                <p className="admin-popup-note">
+                  Pending video recipes are listed in the main dashboard approval section.
+                </p>
+                <button
+  className="admin-popup-action-btn"
+  onClick={scrollToApprovalSection}
+>
+  Go to Approval Section
+</button>
+              </>
+            )}
+
+            {activeAdminPopup === 'reports' && (
+              <>
+                <span>ADMIN REPORTS</span>
+                <h2>Platform Summary</h2>
+
+                <div className="admin-popup-count-grid">
+                  <div>
+                    <h3>{pendingItems.length}</h3>
+                    <p>Total Pending</p>
+                  </div>
+
+                  <div>
+                    <h3>{pendingWritten}</h3>
+                    <p>Written Pending</p>
+                  </div>
+
+                  <div>
+                    <h3>{pendingVideos}</h3>
+                    <p>Video Pending</p>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {activeAdminPopup === 'settings' && (
+              <>
+                <span>ADMIN SETTINGS</span>
+                <h2>Settings</h2>
+
+                <p className="admin-popup-note">
+                  Admin can verify user submissions, approve recipes, reject unsuitable content,
+                  and monitor platform activity from this dashboard.
+                </p>
+
+                <div className="admin-popup-count-grid">
+                  <div>
+                    <h3>Active</h3>
+                    <p>Admin Mode</p>
+                  </div>
+                </div>
+              </>
+            )}
+
+          </div>
+        </div>
+      )}
 
       {selectedItem && (
         <div className="admin-modal-overlay">
@@ -295,7 +497,7 @@ function AdminDashboard() {
               <>
                 {selectedItem.image && (
                   <img
-                    src={`http://localhost:5000${selectedItem.image}`}
+                    src={`${API_URL}${selectedItem.image}`}
                     alt={selectedItem.title}
                     className="admin-recipe-image"
                   />
@@ -314,7 +516,7 @@ function AdminDashboard() {
                 <video
                   controls
                   className="admin-video-preview"
-                  src={`http://localhost:5000${selectedItem.videoUrl}`}
+                  src={`${API_URL}${selectedItem.videoUrl}`}
                 />
 
                 <p>

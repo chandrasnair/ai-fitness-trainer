@@ -1,3 +1,4 @@
+import { API_URL } from '../api'
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { Mail, Lock, ArrowRight } from 'lucide-react'
@@ -42,7 +43,7 @@ const handleSubmit = async (e) => {
 
   try {
     const response = await fetch(
-      'http://localhost:5000/api/auth/login',
+        `${API_URL}/api/auth/login`,
       {
         method: 'POST',
         headers: {

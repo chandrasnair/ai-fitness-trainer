@@ -135,11 +135,33 @@ const deleteMyAccount = async (req, res) => {
     })
   }
 }
+const getUserCount = async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments({
+      role: { $ne: 'admin' }
+    })
+
+    const totalAdmins = await User.countDocuments({
+      role: 'admin'
+    })
+
+    res.json({
+      totalUsers,
+      totalAdmins,
+      totalAccounts: totalUsers + totalAdmins
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    })
+  }
+}
 
 module.exports = {
   getUserProfile,
   updateUserProfile,
   changePassword,
   downloadMyData,
-  deleteMyAccount
+  deleteMyAccount,
+  getUserCount
 }

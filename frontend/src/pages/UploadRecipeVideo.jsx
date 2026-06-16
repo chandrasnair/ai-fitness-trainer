@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { API_URL } from '../api'
 
 function UploadRecipeVideo() {
   const navigate = useNavigate()
@@ -77,7 +78,7 @@ function UploadRecipeVideo() {
       formData.append('thumbnail', thumbnailFile)
       formData.append('duration', duration)
 
-      const response = await fetch('http://localhost:5000/api/recipes/video', {
+      const response = await fetch(`${API_URL}/api/recipes/video`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${userInfo?.token}`

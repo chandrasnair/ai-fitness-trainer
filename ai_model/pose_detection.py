@@ -11,7 +11,6 @@ from exercises.config_loader import load_exercise
 from ai_model.rep_counter import RepCounter
 from ai_model.posture_logic import get_state
 
-from utils.timer import start_timer, time_remaining
 from utils.safety_manager import is_safe_to_continue
 from utils.voice_coach import speak
 from database.workout_history import save_workout_session
@@ -121,7 +120,6 @@ def show_finish_screen(frame, counter, safe_max_reps):
             3
         )
 
-        # SESSION SUMMARY CARDS - SAME SIZE
         cv2.rectangle(
             finish_frame,
             (405, 435),
@@ -278,6 +276,8 @@ def show_finish_screen(frame, counter, safe_max_reps):
 
         if key == ord('q'):
             return "finish"
+
+
 def create_pose_landmarker():
 
     base_options = python.BaseOptions(
@@ -290,6 +290,7 @@ def create_pose_landmarker():
     )
 
     return vision.PoseLandmarker.create_from_options(options)
+
 
 def run_workout(exercise, cap=None, landmarker=None):
     global current_card
@@ -306,12 +307,22 @@ def run_workout(exercise, cap=None, landmarker=None):
 
     counter = RepCounter(max_reps=prescribed_reps)
 
-    start_timer(config.get("duration", 60))
+    # Session timing
+    # Target duration is only a suggested time, not a hard stop.
+    # Workout completion depends mainly on reps.
+    session_start_time = time.time()
+    target_duration = config.get("duration", 60)
+
+    # Safety limit prevents the camera from running forever.
+    safe_session_limit = config.get("safe_session_limit", 600)
+
+    duration_warning_given = False
 
     if landmarker is None:
-     landmarker = create_pose_landmarker()
+        landmarker = create_pose_landmarker()
+
     if cap is None:
-     cap = cv2.VideoCapture(0)
+        cap = cv2.VideoCapture(0)
 
     visible_feedback = ""
     last_feedback_time = 0
@@ -324,10 +335,21 @@ def run_workout(exercise, cap=None, landmarker=None):
 
     while cap.isOpened():
 
-        remaining = time_remaining()
+        elapsed_seconds = int(time.time() - session_start_time)
 
-        if remaining <= 0:
-            print("⏱️ Workout time finished!")
+        if (
+            elapsed_seconds >= target_duration
+            and counter.count < counter.max_reps
+            and not duration_warning_given
+        ):
+            visible_feedback = "Take your time. Complete the reps."
+            speak("Take your time. Complete the reps.", force=True)
+            last_feedback_time = time.time()
+            duration_warning_given = True
+
+        if elapsed_seconds >= safe_session_limit:
+            print("⏱️ Safe session limit reached!")
+            visible_feedback = "Safe time limit reached"
             break
 
         ret, frame = cap.read()
@@ -397,11 +419,10 @@ def run_workout(exercise, cap=None, landmarker=None):
 
                 if counter.is_complete():
                     action = show_finish_screen(
-                     clean_finish_frame,
-                     counter,
-                     safe_max_reps
-)
-                    
+                        clean_finish_frame,
+                        counter,
+                        safe_max_reps
+                    )
 
                     if action == "extra":
                         extra_reps = 5
@@ -410,7 +431,8 @@ def run_workout(exercise, cap=None, landmarker=None):
                             safe_max_reps
                         )
 
-                        start_timer(30)
+                        target_duration += 60
+                        duration_warning_given = False
 
                         visible_feedback = "Extra set started"
                         speak("Extra set started", force=True)
@@ -418,18 +440,22 @@ def run_workout(exercise, cap=None, landmarker=None):
 
                     else:
 
-                           save_workout_session(
+                        save_workout_session(
                             exercise=exercise,
                             reps_completed=counter.count,
                             target_reps=counter.max_reps,
                             status="completed"
-    )
+                        )
 
-                    cap.release()
+                        cap.release()
+                        cv2.destroyAllWindows()
 
-                    cv2.destroyAllWindows()
+                        try:
+                            pygame.mixer.music.stop()
+                        except:
+                            pass
 
-                    return
+                        return
 
         try:
             play_music(exercise)
@@ -519,9 +545,13 @@ def run_workout(exercise, cap=None, landmarker=None):
             2
         )
 
+        elapsed_minutes = elapsed_seconds // 60
+        elapsed_secs = elapsed_seconds % 60
+        elapsed_text = f"{elapsed_minutes:02d}:{elapsed_secs:02d}"
+
         cv2.putText(
             frame,
-            "TIME REMAINING",
+            "ELAPSED TIME",
             (60, 485),
             cv2.FONT_HERSHEY_SIMPLEX,
             0.7,
@@ -531,7 +561,7 @@ def run_workout(exercise, cap=None, landmarker=None):
 
         cv2.putText(
             frame,
-            f"{remaining}s",
+            elapsed_text,
             (60, 540),
             cv2.FONT_HERSHEY_SIMPLEX,
             1.35,
@@ -712,11 +742,9 @@ def run_workout(exercise, cap=None, landmarker=None):
 
         key = cv2.waitKey(1) & 0xFF
 
-        # QUIT
         if key == ord('q'):
             break
 
-        # TEST REP INCREASE
         if key == ord('t'):
 
             if counter.count < counter.max_reps:
@@ -737,7 +765,8 @@ def run_workout(exercise, cap=None, landmarker=None):
                         safe_max_reps
                     )
 
-                    start_timer(30)
+                    target_duration += 60
+                    duration_warning_given = False
 
                 elif action == "finish":
 
@@ -749,20 +778,31 @@ def run_workout(exercise, cap=None, landmarker=None):
                     )
 
                     cap.release()
-
                     cv2.destroyAllWindows()
 
                     try:
                         pygame.mixer.music.stop()
-
                     except:
                         pass
 
                     break
+
+    cap.release()
+    cv2.destroyAllWindows()
+
+    try:
+        pygame.mixer.music.stop()
+    except:
+        pass
+
+
 if __name__ == "__main__":
     import sys
+
     exercise = "squat"
+
     if len(sys.argv) > 1:
-        exercise = sys.argv[1]  
+        exercise = sys.argv[1]
+
     print("Starting workout from command line:", exercise)
-    run_workout(exercise)         
+    run_workout(exercise)

@@ -1,3 +1,4 @@
+import { API_URL } from '../api'
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
@@ -70,7 +71,7 @@ const handleSubmit = async (e) => {
       imageData.append('profileImage', selectedImage)
 
       const uploadResponse = await fetch(
-        'http://localhost:5000/api/upload/profile',
+  `${API_URL}/api/upload/profile`,
         {
           method: 'POST',
           body: imageData
@@ -93,7 +94,7 @@ const handleSubmit = async (e) => {
     }
 
     const response = await fetch(
-      'http://localhost:5000/api/auth/signup',
+      `${API_URL}/api/auth/signup`,
       {
         method: 'POST',
         headers: {

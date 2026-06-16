@@ -1,5 +1,6 @@
 import { useParams, Link } from 'react-router-dom'
 import { Camera, Play, ArrowLeft, Save } from 'lucide-react'
+import { API_URL } from '../api'
 
 function StartExercise() {
   const { exerciseName } = useParams()
@@ -16,7 +17,7 @@ function StartExercise() {
   const handleStartWorkout = async () => {
     try {
       const response = await fetch(
-        'http://localhost:5000/api/workout/start',
+        `${API_URL}/api/workout/start`,
         {
           method: 'POST',
           headers: {
@@ -42,7 +43,7 @@ function StartExercise() {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
     const response = await fetch(
-      'http://localhost:5000/api/history/sync-latest',
+     `${API_URL}/api/history/sync-latest`,
       {
         method: 'POST',
         headers: {

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Search } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { API_URL } from '../api'
 
 function WrittenRecipes() {
   const navigate = useNavigate()
@@ -46,7 +47,7 @@ function WrittenRecipes() {
     const fetchApprovedRecipes = async () => {
       try {
         const response = await fetch(
-          'http://localhost:5000/api/recipes/written'
+           `${API_URL}/api/recipes/written`
         )
 
         const data = await response.json()
@@ -146,7 +147,7 @@ function WrittenRecipes() {
                 src={
                   recipe.source === 'default'
                     ? recipe.image
-                    : `http://localhost:5000${recipe.image}`
+                    : `${API_URL}${recipe.image}`
                 }
                 alt={recipe.title}
                 className="recipe-side-img"

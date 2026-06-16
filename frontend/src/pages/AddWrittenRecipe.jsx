@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { API_URL } from '../api'
 
 function AddWrittenRecipe() {
   const navigate = useNavigate()
@@ -60,7 +61,7 @@ function AddWrittenRecipe() {
       recipeData.append('instructions', formData.instructions)
       recipeData.append('image', dishImage)
 
-      const response = await fetch('http://localhost:5000/api/recipes/written', {
+      const response = await fetch(`${API_URL}/api/recipes/written`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${userInfo?.token}`

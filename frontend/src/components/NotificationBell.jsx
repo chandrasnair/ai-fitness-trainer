@@ -1,21 +1,106 @@
+import { API_URL } from '../api'
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import { Bell } from 'lucide-react'
 
 function NotificationBell() {
+  const navigate = useNavigate()
 
-    const navigate = useNavigate()
   const [showNotifications, setShowNotifications] = useState(false)
   const [notifications, setNotifications] = useState([])
-  const [notificationsSeen, setNotificationsSeen] = useState(
-  localStorage.getItem('notificationsSeen') === 'true'
-)
+  const [unreadCount, setUnreadCount] = useState(0)
+
+  const getUserNotificationKey = () => {
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
+    return userInfo?._id || userInfo?.id || userInfo?.email || 'guest'
+  }
+
+  const createNotificationSignature = (items) => {
+    return items
+      .map((item) => `${item.title}-${item.message}`)
+      .join('|')
+  }
 
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
         const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
+        if (!userInfo?.token) {
+          setNotifications([])
+          setUnreadCount(0)
+          return
+        }
+        if (userInfo?.role === 'admin') {
+  const adminNotifications = []
+
+  const pendingResponse = await fetch(
+    `${API_URL}/api/recipes/pending`,
+    {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    }
+  )
+
+  const pendingData = await pendingResponse.json()
+
+  const pendingRecipes = pendingResponse.ok && Array.isArray(pendingData)
+    ? pendingData
+    : []
+
+  const writtenCount = pendingRecipes.filter(
+    (item) => item.type === 'written'
+  ).length
+
+  const videoCount = pendingRecipes.filter(
+    (item) => item.type === 'video'
+  ).length
+
+  const totalPending = writtenCount + videoCount
+
+  if (totalPending > 0) {
+    adminNotifications.push({
+      title: 'Pending Recipe Approvals',
+      message: `${totalPending} recipe contribution${totalPending > 1 ? 's are' : ' is'} waiting for verification and approval.`,
+      route: '/admin'
+    })
+  }
+
+  if (writtenCount > 0) {
+    adminNotifications.push({
+      title: 'Written Recipes Pending',
+      message: `${writtenCount} written recipe${writtenCount > 1 ? 's need' : ' needs'} review.`,
+      route: '/admin'
+    })
+  }
+
+  if (videoCount > 0) {
+    adminNotifications.push({
+      title: 'Video Recipes Pending',
+      message: `${videoCount} video recipe${videoCount > 1 ? 's need' : ' needs'} review.`,
+      route: '/admin'
+    })
+  }
+
+  setNotifications(adminNotifications)
+
+  const userKey = getUserNotificationKey()
+  const currentSignature = createNotificationSignature(adminNotifications)
+  const savedSignature = localStorage.getItem(
+    `fitfusion_seen_notifications_${userKey}`
+  )
+
+  if (totalPending > 0 && currentSignature !== savedSignature) {
+    setUnreadCount(totalPending)
+  } else {
+    setUnreadCount(0)
+  }
+
+  return
+}
 
         const notificationSettings =
           JSON.parse(localStorage.getItem('notificationSettings')) || {
@@ -27,10 +112,10 @@ function NotificationBell() {
         const generatedNotifications = []
 
         const statsResponse = await fetch(
-          'http://localhost:5000/api/history/stats',
+          `${API_URL}/api/history/stats`,
           {
             headers: {
-              Authorization: `Bearer ${userInfo?.token}`
+              Authorization: `Bearer ${userInfo.token}`
             }
           }
         )
@@ -38,10 +123,10 @@ function NotificationBell() {
         const statsData = await statsResponse.json()
 
         const historyResponse = await fetch(
-          'http://localhost:5000/api/history',
+          `${API_URL}/api/history`,
           {
             headers: {
-              Authorization: `Bearer ${userInfo?.token}`
+              Authorization: `Bearer ${userInfo.token}`
             }
           }
         )
@@ -49,10 +134,10 @@ function NotificationBell() {
         const historyData = await historyResponse.json()
 
         const contributionResponse = await fetch(
-          'http://localhost:5000/api/recipes/my-contributions',
+          `${API_URL}/api/recipes/my-contributions`,
           {
             headers: {
-              Authorization: `Bearer ${userInfo?.token}`
+              Authorization: `Bearer ${userInfo.token}`
             }
           }
         )
@@ -70,13 +155,13 @@ function NotificationBell() {
             return workoutDate === today
           })
 
-         generatedNotifications.push({
-  title: workedOutToday ? 'Workout Completed' : 'Workout Reminder',
-  message: workedOutToday
-    ? 'Great job! You completed a workout today.'
-    : 'You have not completed a workout today. Start one AI-guided session.',
-  route: workedOutToday ? '/progress' : '/workouts'
-})
+          generatedNotifications.push({
+            title: workedOutToday ? 'Workout Completed' : 'Workout Reminder',
+            message: workedOutToday
+              ? 'Great job! You completed a workout today.'
+              : 'You have not completed a workout today. Start one AI-guided session.',
+            route: workedOutToday ? '/progress' : '/workouts'
+          })
         }
 
         if (notificationSettings.recipeAlerts && contributionResponse.ok) {
@@ -94,26 +179,26 @@ function NotificationBell() {
 
           if (pendingCount > 0) {
             generatedNotifications.push({
-  title: 'Recipe Pending',
-  message: `${pendingCount} contribution is waiting for admin review.`,
-  route: '/profile'
-})
+              title: 'Recipe Pending',
+              message: `${pendingCount} contribution is waiting for admin review.`,
+              route: '/profile'
+            })
           }
 
           if (approvedCount > 0) {
             generatedNotifications.push({
-  title: 'Recipe Approved',
-  message: `${approvedCount} contribution is approved and visible.`,
-  route: '/profile'
-})
+              title: 'Recipe Approved',
+              message: `${approvedCount} contribution is approved and visible.`,
+              route: '/profile'
+            })
           }
 
           if (rejectedCount > 0) {
             generatedNotifications.push({
-  title: 'Recipe Rejected',
-  message: `${rejectedCount} contribution needs changes.`,
-  route: '/profile'
-})
+              title: 'Recipe Rejected',
+              message: `${rejectedCount} contribution needs changes.`,
+              route: '/profile'
+            })
           }
         }
 
@@ -133,21 +218,34 @@ function NotificationBell() {
             if (dayStreak >= 7) aiScore += 10
             if (totalCalories >= 1000) aiScore += 10
           }
-        generatedNotifications.push({
-  title: 'AI Coach Tip',
-  message:
-    totalWorkouts === 0
-      ? 'Start your first workout to generate personalized progress insights.'
-      : aiScore < 60
-        ? 'Build consistency with short daily workouts and clean form.'
-        : aiScore < 80
-          ? 'Your progress is improving. Keep training regularly.'
-          : 'Excellent consistency! Keep maintaining your workout rhythm.',
-  route: '/ai-coach'
-})
+
+          generatedNotifications.push({
+            title: 'AI Coach Tip',
+            message:
+              totalWorkouts === 0
+                ? 'Start your first workout to generate personalized progress insights.'
+                : aiScore < 60
+                  ? 'Build consistency with short daily workouts and clean form.'
+                  : aiScore < 80
+                    ? 'Your progress is improving. Keep training regularly.'
+                    : 'Excellent consistency! Keep maintaining your workout rhythm.',
+            route: '/ai-coach'
+          })
         }
 
         setNotifications(generatedNotifications)
+
+        const userKey = getUserNotificationKey()
+        const currentSignature = createNotificationSignature(generatedNotifications)
+        const savedSignature = localStorage.getItem(
+          `fitfusion_seen_notifications_${userKey}`
+        )
+
+        if (generatedNotifications.length > 0 && currentSignature !== savedSignature) {
+          setUnreadCount(generatedNotifications.length)
+        } else {
+          setUnreadCount(0)
+        }
       } catch (error) {
         console.log(error)
       }
@@ -155,6 +253,22 @@ function NotificationBell() {
 
     fetchNotifications()
   }, [])
+
+  const handleBellClick = () => {
+    const nextState = !showNotifications
+
+    setShowNotifications(nextState)
+
+    const userKey = getUserNotificationKey()
+    const currentSignature = createNotificationSignature(notifications)
+
+    localStorage.setItem(
+      `fitfusion_seen_notifications_${userKey}`,
+      currentSignature
+    )
+
+    setUnreadCount(0)
+  }
 
   const notificationPanel = showNotifications ? (
     <div className="global-notification-panel">
@@ -168,20 +282,20 @@ function NotificationBell() {
       )}
 
       {notifications.map((item, index) => (
-  <div
-    className="notification-item"
-    key={index}
-    onClick={() => {
-      if (item.route) {
-        setShowNotifications(false)
-        navigate(item.route)
-      }
-    }}
-  >
-    <strong>{item.title}</strong>
-    <p>{item.message}</p>
-  </div>
-))}
+        <div
+          className="notification-item"
+          key={index}
+          onClick={() => {
+            if (item.route) {
+              setShowNotifications(false)
+              navigate(item.route)
+            }
+          }}
+        >
+          <strong>{item.title}</strong>
+          <p>{item.message}</p>
+        </div>
+      ))}
     </div>
   ) : null
 
@@ -189,17 +303,13 @@ function NotificationBell() {
     <>
       <button
         className="icon-btn notification-btn"
-        onClick={() => {
-  setShowNotifications(!showNotifications)
-  setNotificationsSeen(true)
-  localStorage.setItem('notificationsSeen', 'true')
-}}
+        onClick={handleBellClick}
       >
         <Bell size={19} />
 
-        {notifications.length > 0 && !notificationsSeen && (
+        {unreadCount > 0 && (
           <span className="notification-badge">
-            {notifications.length}
+            {unreadCount}
           </span>
         )}
       </button>

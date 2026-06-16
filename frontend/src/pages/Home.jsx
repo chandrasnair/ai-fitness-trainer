@@ -1,4 +1,6 @@
+import { API_URL } from '../api'
 import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import NotificationBell from '../components/NotificationBell'
 
 import {
@@ -8,743 +10,688 @@ import {
   BarChart3,
   Settings,
   Bot,
-  Plus,
   Flame,
   Repeat,
-  Bell,
-  Zap
+  Zap,
+  Menu,
+  X,
+  ArrowRight,
+  CalendarDays,
+  Clock3,
+  CheckCircle,
+  Leaf,
+  Salad,
+  Activity,
+  History,
+  UserRound,
+  Target
 } from 'lucide-react'
-import { Link } from 'react-router-dom'
 
 import '../index.css'
 
-const heroSlides = [
-  {
-    title: 'AI Powered Training',
-    subtitle: 'Real-time posture correction, rep tracking, and smart coaching.',
-    image: '/images/hero1.jpg'
-  },
-  {
-    title: 'Push Beyond Limits',
-    subtitle: 'Track progress, stay consistent, and build strength every day.',
-    image: '/images/hero2.jpg'
-  },
-  {
-    title: 'Train. Eat. Recover.',
-    subtitle: 'Fitness guidance, healthy food habits, and progress analytics together.',
-    image: '/images/hero3.jpg'
-  },
-  {
-    title: 'Your Smart Fitness Space',
-    subtitle: 'Personalized workouts designed around your level and goals.',
-    image: '/images/hero4.jpg'
-  }
-]
-
 function Home() {
-  const [slideIndex, setSlideIndex] = useState(0)
-  const [gender, setGender] = useState('male')
-useEffect(() => {
+  const navigate = useNavigate()
+
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+  const isAdmin = userInfo?.role === 'admin'
 
-  if (userInfo?.gender) {
-    setGender(userInfo.gender.toLowerCase())
-  }
-}, [])
-
-  const [showAllWorkouts, setShowAllWorkouts] = useState(false)
-  
-  const [theme, setTheme] = useState(
-  localStorage.getItem('themeMode') || 'light'
-)
-useEffect(() => {
-  localStorage.setItem('themeMode', theme)
-
-  if (theme === 'dark') {
-    document.body.classList.add('dark-theme')
-  } else {
-    document.body.classList.remove('dark-theme')
-  }
-}, [theme])
   const [showIntro, setShowIntro] = useState(true)
-  const userInfo = JSON.parse(
-  localStorage.getItem('userInfo')
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [gender, setGender] = useState('male')
+  const [recentActivity, setRecentActivity] = useState([])
+  const [statsLoading, setStatsLoading] = useState(true)
+  const [darkMode, setDarkMode] = useState(
+  localStorage.getItem('themeMode') === 'dark'
 )
 
-const [showNotifications, setShowNotifications] = useState(false)
+  const [stats, setStats] = useState({
+    dayStreak: 0,
+    totalWorkouts: 0,
+    totalReps: 0,
+    totalCalories: 0
+  })
 
-const genderValue = userInfo?.gender?.toLowerCase()
-
-const profileImage = userInfo?.profileImage
-  ? `http://localhost:5000${userInfo.profileImage}`
-  : genderValue === 'female'
-    ? '/images/default-female.jpg'
-    : genderValue === 'male'
-      ? '/images/default-male.jpg'
-      : '/images/default-female.jpg'
-
-const [recentActivity, setRecentActivity] = useState([])
-useEffect(() => {
-  const fetchRecentActivity = async () => {
-    try {
-     const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-
-const response = await fetch(
-  'http://localhost:5000/api/history/recent',
-  {
-    headers: {
-      Authorization: `Bearer ${userInfo?.token}`
-    }
-  }
-)
-      const data = await response.json()
-      setRecentActivity(data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  fetchRecentActivity()
-}, [])
-
-const [stats, setStats] = useState({
-  dayStreak: 0,
-  totalWorkouts: 0,
-  totalReps: 0,
-  totalCalories: 0,
-})
-
-const [statsLoading, setStatsLoading] = useState(true)
-
-useEffect(() => {
-  const fetchStats = async () => {
-    try {
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-
-const response = await fetch(
-  'http://localhost:5000/api/history/stats',
-  {
-    headers: {
-      Authorization: `Bearer ${userInfo?.token}`
-    }
-  }
-)
-      const data = await response.json()
-
-      setStats({
-        dayStreak: data.dayStreak || 0,
-        totalWorkouts: data.totalWorkouts || 0,
-        totalReps: data.totalReps || 0,
-        totalCalories: data.totalCalories || 0,
-      })
-    } catch (error) {
-      console.error('Error fetching stats:', error)
-    } finally {
-      setStatsLoading(false)
-    }
-  }
-
-  fetchStats()
-}, [])
-
-
-
-useEffect(() => {
-  const introTimer = setTimeout(() => {
-    setShowIntro(false)
-  }, 3000)
-
-  return () => clearTimeout(introTimer)
-}, [])
   useEffect(() => {
-    const timer = setInterval(() => {
-      setSlideIndex((prev) => (prev + 1) % heroSlides.length)
-    }, 4000)
+    const timer = setTimeout(() => {
+      setShowIntro(false)
+    }, 3000)
 
-    return () => clearInterval(timer)
+    return () => clearTimeout(timer)
   }, [])
 
-  const slide = heroSlides[slideIndex]
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
-  const workouts = [
-    ['Lower Body', `/images/lowerbody-${gender}.jpg`],
-    ['Upper Body', `/images/upperbody-${gender}.jpg`],
-    ['Core / Abs', `/images/core-${gender}.jpg`],
-    ['Mobility', `/images/mobility-${gender}.jpg`],
-    ['Stretch', `/images/stretch-${gender}.jpg`],
-    ['Cardio', `/images/cardio-${gender}.jpg`]
-  ]
-  const visibleWorkouts = showAllWorkouts
-  ? workouts
-  : workouts.slice(0, 4)
+    if (userInfo?.gender) {
+      setGender(userInfo.gender.toLowerCase())
+    }
+  }, [])
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
+        const response = await fetch(`${API_URL}/api/history/stats`, {
+          headers: {
+            Authorization: `Bearer ${userInfo?.token}`
+          }
+        })
+
+        const data = await response.json()
+
+        if (response.ok) {
+          setStats({
+            dayStreak: data.dayStreak || 0,
+            totalWorkouts: data.totalWorkouts || 0,
+            totalReps: data.totalReps || 0,
+            totalCalories: data.totalCalories || 0
+          })
+        }
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setStatsLoading(false)
+      }
+    }
+
+    fetchStats()
+  }, [])
+
+  useEffect(() => {
+    const fetchRecentActivity = async () => {
+      try {
+        const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
+        const response = await fetch(`${API_URL}/api/history/recent`, {
+          headers: {
+            Authorization: `Bearer ${userInfo?.token}`
+          }
+        })
+
+        const data = await response.json()
+
+        if (response.ok && Array.isArray(data)) {
+          setRecentActivity(data.slice(0, 3))
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    fetchRecentActivity()
+  }, [])
+
+ 
 
   const dailyPlans = [
-  {
-    title: 'Recovery & Stretch',
-    description: 'Light stretching and breathing-focused mobility',
-    meta: '20 min · Beginner',
-    image: `/images/stretch-${gender}.jpg`
-  },
-  {
-    title: 'Lower Body Strength',
-    description: 'Squats, lunges, and controlled leg movement',
-    meta: '30 min · Intermediate',
-    image: `/images/lowerbody-${gender}.jpg`
-  },
-  {
-    title: 'Upper Body Power',
-    description: 'Push-ups, shoulder control, and arm strength',
-    meta: '30 min · Intermediate',
-    image: `/images/upperbody-${gender}.jpg`
-  },
-  {
-    title: 'Core Stability',
-    description: 'Abs, plank control, and posture balance',
-    meta: '25 min · Beginner',
-    image: `/images/core-${gender}.jpg`
-  },
-  {
-    title: 'Mobility Training',
-    description: 'Improve flexibility, balance, and joint movement',
-    meta: '25 min · Beginner',
-    image: `/images/mobility-${gender}.jpg`
-  },
-  {
-    title: 'Cardio Burn',
-    description: 'Fast movement, stamina training, and calorie burn',
-    meta: '35 min · Intermediate',
-    image: `/images/cardio-${gender}.jpg`
-  },
-  {
-    title: 'Full Body Training',
-    description: 'Balanced strength workout for the full body',
-    meta: '40 min · Intermediate',
-    image: `/images/hero2.jpg`
+    {
+      title: 'Recovery & Stretch',
+      meta: '20 min • Beginner',
+      image: `/images/stretch-${gender}.jpg`
+    },
+    {
+      title: 'Lower Body Strength',
+      meta: '30 min • Intermediate',
+      image: `/images/lowerbody-${gender}.jpg`
+    },
+    {
+      title: 'Upper Body Power',
+      meta: '30 min • Intermediate',
+      image: `/images/upperbody-${gender}.jpg`
+    },
+    {
+      title: 'Core Stability',
+      meta: '25 min • Beginner',
+      image: `/images/core-${gender}.jpg`
+    },
+    {
+      title: 'Mobility Training',
+      meta: '25 min • Beginner',
+      image: `/images/mobility-${gender}.jpg`
+    },
+    {
+      title: 'Cardio Burn',
+      meta: '35 min • Intermediate',
+      image: `/images/cardio-${gender}.jpg`
+    },
+    {
+      title: 'Full Body Training',
+      meta: '40 min • Intermediate',
+      image: '/images/hero2.jpg'
+    }
+  ]
+
+  const todayPlan = dailyPlans[new Date().getDay()]
+
+  const workoutCategories = [
+    {
+      title: 'Strength',
+      route: '/workouts/category/strength',
+      image: `/images/lowerbody-${gender}.jpg`,
+      icon: <Dumbbell size={21} />
+    },
+    {
+      title: 'Mobility',
+      route: '/workouts/category/mobility',
+      image: `/images/mobility-${gender}.jpg`,
+      icon: <Activity size={21} />
+    },
+    {
+      title: 'Cardio',
+      route: '/workouts/category/cardio',
+      image: `/images/cardio-${gender}.jpg`,
+      icon: <Zap size={21} />
+    },
+    {
+      title: 'Core',
+      route: '/workouts/category/core',
+      image: `/images/core-${gender}.jpg`,
+      icon: <Target size={21} />
+    }
+  ]
+
+  const formatExerciseName = (exercise) => {
+    if (exercise === 'squat') return 'Squat Workout'
+
+    if (
+      exercise === 'pushup' ||
+      exercise === 'push-up' ||
+      exercise === 'push-ups'
+    ) {
+      return 'Push-up Workout'
+    }
+
+    return exercise
+      ? exercise.replaceAll('-', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase())
+      : 'Workout Session'
   }
-]
 
-const todayIndex = new Date().getDay()
-const todayPlan = dailyPlans[todayIndex]
+  const formatActivityTime = (index) => {
+    if (index === 0) return 'Today'
+    if (index === 1) return 'Yesterday'
+    return `${index + 1} days ago`
+  }
 
-
-if (showIntro) {
-
-  return (
-
-    <div className="intro-screen">
-
-      <div className="intro-collage">
-
-        <img
-          src="/images/motivation1.jpg"
-          alt=""
-        />
-
-        <img
-          src="/images/motivation2.jpg"
-          alt=""
-        />
-
-        <img
-          src="/images/motivation3.jpg"
-          alt=""
-        />
-
-      </div>
-
-      <div className="intro-overlay">
-
-        <p>
-          AI FITNESS SYSTEM
-        </p>
-
-        <h1>
-          TRAIN
-          <br />
-          WITH
-          <br />
-          PURPOSE
-        </h1>
-
-      </div>
-
-    </div>
-
+  const fitnessScore = Math.min(
+    100,
+    Math.round(
+      (stats.totalWorkouts * 6) +
+      (stats.dayStreak * 5) +
+      Math.min(stats.totalReps / 20, 30)
+    )
   )
+  useEffect(() => {
+  if (darkMode) {
+    document.body.classList.add('dark-theme')
+    localStorage.setItem('themeMode', 'dark')
+  } else {
+    document.body.classList.remove('dark-theme')
+    localStorage.setItem('themeMode', 'light')
+  }
+}, [darkMode])
 
+const toggleTheme = () => {
+  setDarkMode((prev) => !prev)
 }
+
+  if (showIntro) {
+    return (
+      <div className="intro-screen">
+        <div className="intro-collage">
+          <img src="/images/motivation1.jpg" alt="" />
+          <img src="/images/motivation2.jpg" alt="" />
+          <img src="/images/motivation3.jpg" alt="" />
+        </div>
+
+        <div className="intro-overlay">
+          <p>AI FITNESS SYSTEM</p>
+
+          <h1>
+            TRAIN
+            <br />
+            WITH
+            <br />
+            PURPOSE
+          </h1>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className={`dashboard ${theme}`}>
-    <div className="ambient ambient-two"></div>
-    <div className="ambient ambient-three"></div>
-      <aside className="sidebar">
-        <h2>AI Fitness</h2>
+    <div className="home-clean-page">
 
-        <nav>
+      <button
+        className="home-clean-menu-btn"
+        onClick={() => setSidebarOpen(true)}
+      >
+        <Menu size={24} />
+      </button>
 
-  <Link to="/">
-    <span className="active">
-      <HomeIcon size={18} /> Home
-    </span>
+      <div
+        className={
+          sidebarOpen
+            ? 'home-clean-sidebar-overlay active'
+            : 'home-clean-sidebar-overlay'
+        }
+        onClick={() => setSidebarOpen(false)}
+      />
+
+      <aside className={sidebarOpen ? 'home-clean-side-panel open' : 'home-clean-side-panel'}>
+        <div className="home-clean-side-head">
+          <div className="home-clean-side-brand">
+            <Dumbbell size={24} />
+            <h2>FitFusion</h2>
+          </div>
+
+          <button onClick={() => setSidebarOpen(false)}>
+            <X size={24} />
+          </button>
+        </div>
+
+        <nav className="home-clean-side-nav">
+          <Link to="/home" className="active" onClick={() => setSidebarOpen(false)}>
+            <HomeIcon size={20} />
+            Home
+          </Link>
+
+          <Link to="/workouts" onClick={() => setSidebarOpen(false)}>
+            <Dumbbell size={20} />
+            Workouts
+          </Link>
+
+          <Link to="/diet" onClick={() => setSidebarOpen(false)}>
+            <Apple size={20} />
+            Diet
+          </Link>
+
+          <Link to="/progress" onClick={() => setSidebarOpen(false)}>
+            <BarChart3 size={20} />
+            Progress
+          </Link>
+
+          <Link to="/ai-coach" onClick={() => setSidebarOpen(false)}>
+            <Bot size={20} />
+            AI Coach
+          </Link>
+
+          <Link to="/workout-history" onClick={() => setSidebarOpen(false)}>
+            <History size={20} />
+            History
+          </Link>
+
+          <Link to="/profile" onClick={() => setSidebarOpen(false)}>
+            <Settings size={20} />
+            Profile
+          </Link>
+
+          {isAdmin && (
+  <Link to="/admin" onClick={() => setSidebarOpen(false)}>
+    <Settings size={20} />
+    Admin Dashboard
   </Link>
+)}
+        </nav>
 
-  <Link to="/workouts">
-    <span>
-      <Dumbbell size={18} /> Workouts
-    </span>
-  </Link>
-
-  <Link to="/diet">
-    <span>
-      <Apple size={18} /> Diet
-    </span>
-  </Link>
-
-  <Link to="/progress">
-    <span>
-      <BarChart3 size={18} /> Progress
-    </span>
-  </Link>
-
-  <Link to="/ai-coach">
-    <span>
-      <Bot size={18} /> AI Coach
-    </span>
-  </Link>
-
-  <Link to="/profile">
-    <span>
-      <Settings size={18} /> Profile
-    </span>
-  </Link>
-
-</nav>
-
-        <div className="profile-box">
-  <img src={profileImage} alt="Profile" />
+        <div className="home-clean-side-profile">
+          <UserRound size={22} />
           <div>
             <h4>Welcome Back</h4>
-            <p>Level: Beginner</p>
+            <p>Beginner Level</p>
           </div>
         </div>
       </aside>
 
-      <main className="content">
-        <header className="topbar">
-          <input placeholder="Search workouts, recipes, progress..." />
+      <section className="home-clean-hero">
 
-          
+        <div className="home-clean-hero-actions">
+  <button
+    className="home-clean-theme-btn"
+    onClick={toggleTheme}
+  >
+    {darkMode ? 'Light' : 'Dark'}
+  </button>
 
-<div className="top-actions">
+  <div className="home-clean-bell-wrap">
+    <NotificationBell />
+  </div>
 
-  <NotificationBell />
-
-  <Link to="/profile">
-    <button className="icon-btn">
-      <Settings size={19} />
-    </button>
-  </Link>
-
+  <button
+    className="home-clean-settings-btn"
+    onClick={() => navigate('/profile')}
+  >
+    <Settings size={23} />
+  </button>
 </div>
 
-        <button
-  className="theme-toggle"
-  onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
->
-  {theme === 'light' ? 'Dark' : 'Light'}
-</button>
+        <div className="home-clean-hero-left">
+          <span className="home-clean-label">FITFUSION HOME</span>
 
-
-        </header>
-
-        <section className="hero-editorial">
-   
-
-  <div
-    className="hero-background"
-    style={{
-      backgroundImage: `url(${slide.image})`
-    }}
-  >
-
-    <div className="hero-dark-overlay"></div>
-
-    <div className="hero-content">
-
-      <p className="hero-mini">
-        AI FITNESS SYSTEM
-      </p>
-
-      <h1>
-        TRAIN
-        <br />
-        WITH
-        <br />
-        PURPOSE
-      </h1>
-
-      <div className="hero-side-text">
-        MOTION
-        <br />
-        FITNESS
-        <br />
-        TIME
-      </div>
-
-      <p className="hero-description">
-        Smart posture tracking, AI coaching,
-        progress analytics, and premium fitness
-        guidance built into one ecosystem.
-      </p>
-
-      <Link
-  to="/workouts"
-  className="hero-btn"
->
-  START TRAINING
-</Link>
-
-      <div className="dots editorial-dots">
-
-        {heroSlides.map((_, index) => (
-
-          <span
-            key={index}
-            className={
-              index === slideIndex
-                ? 'dot active'
-                : 'dot'
-            }
-          ></span>
-
-        ))}
-
-      </div>
-    
-
-    </div>
-
-  </div>
-
-</section>
-       <section className="floating-stats">
-
-  <div className="float-stat fire">
-    <div className="stat-icon">
-      <Flame size={20} />
-    </div>
-
-    <div>
-      <h3>{statsLoading ? '--' : stats.dayStreak}</h3>
-      <p>Day Streak</p>
-    </div>
-  </div>
-
-  <div className="float-stat lift">
-    <div className="stat-icon">
-      <Dumbbell size={20} />
-    </div>
-
-    <div>
-      <h3>{statsLoading ? '--' : stats.totalWorkouts}</h3>
-      <p>Workouts</p>
-    </div>
-  </div>
-
-  <div className="float-stat reps">
-    <div className="stat-icon">
-      <Repeat size={20} />
-    </div>
-
-    <div>
-      <h3>{statsLoading ? '--' : stats.totalReps}</h3>
-      <p>Total Reps</p>
-    </div>
-  </div>
-
-  <div className="float-stat burn">
-    <div className="stat-icon">
-      <Zap size={20} />
-    </div>
-
-    <div>
-      <h3>{statsLoading ? '--' : stats.totalCalories}</h3>
-      <p>Calories</p>
-    </div>
-  </div>
-
-</section>
-<section className="dashboard-main-grid">
-
-  <div
-    className="ai-feature-card"
-    style={{
-      backgroundImage:
-        "linear-gradient(to right, rgba(5,12,5,.92), rgba(5,12,5,.38)), url('/images/ai-coach.jpg')"
-    }}
-  >
-    <span>AI COACH INSIGHT</span>
-
-    <h2>
-      Your form consistency
-      is improving.
-    </h2>
-
-    <p>
-      Based on recent sessions, focus on controlled movement and deeper squat range today.
-    </p>
-
-    <Link
-  to="/ai-coach"
-  className="ai-report-btn"
->
-  View AI Report
-</Link>
-  </div>
-
-  <div className="middle-cards">
-
-    <div className="side-plan-card image-plan-card">
-  <span>TODAY'S PLAN</span>
-
-  <div className="plan-content">
-    <div>
-      <h3>{todayPlan.title}</h3>
-      <p>{todayPlan.description}</p>
-      <small>{todayPlan.meta}</small>
-    </div>
-
-    <img src={todayPlan.image} alt={todayPlan.title} />
-  </div>
-</div>
-
-    <div className="side-plan-card image-plan-card nutrition-preview">
-      <span>NUTRITION</span>
-
-      <div className="plan-content">
-        <div>
-          <h3>Protein Meals</h3>
-          <p>Recipes and food videos</p>
-        </div>
-
-        <img src="/images/nutrition-summary.jpg" alt="" />
-      </div>
-    </div>
-
-  </div>
-
-  <div className="recent-activity-card">
-
-  <div className="recent-header">
-    <div>
-      <span>WORKOUT TRACKER</span>
-      <h3>Recent Activity</h3>
-    </div>
-
-    <Link
-      to="/workout-history"
-      className="view-all-btn"
-    >
-      View All
-    </Link>
-  </div>
-
-  <div className="recent-list">
-    {recentActivity.map((item, index) => (
-      <div
-        className="recent-item"
-        key={index}
-      >
-        <div className="recent-item-left">
-          <h4>
-            {item.exercise === 'squat'
-              ? ' Squat Workout'
-              : ' Push-up Workout'}
-          </h4>
+          <h1>
+            Train with purpose,
+            <br />
+            progress with clarity.
+          </h1>
 
           <p>
-            {item.reps_completed} reps •{' '}
-            {item.calories_burned || 0} calories
+            Your workout stats, AI guidance, nutrition preview, and progress
+            tracking are brought together in one clean dashboard.
           </p>
+
+          <div className="home-clean-hero-buttons">
+            <Link to="/workouts">
+              Start Training
+              <ArrowRight size={17} />
+            </Link>
+
+            <Link to="/progress">
+              View Progress
+            </Link>
+          </div>
+
+          <div className="home-clean-stats-row">
+            <div>
+              <Flame size={20} />
+              <section>
+                <small>Day Streak</small>
+                <strong>{statsLoading ? '--' : stats.dayStreak}</strong>
+              </section>
+            </div>
+
+            <div>
+              <Dumbbell size={20} />
+              <section>
+                <small>Workouts</small>
+                <strong>{statsLoading ? '--' : stats.totalWorkouts}</strong>
+              </section>
+            </div>
+
+            <div>
+              <Repeat size={20} />
+              <section>
+                <small>Total Reps</small>
+                <strong>{statsLoading ? '--' : stats.totalReps}</strong>
+              </section>
+            </div>
+
+            <div>
+              <Zap size={20} />
+              <section>
+                <small>Calories</small>
+                <strong>{statsLoading ? '--' : stats.totalCalories}</strong>
+              </section>
+            </div>
+          </div>
         </div>
 
-        <span className="recent-date">
-          {item.date_time?.split(' ')[0]}
-        </span>
+        <div className="home-clean-score">
+          <h3>{statsLoading ? '--' : fitnessScore}<span>%</span></h3>
+          <p>Fitness Score</p>
+        </div>
+
+        <img
+          className="home-clean-person"
+          src="/images/aicoach-girl-cutout.png"
+          alt="FitFusion hero"
+        />
+
+        <div className="home-clean-hero-text">
+          <h2>
+            Smarter
+            <br />
+            Fitness
+            <br />
+            <b>Every Day</b>
+          </h2>
+
+          <p>
+            AI-supported workouts, nutrition, and progress guidance.
+          </p>
+        </div>
+      </section>
+
+      <main className="home-clean-main">
+
+        <section className="home-premium-card-row">
+
+  <Link to="/ai-coach" className="home-premium-card ai">
+    <div className="home-premium-card-top">
+      <span>
+        <Bot size={20} />
+      </span>
+      <small>AI REPORT</small>
+    </div>
+
+    <h3>AI Coach Insight</h3>
+
+    <p>
+      Smart guidance based on your workout progress, recovery and consistency.
+    </p>
+
+    
+
+    <div className="home-premium-card-action">
+      View AI Report
+      <ArrowRight size={14} />
+    </div>
+  </Link>
+
+  <Link to="/workouts" className="home-premium-card plan">
+    <div className="home-premium-card-top">
+      <span>
+        <CalendarDays size={20} />
+      </span>
+      <small>TODAY</small>
+    </div>
+
+    <div className="home-premium-image-layout">
+      <img src={todayPlan.image} alt={todayPlan.title} />
+
+      <div>
+        <h3>{todayPlan.title}</h3>
+        <p>{todayPlan.meta}</p>
+
+        <div className="home-premium-card-action">
+          View Plan
+          <ArrowRight size={14} />
+        </div>
       </div>
-    ))}
+    </div>
+  </Link>
+
+  <Link to="/diet" className="home-premium-card nutrition">
+    <div className="home-premium-card-top">
+      <span>
+        <Apple size={20} />
+      </span>
+      <small>NUTRITION</small>
+    </div>
+
+    <div className="home-premium-image-layout">
+      <img src="/images/nutrition-summary.jpg" alt="Nutrition" />
+
+      <div>
+        <h3>Nutrition Preview</h3>
+        <p>Protein meals, hydration and balanced food support.</p>
+
+        <div className="home-premium-card-action">
+          View Nutrition
+          <ArrowRight size={14} />
+        </div>
+      </div>
+    </div>
+  </Link>
+
+  <Link to="/workout-history" className="home-premium-card recent">
+    <div className="home-premium-card-top">
+      <span>
+        <Clock3 size={20} />
+      </span>
+      <small>RECENT</small>
+    </div>
+
+    <h3>Recent Activity</h3>
+
+    <div className="home-premium-recent-list">
+      {(recentActivity.length > 0 ? recentActivity : [1, 2, 3]).map((item, index) => (
+        <div className="home-premium-recent-item" key={index}>
+          <div>
+            <h4>
+              {typeof item === 'number'
+                ? index === 0
+                  ? 'Upper Body Strength'
+                  : index === 1
+                    ? 'Cardio Burn'
+                    : 'Core Stability'
+                : formatExerciseName(item.exercise)}
+            </h4>
+
+            <p>
+              {typeof item === 'number'
+                ? formatActivityTime(index)
+                : `${formatActivityTime(index)} • ${item.reps_completed || 0} reps`}
+            </p>
+          </div>
+
+          <CheckCircle size={15} />
+        </div>
+      ))}
+    </div>
+  </Link>
+
+</section>
+ <section className="home-lower-v2">
+
+  <div className="home-lower-v2-workouts">
+    <div className="home-lower-v2-head">
+      <div>
+        <small>TRAINING LIBRARY</small>
+        <h2>Choose your workout mode</h2>
+        <p>Focused categories to start training faster.</p>
+      </div>
+
+      <Link to="/workouts">
+        View All
+        <ArrowRight size={15} />
+      </Link>
+    </div>
+
+    <div className="home-lower-v2-workout-grid">
+      {workoutCategories.map((item, index) => (
+        <Link
+          to={item.route}
+          className="home-lower-v2-workout-tile"
+          key={index}
+          style={{
+            backgroundImage: `linear-gradient(to top, rgba(5, 9, 5, 0.86), rgba(5, 9, 5, 0.22)), url(${item.image})`
+          }}
+        >
+          <span>{item.icon}</span>
+
+          <div>
+            <h3>{item.title}</h3>
+            <p>
+              {index === 0
+                ? 'Build strength'
+                : index === 1
+                  ? 'Move better'
+                  : index === 2
+                    ? 'Burn calories'
+                    : 'Core control'}
+            </p>
+          </div>
+        </Link>
+      ))}
+    </div>
   </div>
 
-</div>
+  <div className="home-lower-v2-smart">
+
+    <Link to="/progress" className="home-lower-v2-progress">
+      <div className="home-lower-v2-card-head">
+        <span>
+          <BarChart3 size={20} />
+        </span>
+
+        <div>
+          <small>PROGRESS SNAPSHOT</small>
+          <h3>Weekly rhythm</h3>
+        </div>
+      </div>
+
+      <div className="home-lower-v2-progress-content">
+        <section>
+          <small>Workouts</small>
+          <strong>{statsLoading ? '--' : stats.totalWorkouts}</strong>
+        </section>
+
+        <section>
+          <small>Calories</small>
+          <strong>{statsLoading ? '--' : stats.totalCalories}</strong>
+        </section>
+
+        <div className="home-lower-v2-bars">
+          <i style={{ height: '45%' }}></i>
+          <i style={{ height: '62%' }}></i>
+          <i style={{ height: '52%' }}></i>
+          <i style={{ height: '78%' }}></i>
+          <i style={{ height: '58%' }}></i>
+        </div>
+      </div>
+    </Link>
+
+    <Link to="/ai-coach" className="home-lower-v2-wellness-card">
+  <div className="home-lower-v2-wellness-image">
+    <img src="/images/protein-meal.jpg" alt="Nutrition and recovery" />
+  </div>
+
+  <div className="home-lower-v2-wellness-content">
+    <small>NUTRITION + RECOVERY</small>
+
+    <h3>Fuel well, recover smarter</h3>
+
+    <p>
+      Balanced meals, hydration, and proper rest help your body perform better in the next workout.
+    </p>
+
+    <div className="home-lower-v2-wellness-tags">
+      <span>Protein</span>
+      <span>Hydration</span>
+      <span>Rest</span>
+    </div>
+  </div>
+
+  <div className="home-lower-v2-wellness-icon">
+    <Activity size={22} />
+  </div>
+</Link>
+  </div>
 
 </section>
 
-        <section className="section-block">
-          <div className="section-head">
-            <h2>Workout Categories</h2>
-           <Link to="/workouts" className="view-all-link">
-  View all
-</Link>
-          </div>
-
-          <div className="workout-layout">
-<Link
-  to="/workouts/category/strength"
-  className="workout-large"
-  style={{
-    backgroundImage:
-      `linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/lowerbody-${gender}.jpg')`
-  }}
->
-    <div>
-      <h3>Strength Training</h3>
-      <span>AI Guided</span>
-    </div>
-   </Link>
-
-  <Link
-  to="/workouts/category/mobility"
-  className="workout-small"
-
-    style={{
-      backgroundImage:
-        `linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/mobility-${gender}.jpg')`
-    }}
-  >
-    <div>
-      <h3>Yoga & Mobility</h3>
-      <span>AI Guided</span>
-    </div>
+<section className="home-lower-v2-actions">
+  <Link to="/diet">
+    <Salad size={20} />
+    <span>Meal Ideas</span>
   </Link>
 
-  <div className="workout-stack">
-
-    <Link
-  to="/workouts/category/cardio"
-  className="workout-small"
-
-      style={{
-        backgroundImage:
-          `linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/cardio-${gender}.jpg')`
-      }}
-    >
-      <div>
-        <h3>HIIT Cardio</h3>
-        <span>AI Guided</span>
-      </div>
-    </Link>
-
-    <Link
-  to="/workouts/category/core"
-  className="workout-tall"
-
-      style={{
-        backgroundImage:
-          `linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/core-${gender}.jpg')`
-      }}
-    >
-      <div>
-        <h3>Core Workouts</h3>
-        <span>AI Guided</span>
-      </div>
-    </Link>
-
-  </div>
-
-  <Link
-  to="/workouts/category/power"
-  className="workout-small"
-
-    style={{
-      backgroundImage:
-        `linear-gradient(to top, rgba(5,12,5,.82), rgba(5,12,5,.18)), url('/images/upperbody-${gender}.jpg')`
-    }}
-  >
-    <div>
-      <h3>Power Lifting</h3>
-      <span>AI Guided</span>
-    </div>
-  </Link>
-
-</div>
-        </section>
-
- <section className="two-column">
-          <div className="diet-card">
-            <div>
-              <h2>Healthy Food Guide</h2>
-              <p>
-                Discover healthy recipes, protein meals, smoothies, and balanced
-                food habits for your fitness goals.
-              </p>
-              <Link
-  to="/diet"
-  className="explore-diet-btn"
->
-  Explore Diet
-</Link>
-            </div>
-
-            <img src="/images/healthy-food.jpg" alt="Healthy food" />
-          </div>
-
-          <Link
-  to="/progress"
-  className="analytics-card"
->
-            <h2>Progress Analytics</h2>
-            <p>Weekly improvement preview</p>
-
-            <div className="bars">
-              <span style={{ height: '42%' }}></span>
-              <span style={{ height: '60%' }}></span>
-              <span style={{ height: '35%' }}></span>
-              <span style={{ height: '75%' }}></span>
-              <span style={{ height: '55%' }}></span>
-              <span style={{ height: '88%' }}></span>
-            </div>
-          </Link>
-        </section>
-        <section className="recipe-row">
-          <Link to="/diet" className="recipe-card">
-  <img src="/images/protein-meal.jpg" alt="Protein meal" />
-  <h3>Protein Meals</h3>
-</Link>
-
-<Link to="/diet" className="recipe-card">
-  <img src="/images/smoothie.jpg" alt="Smoothie" />
-  <h3>Smoothies</h3>
-</Link>
-
-<Link to="/diet" className="recipe-card">
-  <img src="/images/salad.jpg" alt="Salad" />
-  <h3>Clean Eating</h3>
-</Link>
-        </section>
-
-      </main>
-
-      <nav className="bottom-nav">
-  <Link to="/" className="nav-active">
-    <HomeIcon size={18} /> Home
+  <Link to="/ai-coach">
+    <Activity size={20} />
+    <span>Recovery</span>
   </Link>
 
   <Link to="/workouts">
-    <Dumbbell size={18} /> Workouts
-  </Link>
-
-  <button className="nav-action">
-    <Plus size={30} />
-  </button>
-
-  <Link to="/diet">
-    <Apple size={18} /> Diet
+    <Dumbbell size={20} />
+    <span>Workout Advice</span>
   </Link>
 
   <Link to="/progress">
-    <BarChart3 size={18} /> Progress
+    <BarChart3 size={20} />
+    <span>Progress</span>
   </Link>
-</nav>
+</section>
+      </main>
     </div>
   )
 }

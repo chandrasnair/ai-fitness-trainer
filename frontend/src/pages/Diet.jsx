@@ -1,3 +1,4 @@
+import { API_URL } from '../api'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -144,7 +145,7 @@ const [isSavingTarget, setIsSavingTarget] = useState(false)
       }
 
       const response = await fetch(
-        'http://localhost:5000/api/meal-plans/today',
+        `${API_URL}/api/meal-plans/today`,
         {
           headers: {
             Authorization: `Bearer ${userInfo.token}`
@@ -172,7 +173,7 @@ const [isSavingTarget, setIsSavingTarget] = useState(false)
         }
 
         const response = await fetch(
-          'http://localhost:5000/api/diet-targets',
+          `${API_URL}/api/diet-targets`,
           {
             headers: {
               Authorization: `Bearer ${userInfo.token}`
@@ -197,7 +198,7 @@ const [isSavingTarget, setIsSavingTarget] = useState(false)
   useEffect(() => {
     const fetchWrittenRecipes = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/recipes/written')
+        const response = await fetch(`${API_URL}/api/recipes/written`)
         const data = await response.json()
 
         if (response.ok) {
@@ -213,7 +214,7 @@ const [isSavingTarget, setIsSavingTarget] = useState(false)
 
     const fetchVideoRecipes = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/recipes/videos')
+        const response = await fetch(`${API_URL}/api/recipes/videos`)
         const data = await response.json()
 
         if (response.ok) {
@@ -222,9 +223,9 @@ const [isSavingTarget, setIsSavingTarget] = useState(false)
             title: item.title,
             duration: item.duration || 'Duration not available',
             thumbnail: item.thumbnail
-              ? `http://localhost:5000${item.thumbnail}`
+              ? `${API_URL}${item.thumbnail}`
               : '',
-            video: `http://localhost:5000${item.videoUrl}`,
+            video: `${API_URL}${item.videoUrl}`,
             source: 'uploaded'
           }))
 
@@ -279,7 +280,7 @@ const [isSavingTarget, setIsSavingTarget] = useState(false)
 
     return recipe.source === 'default'
       ? recipe.image
-      : `http://localhost:5000${recipe.image}`
+      : `${API_URL}${recipe.image}`
   }
 
   const getVideoThumbnail = (video) => {
@@ -320,8 +321,8 @@ const [isSavingTarget, setIsSavingTarget] = useState(false)
     }
 
     const url = selectedGoalOption
-      ? 'http://localhost:5000/api/diet-targets/goal-option'
-      : 'http://localhost:5000/api/diet-targets/today'
+      ? `${API_URL}/api/diet-targets/goal-option`
+      : `${API_URL}/api/diet-targets/today`
 
     const bodyData = selectedGoalOption
       ? {
@@ -375,7 +376,7 @@ const [isSavingTarget, setIsSavingTarget] = useState(false)
       }
 
       const response = await fetch(
-        'http://localhost:5000/api/diet-targets/regenerate',
+        `${API_URL}/api/diet-targets/regenerate`,
         {
           method: 'POST',
           headers: {
@@ -413,7 +414,7 @@ const [isSavingTarget, setIsSavingTarget] = useState(false)
       }
 
       const response = await fetch(
-        'http://localhost:5000/api/diet-targets/goal-option',
+        `${API_URL}/api/diet-targets/goal-option`,
         {
           method: 'PUT',
           headers: {
@@ -1021,12 +1022,14 @@ const [isSavingTarget, setIsSavingTarget] = useState(false)
           <input
             type="text"
             value={editTargetForm.calories}
-            onChange={(e) =>
-              setEditTargetForm({
-                ...editTargetForm,
-                calories: e.target.value
-              })
-            }
+            onChange={(e) => {
+  setSelectedGoalOption('')
+
+  setEditTargetForm({
+    ...editTargetForm,
+    calories: e.target.value
+  })
+}}
           />
         </label>
 
@@ -1035,12 +1038,14 @@ const [isSavingTarget, setIsSavingTarget] = useState(false)
           <input
             type="text"
             value={editTargetForm.protein}
-            onChange={(e) =>
-              setEditTargetForm({
-                ...editTargetForm,
-                protein: e.target.value
-              })
-            }
+            onChange={(e) => {
+  setSelectedGoalOption('')
+
+  setEditTargetForm({
+    ...editTargetForm,
+    protein: e.target.value
+  })
+}}
           />
         </label>
 
@@ -1049,12 +1054,14 @@ const [isSavingTarget, setIsSavingTarget] = useState(false)
           <input
             type="text"
             value={editTargetForm.water}
-            onChange={(e) =>
-              setEditTargetForm({
-                ...editTargetForm,
-                water: e.target.value
-              })
-            }
+            onChange={(e) => {
+  setSelectedGoalOption('')
+
+  setEditTargetForm({
+    ...editTargetForm,
+    water: e.target.value
+  })
+}}
           />
         </label>
 
@@ -1063,12 +1070,14 @@ const [isSavingTarget, setIsSavingTarget] = useState(false)
           <input
             type="text"
             value={editTargetForm.meals}
-            onChange={(e) =>
-              setEditTargetForm({
-                ...editTargetForm,
-                meals: e.target.value
-              })
-            }
+            onChange={(e) => {
+  setSelectedGoalOption('')
+
+  setEditTargetForm({
+    ...editTargetForm,
+    meals: e.target.value
+  })
+}}
           />
         </label>
 

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import NotificationBell from '../components/NotificationBell'
+import { API_URL } from '../api'
 import {
   Settings,
   Flame,
@@ -55,7 +56,7 @@ useEffect(() => {
 
     try {
       const response = await fetch(
-        'http://localhost:5000/api/history/progress-summary',
+        `${API_URL}/api/history/progress-summary`,
         {
           headers: {
             Authorization: `Bearer ${userInfo?.token}`

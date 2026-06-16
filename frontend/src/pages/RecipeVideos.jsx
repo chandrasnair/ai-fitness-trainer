@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Search, Play } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { API_URL } from '../api'
 
 function RecipeVideos() {
   const navigate = useNavigate()
@@ -49,7 +50,7 @@ function RecipeVideos() {
     const fetchApprovedVideos = async () => {
       try {
         const response = await fetch(
-          'http://localhost:5000/api/recipes/videos'
+          `${API_URL}/api/recipes/videos`
         )
 
         const data = await response.json()
@@ -60,9 +61,9 @@ function RecipeVideos() {
   title: item.title,
   duration: item.duration || 'Duration not available',
   thumbnail: item.thumbnail
-    ? `http://localhost:5000${item.thumbnail}`
-    : '',
-  video: `http://localhost:5000${item.videoUrl}`,
+  ? `${API_URL}${item.thumbnail}`
+  : '',
+video: `${API_URL}${item.videoUrl}`,
   source: 'uploaded'
 }))
 

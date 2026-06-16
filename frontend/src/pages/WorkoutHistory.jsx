@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Dumbbell, Flame, Calendar, CheckCircle } from 'lucide-react'
+import { API_URL } from '../api'
 
 function WorkoutHistory() {
   const [history, setHistory] = useState([])
@@ -11,7 +12,7 @@ function WorkoutHistory() {
         const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
         const response = await fetch(
-          'http://localhost:5000/api/history',
+           `${API_URL}/api/history`,
           {
             headers: {
               Authorization: `Bearer ${userInfo?.token}`

@@ -1,73 +1,136 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { API_URL } from '../api'
 import NotificationBell from '../components/NotificationBell'
 import {
-  Bell,
   Settings,
   Send,
   Sparkles,
   Brain,
-  Gauge,
-  Battery,
   Target,
-  CheckCircle
+  Zap,
+  TrendingUp,
+  Heart,
+  Download,
+  Leaf,
+  Utensils,
+  Droplets,
+  Dumbbell,
+  Moon,
+  CheckCircle,
+  Activity,
+  Timer,
+  BarChart3,
+  UserRound,
+  Mic,
+  Apple,
+  Salad,
+  CircleDot,
+  ChevronDown
 } from 'lucide-react'
 
 function AICoach() {
   const navigate = useNavigate()
+
   const [question, setQuestion] = useState('')
   const [aiReply, setAiReply] = useState('')
+  const [isAsking, setIsAsking] = useState(false)
 
-  const [aiStats, setAiStats] = useState({
-    aiScore: 0,
-    recovery: 0,
-    readiness: 'Start Training',
-    consistency: 'No Data'
+  const [coachData, setCoachData] = useState({
+    coachScore: 0,
+    energyTrend: 'Building',
+    trainingLoad: 'Light',
+    recoveryState: 'Start',
+    directionTitle: 'Build strength with intention, recover with purpose.',
+    directionText:
+      'Focus on controlled movement and smart recovery to keep progressing sustainably.',
+    formFocus: 'Quality over quantity.',
+    recoveryFocus: 'Rest is progress.',
+    repFocus: 'Small jumps today.',
+    nutritionFocus: 'Nourish well.',
+    planWorkout: 'Controlled Workout',
+    planDuration: '30 min'
   })
 
-  const calculateAiScore = (data) => {
-    if (!data.totalWorkouts || data.totalWorkouts === 0) {
-      return 0
-    }
-
-    let score = 50
-
-    if (data.totalWorkouts >= 5) score += 10
-    if (data.totalWorkouts >= 10) score += 10
-    if (data.dayStreak >= 3) score += 10
-    if (data.dayStreak >= 7) score += 10
-    if (data.totalCalories >= 1000) score += 10
-
-    return Math.min(score, 100)
-  }
-
   useEffect(() => {
-    const fetchAIStats = async () => {
+    const fetchCoachData = async () => {
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
       try {
         const response = await fetch(
-          'http://localhost:5000/api/history/stats'
+          `${API_URL}/api/history/progress-summary`,
+          {
+            headers: {
+              Authorization: `Bearer ${userInfo?.token}`
+            }
+          }
         )
 
         const data = await response.json()
 
         if (response.ok) {
-          const score = calculateAiScore(data)
+          const stats = data.stats || {}
 
-          setAiStats({
-            aiScore: score,
-            recovery: score >= 80 ? 88 : score >= 60 ? 72 : 50,
-            readiness:
-              score >= 80
-                ? 'Ready'
-                : score >= 60
-                  ? 'Moderate'
-                  : 'Build Up',
-            consistency:
-              score >= 80
-                ? 'Strong'
-                : score >= 60
-                  ? 'Improving'
-                  : 'Low'
+          const score = stats.aiScore || 0
+          const posture = stats.postureScore || 0
+          const reps = stats.totalReps || 0
+          const workouts = stats.totalWorkouts || 0
+
+          setCoachData({
+            coachScore: score,
+
+            energyTrend:
+              score >= 80 ? 'High' : score >= 60 ? 'Steady' : 'Building',
+
+            trainingLoad:
+              reps >= 300 ? 'High' : reps >= 100 ? 'Moderate' : 'Light',
+
+            recoveryState:
+              posture >= 80 ? 'Good' : posture >= 60 ? 'Average' : 'Focus',
+
+            directionTitle:
+  workouts === 0
+    ? 'Start steady, move with control, build your rhythm.'
+    : posture < 60
+      ? 'Improve your form before increasing intensity.'
+      : score >= 80
+        ? 'Maintain your rhythm and recover with purpose.'
+        : reps >= 100
+          ? 'Build strength with steady progression.'
+          : 'Move consistently and focus on clean reps.',
+
+directionText:
+  workouts === 0
+    ? 'Begin with simple workouts, clean form, and enough recovery. FitFusion AI will guide better as your activity grows.'
+    : posture < 60
+      ? 'Your posture score needs attention. Slow down your reps, focus on correct alignment, and avoid increasing intensity too quickly.'
+      : score >= 80
+        ? 'Your progress looks strong. Continue controlled movement, balanced recovery, and steady training without overloading your body.'
+        : reps >= 100
+          ? 'Your rep count is improving. Keep progressing gradually while maintaining proper form and recovery.'
+          : 'Focus on consistency, controlled movement, and small improvements in each workout session.',
+            formFocus:
+              posture >= 80
+                ? 'Quality over quantity.'
+                : 'Slow down your reps.',
+
+            recoveryFocus:
+              score >= 70
+                ? 'Rest is progress.'
+                : 'Recharge smartly.',
+
+            repFocus:
+              reps >= 100
+                ? 'Progress gradually.'
+                : 'Small jumps today.',
+
+            nutritionFocus: 'Nourish well.',
+
+            planWorkout:
+              workouts >= 5 ? 'Strength: Upper Body' : 'Controlled Workout',
+
+            planDuration:
+              workouts >= 5 ? '45 min' : '30 min'
           })
         }
       } catch (error) {
@@ -75,75 +138,102 @@ function AICoach() {
       }
     }
 
-    fetchAIStats()
+    fetchCoachData()
   }, [])
 
-  const handleAskAI = () => {
-    const q = question.toLowerCase()
-
-    if (q.includes('protein') || q.includes('food')) {
-      setAiReply(
-        'Protein-rich food helps muscle recovery. Try eggs, paneer, chicken, dal, Greek yogurt, or sprouts after workouts.'
-      )
-    } else if (q.includes('squat')) {
-      setAiReply(
-        'For squats, keep your chest up, knees aligned with your toes, and move slowly. Focus on depth and control.'
-      )
-    } else if (q.includes('muscle')) {
-      setAiReply(
-        'To build muscle, combine strength training, sufficient protein intake, progressive overload, and quality sleep.'
-      )
-    } else if (
-      q.includes('weight loss') ||
-      q.includes('fat loss')
-    ) {
-      setAiReply(
-        'For fat loss, stay consistent with workouts, eat balanced meals, avoid excess sugar, and maintain a calorie deficit.'
-      )
-    } else if (
-      q.includes('sleep') ||
-      q.includes('recovery')
-    ) {
-      setAiReply(
-        'Recovery improves with proper sleep, hydration, stretching, and rest between intense training sessions.'
-      )
-    } else if (q.includes('pain')) {
-      setAiReply(
-        'If you feel pain, stop the exercise immediately. Check your form and avoid pushing through sharp pain.'
-      )
-    } else {
-      setAiReply(
-        'Ask me about protein, squats, muscle gain, weight loss, recovery, sleep, hydration, or workout tips.'
-      )
-    }
-
-    setQuestion('')
+  const handleAskAI = async (e) => {
+  if (e) {
+    e.preventDefault()
   }
 
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
+  if (!question.trim()) {
+    setAiReply('Please type a question first.')
+    return
+  }
+
+  if (!userInfo?.token) {
+    setAiReply('Please login again to use FitFusion AI Coach.')
+    return
+  }
+
+  if (isAsking) {
+    return
+  }
+
+  try {
+    setIsAsking(true)
+    setAiReply('FitFusion AI Coach is thinking...')
+
+    const response = await fetch(`${API_URL}/api/ai-coach/ask`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`
+      },
+      body: JSON.stringify({
+        question: question.trim()
+      })
+    })
+
+    const data = await response.json()
+
+    if (response.status === 429) {
+      setAiReply(
+        'FitFusion AI Coach is receiving too many requests right now. Please wait a little and try again.'
+      )
+      return
+    }
+
+    if (response.status === 401) {
+      setAiReply('Your session expired. Please login again to continue.')
+      return
+    }
+
+    if (!response.ok) {
+      setAiReply(
+        data.message ||
+          'FitFusion AI Coach is currently unavailable. Please try again later.'
+      )
+      return
+    }
+
+    setAiReply(
+      data.reply ||
+        'FitFusion AI Coach could not generate a response right now. Please try again.'
+    )
+
+    setQuestion('')
+  } catch (error) {
+    console.log(error)
+
+    setAiReply(
+      'Unable to connect to FitFusion AI Coach. Please check if the backend server is running.'
+    )
+  } finally {
+    setIsAsking(false)
+  }
+}
   const handleDownloadReport = () => {
     const reportData = {
-      reportTitle: 'FitFusion AI Performance Report',
+      reportTitle: 'FitFusion AI Coach Report',
       generatedAt: new Date().toISOString(),
-
-      aiScore: aiStats.aiScore,
-      recovery: aiStats.recovery,
-      readiness: aiStats.readiness,
-      consistency: aiStats.consistency,
-
-      aiInsight:
-        aiStats.aiScore >= 80
-          ? 'Your workout consistency and readiness are strong.'
-          : aiStats.aiScore >= 60
-            ? 'Your progress is improving. Stay consistent.'
-            : 'Start with regular workouts to build better performance.',
-
-      recommendations: [
-        'Prioritize clean form over speed.',
-        'Maintain proper hydration throughout the day.',
-        'Include protein-rich food after workouts.',
-        'Take enough rest between intense sessions.',
-        'Track workouts regularly for better AI insights.'
-      ]
+      coachScore: coachData.coachScore,
+      energyTrend: coachData.energyTrend,
+      trainingLoad: coachData.trainingLoad,
+      recoveryState: coachData.recoveryState,
+      todaysCoachingDirection: coachData.directionTitle,
+      todaysCoachingFocus: {
+        formControl: coachData.formFocus,
+        recoveryBalance: coachData.recoveryFocus,
+        repProgression: coachData.repFocus,
+        nutritionSupport: coachData.nutritionFocus
+      },
+      nutritionFocus:
+        'Fuel your body with protein, healthy meals, hydration, and balanced recovery nutrition.',
+      note:
+        'This report is generated using FitFusion backend workout progress data and AI coaching guidance.'
     }
 
     const fileData = JSON.stringify(reportData, null, 2)
@@ -156,193 +246,389 @@ function AICoach() {
 
     const link = document.createElement('a')
     link.href = url
-    link.download = 'fitfusion-ai-report.json'
+    link.download = 'fitfusion-ai-coach-report.json'
     link.click()
 
     URL.revokeObjectURL(url)
   }
 
-  return (
-    <div className="ai-coach-page">
+  const coachingFocusItems = [
+  {
+    icon: <UserRound size={22} />,
+    title: 'Form Control',
+    text: 'Quality over quantity.'
+  },
+  {
+    icon: <Heart size={22} />,
+    title: 'Recovery Balance',
+    text: 'Recharge smartly.'
+  },
+  {
+    icon: <TrendingUp size={22} />,
+    title: 'Rep Progression',
+    text: 'Progress gradually.'
+  },
+  {
+    icon: <Utensils size={22} />,
+    title: 'Nutrition Support',
+    text: 'Nourish well.'
+  }
+]
 
-      <div className="page-topbar">
-        <div className="page-title-block">
-          <span>FITFUSION AI REPORT</span>
-          <h1>AI Performance Report</h1>
+const todayIndex = new Date().getDay() % coachingFocusItems.length
+
+const todayFocusItems = [
+  ...coachingFocusItems.slice(todayIndex),
+  ...coachingFocusItems.slice(0, todayIndex)
+]
+
+  return (
+    <div className="ai-coach-v3-page">
+
+      <header className="ai-coach-v3-header-pro">
+  <div className="ai-coach-v3-title-area">
+    <div className="ai-coach-v3-main-icon">
+      <Brain size={30} />
+    </div>
+
+    <div>
+      <span>AI COACH SYSTEM</span>
+      <h1>AI Coach</h1>
+      <p>Smarter guidance. Stronger you.</p>
+    </div>
+  </div>
+
+  <div className="ai-coach-v3-header-actions">
+    <div className="ai-coach-v3-header-action-item">
+  <div className="ai-coach-v3-header-action-circle">
+    <NotificationBell />
+  </div>
+  <small>Notifications</small>
+</div>
+
+    <div
+      className="ai-coach-v3-header-action-item"
+      onClick={() => navigate('/profile')}
+    >
+      <button className="ai-coach-v3-header-action-circle">
+        <Settings size={21} />
+      </button>
+      <small>Settings</small>
+    </div>
+  </div>
+</header>
+
+      <section className="ai-coach-v3-top-layout">
+
+        <div className="ai-coach-v3-direction-card">
+          <div className="ai-coach-v3-section-label">
+            <div>
+              <Leaf size={19} />
+            </div>
+            <span>Today&apos;s Coaching Direction</span>
+          </div>
+
+          <h2>{coachData.directionTitle}</h2>
+
+          <p>{coachData.directionText}</p>
+
+          <div className="ai-coach-v3-direction-body">
+            <div className="ai-coach-v3-score-circle">
+              <svg viewBox="0 0 150 150">
+                <circle cx="75" cy="75" r="58" />
+                <circle
+                  cx="75"
+                  cy="75"
+                  r="58"
+                  pathLength="100"
+                  strokeDasharray={`${coachData.coachScore} 100`}
+                />
+              </svg>
+
+              <div>
+                <span>Coach Score</span>
+                <strong>{coachData.coachScore}</strong>
+                <small>/100</small>
+              </div>
+            </div>
+
+            <div className="ai-coach-v3-signal-list">
+              <div>
+                <span className="ai-coach-v3-signal-icon">
+                  <Zap size={20} />
+                </span>
+
+                <div>
+                  <small>Energy Trend</small>
+                  <strong>{coachData.energyTrend}</strong>
+                </div>
+
+                <TrendingUp size={15} />
+              </div>
+
+              <div>
+                <span className="ai-coach-v3-signal-icon">
+                  <BarChart3 size={20} />
+                </span>
+
+                <div>
+                  <small>Training Load</small>
+                  <strong>{coachData.trainingLoad}</strong>
+                </div>
+
+                <Activity size={15} />
+              </div>
+
+              <div>
+                <span className="ai-coach-v3-signal-icon">
+                  <Heart size={20} />
+                </span>
+
+                <div>
+                  <small>Recovery</small>
+                  <strong>{coachData.recoveryState}</strong>
+                </div>
+
+                <TrendingUp size={15} />
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="top-actions">
-          <NotificationBell />
+        <div className="ai-coach-v3-hero">
+          <img
+  className="ai-coach-v3-girl-cutout"
+  src="/images/home-hero-cutout.png"
+  alt="AI coach"
+/>
+          <div className="ai-coach-v3-hero-shade" />
 
-          <button
-  className="icon-btn"
-  onClick={() => navigate('/profile')}
->
-  <Settings size={19} />
-</button>
+          <div className="ai-coach-v3-hero-text">
+            <h2>
+              Train Smarter
+              <br />
+              Every Day
+            </h2>
+
+            <p>
+              Personalized insights that adapt to your body,
+              goals, and lifestyle.
+            </p>
+
+            <div className="ai-coach-v3-hero-buttons">
+              <button
+                className="ai-coach-v3-primary-btn"
+                onClick={() =>
+                  document
+                    .querySelector('.ai-coach-v3-ask-card')
+                    ?.scrollIntoView({
+                      behavior: 'smooth',
+                      block: 'center'
+                    })
+                }
+              >
+                <Sparkles size={16} />
+                Ask AI Coach
+              </button>
+
+              <button
+                className="ai-coach-v3-secondary-btn"
+                onClick={handleDownloadReport}
+              >
+                <Download size={17} />
+                Download Report
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      
+      <section className="ai-coach-v3-focus-pills-section">
+
+  <div className="ai-coach-v3-focus-pills-head">
+    <div className="ai-coach-v3-section-label small">
+      <Target size={17} />
+      <span>Today&apos;s Coaching Focus</span>
+    </div>
+
+    <p>Small actions selected from your current training pattern.</p>
+  </div>
+
+  <div className="ai-coach-v3-focus-pill-row">
+  {todayFocusItems.map((item, index) => (
+    <div className="ai-coach-v3-focus-pill" key={index}>
+      <span>
+        {item.icon}
+      </span>
+
+      <div>
+        <small>{item.title}</small>
+        <strong>{item.text}</strong>
+      </div>
+    </div>
+  ))}
+</div>
+
+</section>
+
+<section className="ai-coach-v3-middle-extended-layout">
+
+  <div className="ai-coach-v3-middle-left">
+
+    <div className="ai-coach-v3-nutrition-card ai-coach-v3-dual-image-card">
+
+      <div className="ai-coach-v3-nutrition-tile">
+        <img
+          src="/images/nutrition-tip.jpg"
+          alt="Nutrition focus"
+        />
+
+        <div className="ai-coach-v3-tile-overlay" />
+
+        <div className="ai-coach-v3-tile-text">
+          <span>
+            <Leaf size={15} />
+            Nutrition Focus
+          </span>
+
+          <h2>Fuel your progress.</h2>
+
+          <p>
+            Add protein-rich meals after workouts to support muscle repair,
+            recovery, and steady energy.
+          </p>
+
+          <div className="ai-coach-v3-tile-tags">
+            <small>Protein</small>
+            <small>Hydration</small>
+          </div>
         </div>
       </div>
 
-      <section
-        className="ai-coach-hero"
-        style={{
-          backgroundImage:
-            "linear-gradient(90deg, rgba(3,10,5,.94), rgba(3,10,5,.42), rgba(3,10,5,.05)), url('/images/aicoach-hero.png')"
-        }}
-      >
-        <div className="ai-hero-content">
-          <span>POWERED BY AI</span>
+      <div className="ai-coach-v3-nutrition-tile">
+        <img
+          src="/images/sleep.jpg"
+          alt="Sleep and recovery"
+        />
 
-          <h2>Your weekly AI fitness report.</h2>
+        <div className="ai-coach-v3-tile-overlay" />
+
+        <div className="ai-coach-v3-tile-text">
+          <span>
+            <Moon size={15} />
+            Recovery Focus
+          </span>
+
+          <h2>Sleep builds strength.</h2>
 
           <p>
-            Track workout consistency, recovery,
-            training readiness, and personalized
-            recommendations generated by FitFusion AI.
+            Quality sleep helps your body recover, improves energy,
+            and supports better workout performance.
           </p>
 
-          <button onClick={handleDownloadReport}>
-            Download Report
-          </button>
-        </div>
-
-        <div className="ai-hero-metrics">
-
-          <div className="hero-ai-metric">
-            <Gauge size={22} />
-            <span>AI SCORE</span>
-            <h3>{aiStats.aiScore}%</h3>
-          </div>
-
-          <div className="hero-ai-metric">
-            <Battery size={22} />
-            <span>RECOVERY</span>
-            <h3>{aiStats.recovery}%</h3>
-          </div>
-
-          <div className="hero-ai-metric">
-            <Target size={22} />
-            <span>READINESS</span>
-            <h3>{aiStats.readiness}</h3>
-          </div>
-
-          <div className="hero-ai-metric">
-            <Brain size={22} />
-            <span>CONSISTENCY</span>
-            <h3>{aiStats.consistency}</h3>
-          </div>
-
-        </div>
-      </section>
-
-      <section className="ai-dashboard-grid">
-
-        <div className="ai-mini-photo insight-tile">
-          <img src="/images/ai-insight.jpg" alt="" />
-
-          <div>
-            <span>AI INSIGHT</span>
-            <h3>Control improving</h3>
-
-            <p>
-              AI analysis shows improved movement control, better posture
-              alignment, and more consistent workout execution compared to
-              recent sessions.
-            </p>
+          <div className="ai-coach-v3-tile-tags">
+            <small>Sleep</small>
+            <small>Recovery</small>
           </div>
         </div>
+      </div>
 
-        <div className="ask-ai-tile">
-          <span>ASK AI COACH</span>
-          <h3>Need quick guidance?</h3>
+    </div>
 
-          <div className="ask-tile-input">
-            <input
-              type="text"
-              placeholder="Ask about workout, diet, recovery..."
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-            />
+    <div className="ai-coach-v3-quick-actions">
+      <span>
+        <Zap size={15} />
+        Quick Actions
+      </span>
 
-            <button onClick={handleAskAI}>
-              <Send size={17} />
-            </button>
-          </div>
+      <button onClick={() => navigate('/workouts')}>
+        <TrendingUp size={14} />
+        Log Workout
+      </button>
 
-          {aiReply && (
-            <div className="ai-reply-box">
-              <p>{aiReply}</p>
-            </div>
-          )}
-        </div>
+      <button onClick={() => navigate('/diet')}>
+        <Utensils size={14} />
+        Log Meal
+      </button>
 
-        <div className="ai-mini-photo">
-          <img src="/images/sleep.jpg" alt="" />
+      <button onClick={() => navigate('/profile')}>
+        <UserRound size={14} />
+        Body Metrics
+      </button>
 
-          <div>
-            <span>RECOVERY</span>
-            <h3>Sleep quality</h3>
+      <button onClick={() => navigate('/progress')}>
+        <BarChart3 size={14} />
+        View Progress
+      </button>
+    </div>
 
-            <p>
-              Prioritize quality sleep and hydration to support muscle recovery,
-              energy restoration, and overall training performance.
-            </p>
-          </div>
-        </div>
+  </div>
 
-        <div className="ai-mini-photo stability-card-clean">
-          <img src="/images/stability-focus.png" alt="" />
+  <div className="ai-coach-v3-ask-card ai-coach-v3-ask-card-extended">
+    <span className="ai-coach-v3-section-label">
+      <Sparkles size={16} />
+      Ask FitFusion AI
+    </span>
 
-          <div>
-            <span>WORKOUT</span>
+    <h2>What do you want to know?</h2>
 
-            <p>
-              Focus on balance, control, and coordination to build a stronger
-              foundation for safer and more effective workouts.
-            </p>
-          </div>
-        </div>
+    <form onSubmit={handleAskAI} className="ai-coach-v3-ask-form">
+  <input
+    type="text"
+    placeholder="Ask anything about training, nutrition, recovery..."
+    value={question}
+    onChange={(e) => setQuestion(e.target.value)}
+  />
 
-        <div className="ai-mini-photo">
-          <img src="/images/nutrition-tip.jpg" alt="" />
+  <button type="submit" disabled={isAsking}>
+    <Send size={20} />
+  </button>
+</form>
 
-          <div>
-            <span>NUTRITION</span>
-            <h3>Protein recovery</h3>
+    <div className="ai-coach-v3-prompt-row">
+   <button
+  type="button"
+  onClick={() => setQuestion('What is the best post-workout meal for me?')}
+>
+  <Leaf size={14} />
+  Best post-workout meal?
+</button>
 
-            <p>
-              Support recovery with protein-rich meals and balanced nutrition
-              to maximize muscle repair and daily performance.
-            </p>
-          </div>
-        </div>
+<button
+  type="button"
+  onClick={() => setQuestion('How can I improve my push-ups?')}
+>
+  <Dumbbell size={14} />
+  Improve push-ups
+</button>
 
-        <div className="daily-goals-tile">
-          <span>DAILY GOALS</span>
+<button
+  type="button"
+  onClick={() => setQuestion('How should I recover after today’s workout?')}
+>
+  <Heart size={14} />
+  Recovery tips
+</button>
+    </div>
 
-          <div className="goal-line">
-            <CheckCircle size={16} />
-            <p>Mobility warm-up</p>
-          </div>
+    <div className="ai-coach-v3-ai-reply ai-coach-v3-ai-reply-extended">
+      <div>
+        <Sparkles size={20} />
+      </div>
 
-          <div className="goal-line">
-            <CheckCircle size={16} />
-            <p>Controlled workout</p>
-          </div>
+      <p>
+        {isAsking
+          ? 'FitFusion AI Coach is thinking...'
+          : aiReply || 'Great question! Based on your training and goals, ask me anything about workouts, nutrition, recovery, or form.'}
+      </p>
 
-          <div className="goal-line">
-            <CheckCircle size={16} />
-            <p>Protein recovery</p>
-          </div>
-        </div>
+      <ChevronDown size={18} />
+    </div>
+  </div>
 
-      </section>
-
-      <section className="ai-final-quote">
-        <Sparkles size={19} />
-        <p>Discipline creates the results that motivation promises.</p>
-      </section>
-
+</section>
     </div>
   )
 }

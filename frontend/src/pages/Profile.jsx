@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import NotificationBell from '../components/NotificationBell'
+import { API_URL } from '../api'
 
 import {
   Home,
@@ -73,7 +74,7 @@ const [profileStats, setProfileStats] = useState({
  const genderValue = userInfo?.gender?.toLowerCase()
 
 const profileImage = userInfo?.profileImage
-  ? `http://localhost:5000${userInfo.profileImage}`
+ ? `${API_URL}${userInfo.profileImage}`
   : genderValue === 'female'
     ? '/images/default-female.jpg'
     : genderValue === 'male'
@@ -85,7 +86,7 @@ const profileImage = userInfo?.profileImage
     const fetchContributions = async () => {
       try {
         const response = await fetch(
-          'http://localhost:5000/api/recipes/my-contributions',
+         `${API_URL}/api/recipes/my-contributions`,
           {
             headers: {
               Authorization: `Bearer ${userInfo?.token}`
@@ -113,7 +114,7 @@ const profileImage = userInfo?.profileImage
    const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
 const response = await fetch(
-  'http://localhost:5000/api/history/stats',
+  `${API_URL}/api/history/stats`,
   {
     headers: {
       Authorization: `Bearer ${userInfo?.token}`
@@ -143,11 +144,11 @@ fetchProfileStats()
 
   const getContributionImage = (item) => {
     if (item.type === 'written' && item.image) {
-      return `http://localhost:5000${item.image}`
+      return `${API_URL}${item.image}`
     }
 
     if (item.type === 'video' && item.thumbnail) {
-      return `http://localhost:5000${item.thumbnail}`
+      return `${API_URL}${item.thumbnail}`
     }
 
     return '/images/nutrition-summary.jpg'
@@ -158,7 +159,7 @@ fetchProfileStats()
 
 
 const updateUserProfile = async (updatedData) => {
-  const response = await fetch('http://localhost:5000/api/users/profile', {
+  const response = await fetch(`${API_URL}/api/users/profile`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -187,7 +188,7 @@ const handleProfileImageChange = async (event) => {
   imageData.append('profileImage', file)
 
   const uploadResponse = await fetch(
-    'http://localhost:5000/api/upload/profile',
+    `${API_URL}/api/upload/profile`,
     {
       method: 'POST',
       body: imageData
@@ -247,7 +248,7 @@ const handleChangePasswordSubmit = async (e) => {
 
   try {
     const response = await fetch(
-      'http://localhost:5000/api/users/change-password',
+      `${API_URL}/api/users/change-password`,
       {
         method: 'PUT',
         headers: {
@@ -431,7 +432,7 @@ const updateThemeMode = (mode) => {
 const handleDownloadMyData = async () => {
   try {
     const response = await fetch(
-      'http://localhost:5000/api/users/download-data',
+      `${API_URL}/api/users/download-data`,
       {
         headers: {
           Authorization: `Bearer ${userInfo?.token}`
@@ -477,7 +478,7 @@ const handleDeleteAccount = async () => {
 
   try {
     const response = await fetch(
-      'http://localhost:5000/api/users/delete-account',
+      `${API_URL}/api/users/delete-account`,
       {
         method: 'DELETE',
         headers: {
@@ -521,12 +522,15 @@ const handleGenderAvatarSelect = async (genderValue) => {
   <X size={20} />
 </button>
         <div className="profile-logo">
-          <span>🌿</span>
-          <div>
-            <h2>FITFUSION</h2>
-            <p>AI FITNESS</p>
-          </div>
-        </div>
+  <span className="profile-logo-icon">
+    <Dumbbell size={20} />
+  </span>
+
+  <div>
+    <h2>FitFusion</h2>
+    <p>AI FITNESS</p>
+  </div>
+</div>
 
         <nav>
           <Link to="/"><Home size={20} /> Home</Link>
@@ -562,7 +566,12 @@ const handleGenderAvatarSelect = async (genderValue) => {
 
           <div className="top-actions">
            <NotificationBell />
-            <button className="icon-btn"><Settings size={19} /></button>
+            <button
+  className="icon-btn"
+  onClick={() => setShowAccountSettings(true)}
+>
+  <Settings size={19} />
+</button>
           </div>
         </div>
 
@@ -724,33 +733,36 @@ const handleGenderAvatarSelect = async (genderValue) => {
     Pending
   </button>
 </div>
+        <div className="contributions-scroll-area">
 
-            {loading && (
-              <p>Loading contributions...</p>
-            )}
-            
-            {!loading && filteredContributions.length === 0 && (
-  <p>No contributions found.</p>
-)}
+  {loading && (
+    <p>Loading contributions...</p>
+  )}
 
-{filteredContributions.map((item) => (
-              <div className="contribution-row" key={item._id}>
-                <img src={getContributionImage(item)} alt={item.title} />
+  {!loading && filteredContributions.length === 0 && (
+    <p>No contributions found.</p>
+  )}
 
-                <div>
-                  <h4>{item.title}</h4>
+  {filteredContributions.map((item) => (
+    <div className="contribution-row" key={item._id}>
+      <img src={getContributionImage(item)} alt={item.title} />
 
-                  <p>
-                    {item.type === 'written' ? 'Written Recipe' : 'Video Recipe'}{' '}
-                    <b className={item.status}>
-                      {item.status}
-                    </b>
-                  </p>
-                </div>
+      <div>
+        <h4>{item.title}</h4>
 
-                <Trash2 size={17} />
-              </div>
-            ))}
+        <p>
+          {item.type === 'written' ? 'Written Recipe' : 'Video Recipe'}{' '}
+          <b className={item.status}>
+            {item.status}
+          </b>
+        </p>
+      </div>
+
+      <Trash2 size={17} />
+    </div>
+  ))}
+
+</div>
           </div>
 
         </section>

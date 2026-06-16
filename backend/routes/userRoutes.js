@@ -5,13 +5,18 @@ const {
   updateUserProfile,
   changePassword,
   downloadMyData,
-  deleteMyAccount
+  deleteMyAccount,
+  getUserCount
 } = require('../controllers/userController')
 const {
-  protect
+  protect,
+  adminOnly
 } = require('../middleware/authMiddleware')
 
+
+
 const router = express.Router()
+router.get('/count', protect, adminOnly, getUserCount)
 
 router.get('/profile', protect, getUserProfile)
 
